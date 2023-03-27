@@ -94,7 +94,13 @@ fun Application.photoGalleryAppModule() {
 fun Application.configureRouting(appData: AppData) {
   routing {
     get("/") {
-      call.respondRedirect("/albums")
+      call.respondText(
+        this::class.java.classLoader.getResource("index.html")!!.readText(),
+        ContentType.Text.Html
+      )
+    }
+    static("/") {
+      resources("")
     }
 
     get("/albums") {
@@ -107,9 +113,10 @@ fun Application.configureRouting(appData: AppData) {
       call.respond(result)
     }
 
-    get("/photo/{id}") {
-      val id = call.parameters.getOrFail<Int>("id").toInt()
-      val result = appData.getPhoto(id) ?: throw RequestValidationException(id, listOf("Invalid photo ID"))
+    get("/photo/{albumId}/{photoId}") {
+      val albumId = call.parameters.getOrFail<Int>("albumId").toInt()
+      val photoId = call.parameters.getOrFail<Int>("photoId").toInt()
+      val result = appData.getPhoto(albumId, photoId) ?: throw RequestValidationException(photoId, listOf("Invalid photo ID"))
       call.respond(result)
     }
 

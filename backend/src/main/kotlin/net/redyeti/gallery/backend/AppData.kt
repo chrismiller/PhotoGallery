@@ -8,13 +8,13 @@ import java.nio.file.Path
 class AppData(albums: List<PopulatedAlbum>) {
   private val albums = albums.map { it.album }
   private val albumsById = albums.associateBy { it.album.id }
-  private val photosById = albums.flatMap { it.photos }.associateBy { it.id }
+  private val photosByAlbumAndId = albumsById.mapValues { it.value.photos.associateBy { photo -> photo.id } }
 
   fun getAlbums(): List<Album> = albums
 
   fun getAlbum(id: Int): PopulatedAlbum? = albumsById[id]
 
-  fun getPhoto(id: Int): Photo? = photosById[id]
+  fun getPhoto(albumId: Int, photoId: Int): Photo? = photosByAlbumAndId[albumId]?.get(photoId)
 }
 
 class AppConfig(val exiftool: Path, val imageMagick: Path, val baseAlbumDir: Path, val port: Int)
