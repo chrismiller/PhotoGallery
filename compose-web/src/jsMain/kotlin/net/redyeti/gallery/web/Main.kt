@@ -6,7 +6,8 @@ import net.redyeti.gallery.di.initKoin
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.repository.PhotoGalleryInterface
-import net.redyeti.gallery.web.style.AppStylesheet
+import net.redyeti.gallery.web.style.AppStyleSheet
+import net.redyeti.gallery.web.style.TextStyle
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import org.jetbrains.compose.web.renderComposable
@@ -18,7 +19,7 @@ fun main() {
   val repo = koin.get<PhotoGalleryInterface>()
 
   renderComposable(rootElementId = "root") {
-    Style(AppStylesheet)
+    Style(AppStyleSheet)
 
     var albums by remember { mutableStateOf(emptyList<Album>()) }
 
@@ -31,7 +32,7 @@ fun main() {
     }
 
     Div(attrs = { style { padding(16.px) } }) {
-      H1(attrs = { classes(AppStylesheet.titleText) }) {
+      H1(attrs = { classes(TextStyle.titleText) }) {
         Text("Photo Gallery")
       }
       H2 {
@@ -61,7 +62,7 @@ fun main() {
               }
             )
 
-            Span(attrs = { classes(AppStylesheet.albumText) }) {
+            Span(attrs = { classes(TextStyle.albumText) }) {
               Text("${album.name} (${album.year})")
             }
           }

@@ -2,8 +2,7 @@ package net.redyeti.gallery.web.style
 
 import org.jetbrains.compose.web.css.*
 
-object AppStylesheet : StyleSheet() {
-
+object TextStyle : StyleSheet(AppStyleSheet) {
   val titleText by style {
     color(rgb(23, 24, 28))
     fontSize(50.px)
