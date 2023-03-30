@@ -19,7 +19,6 @@ object Versions {
     const val mockito = "3.11.2"
     const val robolectric = "4.6.1"
 
-    const val sqlDelight = "1.5.5"
     const val shadow = "7.0.0"
     const val kotlinterGradle = "3.4.5"
 
@@ -35,7 +34,6 @@ object Deps {
     object Gradle {
         const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:${Versions.kotlinterGradle}"
         const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:${Versions.shadow}"
-        const val sqlDelight = "com.squareup.sqldelight:gradle-plugin:${Versions.sqlDelight}"
         const val gradleVersionsPlugin = "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersionsPlugin}"
     }
 
@@ -82,12 +80,6 @@ object Deps {
         const val clientSerialization = "io.ktor:ktor-client-serialization:${Versions.ktor}"
         const val clientJava = "io.ktor:ktor-client-java:${Versions.ktor}"
         const val clientJs = "io.ktor:ktor-client-js:${Versions.ktor}"
-    }
-
-    object SqlDelight {
-        const val runtime = "com.squareup.sqldelight:runtime:${Versions.sqlDelight}"
-        const val coroutineExtensions = "com.squareup.sqldelight:coroutines-extensions:${Versions.sqlDelight}"
-        const val sqliteDriver = "com.squareup.sqldelight:sqlite-driver:${Versions.sqlDelight}"
     }
 
     object Log {

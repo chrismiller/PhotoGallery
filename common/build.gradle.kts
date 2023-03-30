@@ -3,7 +3,6 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     kotlin("multiplatform")
     id("kotlinx-serialization")
-    id("com.squareup.sqldelight")
     id("com.google.devtools.ksp")
     id("com.rickclephas.kmp.nativecoroutines")
 }
@@ -32,11 +31,6 @@ kotlin {
                     implementation(serializationCore)
                 }
 
-                with(Deps.SqlDelight) {
-                    implementation(runtime)
-                    implementation(coroutineExtensions)
-                }
-
                 with(Deps.Koin) {
                     api(core)
                     api(test)
@@ -59,7 +53,6 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 implementation(Deps.Ktor.clientJava)
-                implementation(Deps.SqlDelight.sqliteDriver)
                 implementation(Deps.Log.slf4j)
             }
         }
@@ -76,13 +69,6 @@ kotlin {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-}
-
-sqldelight {
-    database("PhotoGalleryDatabase") {
-        packageName = "net.redyeti.gallery.db"
-        sourceFolders = listOf("sqldelight")
     }
 }
 

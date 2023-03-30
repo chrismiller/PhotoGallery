@@ -30,7 +30,7 @@ class PhotoGalleryTest: KoinTest {
                 commonModule(true),
                 platformModule(),
                 module {
-                    single { PhotoGalleryDatabaseWrapper(null) }
+                    single { PhotoGalleryDatabaseWrapper() }
                 }
             )
         }

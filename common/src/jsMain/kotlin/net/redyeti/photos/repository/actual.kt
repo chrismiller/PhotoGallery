@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 actual fun platformModule() = module {
   single {
-    PhotoGalleryDatabaseWrapper(null)
+    PhotoGalleryDatabaseWrapper()
   }
   single { Js.create() }
 }

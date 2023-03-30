@@ -27,6 +27,4 @@ Using shadowJar plugin to create an "uber" jar as shown below.
 * [Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)
 * [Ktor client library](https://github.com/ktorio/ktor)
 * [Koin](https://github.com/InsertKoinIO/koin)
-* [SQLDelight](https://github.com/cashapp/sqldelight)
 * [KMP-NativeCoroutines](https://github.com/rickclephas/KMP-NativeCoroutines)
-* [Coil](https://coil-kt.github.io/coil/)
