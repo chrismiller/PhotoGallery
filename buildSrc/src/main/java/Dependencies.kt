@@ -7,12 +7,9 @@ object Versions {
     const val koinAndroid = "3.3.2"
     const val koinAndroidCompose = "3.4.1"
 
-    const val kmpNativeCoroutinesVersion = "1.0.0-ALPHA-4"
+    const val kmpNativeCoroutinesVersion = "1.0.0-ALPHA-5"
 
-    const val compose = "1.4.0-alpha03"
-    const val navCompose = "2.5.2"
-
-    const val composeDesktopWeb = "1.3.0"
+    const val composeDesktopWeb = "1.3.1"
 
     const val junit = "4.12"
     const val testCore = "1.3.0"
@@ -46,13 +43,6 @@ object Deps {
     object Test {
         const val junit = "junit:junit:${Versions.junit}"
         const val mockito = "org.mockito:mockito-inline:${Versions.mockito}"
-        const val robolectric = "org.robolectric:robolectric:${Versions.robolectric}"
-        const val testCore = "androidx.test:core:${Versions.testCore}"
-
-        const val composeUiTest = "androidx.compose.ui:ui-test:${Versions.compose}"
-        const val composeUiTestJUnit = "androidx.compose.ui:ui-test-junit4:${Versions.compose}"
-        const val composeUiTestManifest = "androidx.compose.ui:ui-test-manifest:${Versions.compose}"
-        const val composeNavTesting = "androidx.navigation:navigation-testing:${Versions.navCompose}"
     }
 
     object Koin {
@@ -86,8 +76,5 @@ object Deps {
         const val slf4j = "org.slf4j:slf4j-simple:${Versions.slf4j}"
         const val logback = "ch.qos.logback:logback-classic:${Versions.logback}"
         const val kermit = "co.touchlab:kermit:${Versions.kermit}"
-    }
-
-    object Misc {
     }
 }

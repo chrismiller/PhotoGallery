@@ -19,7 +19,7 @@ buildscript {
             classpath(shadow)
             classpath(kotlinter)
             classpath(gradleVersionsPlugin)
-            classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.8.0-1.0.8")
+            classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.8.10-1.0.9")
             classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:${Versions.kmpNativeCoroutinesVersion}")
         }
     }

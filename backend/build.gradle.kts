@@ -24,7 +24,9 @@ dependencies {
         implementation(json)
     }
 
-    with(Deps.Misc) {
+    with(Deps.Test) {
+        testImplementation(mockito)
+        testImplementation(junit)
     }
 
     with(Deps.Log) {
@@ -36,6 +38,13 @@ dependencies {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+tasks.named<ProcessResources>("processResources") {
+    dependsOn(":compose-web:assemble")
+    from(File(rootProject.project("compose-web").buildDir, "distributions/")) {
+        into("app")
+    }
 }
 
 application {
