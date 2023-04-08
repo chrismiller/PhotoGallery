@@ -6,10 +6,14 @@ import net.redyeti.gallery.di.initKoin
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.repository.PhotoGalleryInterface
+import net.redyeti.gallery.web.components.AlbumCover
 import net.redyeti.gallery.web.style.AppStyleSheet
 import net.redyeti.gallery.web.style.TextStyle
-import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.css.Style
+import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.H1
+import org.jetbrains.compose.web.dom.H2
+import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.renderComposable
 
 private val koin = initKoin(enableNetworkLogs = true).koin
@@ -31,42 +35,20 @@ fun main() {
       repo.pollISSPosition().collect { value = it }
     }
 
-    Div(attrs = { style { padding(16.px) } }) {
-      H1(attrs = { classes(TextStyle.titleText) }) {
-        Text("Photo Gallery")
-      }
-      H2 {
-        Text("Location: latitude = ${gpsCoordinates.latitude}, longitude = ${gpsCoordinates.longitude}")
-      }
+    H1(attrs = { classes(TextStyle.titleText) }) {
+      Text("Photo Gallery")
+    }
+    H2 {
+      Text("Location: latitude = ${gpsCoordinates.latitude}, longitude = ${gpsCoordinates.longitude}")
+    }
 
-      H1 {
-        Text("Albums")
-      }
+    H1 {
+      Text("Albums")
+    }
+
+    Div(attrs = { classes(AppStyleSheet.divWrapper) }) {
       albums.forEach { album ->
-        A(href = "album/${album.id}") {
-          Div(
-            attrs = {
-              style {
-                display(DisplayStyle.Flex)
-                alignItems(AlignItems.Center)
-              }
-            }
-          ) {
-            Img(
-              src = "/image/${album.directory}/thumb/${album.coverImage}",
-              attrs = {
-                style {
-                  width(48.px)
-                  property("padding-right", 16.px)
-                }
-              }
-            )
-
-            Span(attrs = { classes(TextStyle.albumText) }) {
-              Text("${album.name} (${album.year})")
-            }
-          }
-        }
+        AlbumCover(album)
       }
     }
   }

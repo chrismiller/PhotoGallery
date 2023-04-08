@@ -1,42 +1,78 @@
 package net.redyeti.gallery.web.style
 
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.keywords.auto
 
-object AppCSSVariables {
-  val wtColorGreyLight by variable<CSSColorValue>()
-  val wtColorGreyDark by variable<CSSColorValue>()
+object StyleVars {
+  val colourGreyLight by variable<CSSColorValue>()
+  val colourGreyMedium by variable<CSSColorValue>()
+  val colourGreyDark by variable<CSSColorValue>()
 
-  val wtOffsetTopUnit by variable<CSSUnitValue>()
-  val wtHorizontalLayoutGutter by variable<CSSUnitValue>()
-  val wtFlowUnit by variable<CSSUnitValue>()
+  val imageSideMargin by variable<CSSUnitValue>()
+  val imageBorder by variable<CSSBorder>()
 
-  val wtHeroFontSize by variable<CSSUnitValue>()
-  val wtHeroLineHeight by variable<CSSUnitValue>()
-  val wtSubtitle2FontSize by variable<CSSUnitValue>()
-  val wtSubtitle2LineHeight by variable<CSSUnitValue>()
-  val wtH2FontSize by variable<CSSUnitValue>()
-  val wtH2LineHeight by variable<CSSUnitValue>()
-  val wtH3FontSize by variable<CSSUnitValue>()
-  val wtH3LineHeight by variable<CSSUnitValue>()
+  val heroFontSize by variable<CSSUnitValue>()
+  val heroLineHeight by variable<CSSUnitValue>()
+  val subtitle2FontSize by variable<CSSUnitValue>()
+  val subtitle2LineHeight by variable<CSSUnitValue>()
+  val h2FontSize by variable<CSSUnitValue>()
+  val h2LineHeight by variable<CSSUnitValue>()
+  val h3FontSize by variable<CSSUnitValue>()
+  val h3LineHeight by variable<CSSUnitValue>()
 
-  val wtColCount by variable<StylePropertyNumber>()
+  val colCount by variable<StylePropertyNumber>()
 }
 
 object AppStyleSheet : StyleSheet() {
   init {
-    "label, a, button" style {
-      property(
-        "font-family",
-        "system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,Arial,sans-serif"
-      )
+    "body" style {
+      fontFamily("Helvetica", "Geneva", "Arial", "sans-serif")
+      color(StyleVars.colourGreyMedium.value())
+      backgroundColor(Color.black)
+      textAlign("center")
+    }
+
+    "img" style {
+      border(1.px, LineStyle.Solid, Color.white)
+      marginLeft(StyleVars.imageSideMargin.value())
+      marginRight(StyleVars.imageSideMargin.value())
+
+      "logo" style {
+        border(0.px)
+      }
+    }
+
+    "a" style {
+      color(StyleVars.colourGreyMedium.value())
+      textDecoration("none")
+      textAlign("center")
+      hover {
+        color(Color.white)
+      }
     }
 
     universal style {
-      AppCSSVariables.wtColorGreyLight(Color("#f4f4f4"))
-      AppCSSVariables.wtColorGreyDark(Color("#323236"))
-      AppCSSVariables.wtOffsetTopUnit(24.px)
-
+      StyleVars.colourGreyLight(Color("#f4f4f4"))
+      StyleVars.colourGreyMedium(Color("#b3b3b3"))
+      StyleVars.colourGreyDark(Color("#323236"))
+      StyleVars.imageSideMargin(20.px)
       margin(0.px)
     }
+  }
+
+  val divWrapper by style {
+    width(880.px)
+    // margin 0.px auto
+  }
+
+  val divHeader by style {
+    width(880.px)
+    // margin 0.px auto
+    overflow("auto")
+    property("clear", "both")
+  }
+
+  val divFloat by style {
+    property("float", "left")
   }
 }
