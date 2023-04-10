@@ -23,7 +23,7 @@ data class PopulatedAlbum(val album: Album, val photos: List<Photo>)
 @Serializable
 data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double)
 
-class PhotoGalleryApi(private val client: HttpClient, var baseUrl: String = "http://localhost:8081") : KoinComponent {
+class PhotoGalleryApi(private val client: HttpClient, var baseUrl: String = "http://localhost:8081/api") : KoinComponent {
   suspend fun fetchAlbums(): List<Album> {
     return client.get("$baseUrl/albums").body<List<Album>>()
   }

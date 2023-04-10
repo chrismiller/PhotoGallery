@@ -11,6 +11,8 @@ object Versions {
 
     const val composeDesktopWeb = "1.4.0-rc03"
 
+    const val routingCompose = "0.2.12"
+
     const val junit = "4.12"
     const val testCore = "1.3.0"
     const val mockito = "3.11.2"
@@ -60,6 +62,9 @@ object Deps {
         const val serverCompression = "io.ktor:ktor-server-compression:${Versions.ktor}"
         const val serverValidation = "io.ktor:ktor-server-request-validation:${Versions.ktor}"
         const val serverStatusPages = "io.ktor:ktor-server-status-pages:${Versions.ktor}"
+        const val serverCallLogging = "io.ktor:ktor-server-call-logging:${Versions.ktor}"
+        const val serverDefaultHeaders = "io.ktor:ktor-server-default-headers:${Versions.ktor}"
+        const val serverCachingHeaders = "io.ktor:ktor-server-caching-headers:${Versions.ktor}"
         const val contentNegotiation = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
         const val json = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
         const val serverContentNegotiation = "io.ktor:ktor-server-content-negotiation:${Versions.ktor}"
@@ -70,6 +75,10 @@ object Deps {
         const val clientSerialization = "io.ktor:ktor-client-serialization:${Versions.ktor}"
         const val clientJava = "io.ktor:ktor-client-java:${Versions.ktor}"
         const val clientJs = "io.ktor:ktor-client-js:${Versions.ktor}"
+    }
+
+    object Web {
+        const val routingCompose = "app.softwork:routing-compose:${Versions.routingCompose}"
     }
 
     object Log {

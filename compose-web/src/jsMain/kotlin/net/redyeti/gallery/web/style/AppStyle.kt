@@ -23,7 +23,7 @@ object StyleVars {
   val colCount by variable<StylePropertyNumber>()
 }
 
-object AppStyleSheet : StyleSheet() {
+object AppStyle : StyleSheet() {
   init {
     "body" style {
       fontFamily("Helvetica", "Geneva", "Arial", "sans-serif")
@@ -61,13 +61,21 @@ object AppStyleSheet : StyleSheet() {
   }
 
   val divWrapper by style {
-    width(880.px)
+    width(1200.px)
     // margin 0.px auto
+    // https://kotlinlang.slack.com/archives/C01F2HV7868/p1665751751246239
+    marginTop(0.px)
+    marginBottom(0.px)
+    property("margin-left", auto)
+    property("margin-right", auto)
   }
 
   val divHeader by style {
-    width(880.px)
-    // margin 0.px auto
+    width(1200.px)
+    marginTop(0.px)
+    marginBottom(0.px)
+    property("margin-left", auto)
+    property("margin-right", auto)
     overflow("auto")
     property("clear", "both")
   }

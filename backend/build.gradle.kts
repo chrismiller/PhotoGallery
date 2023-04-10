@@ -20,6 +20,9 @@ dependencies {
         implementation(serverCompression)
         implementation(serverValidation)
         implementation(serverStatusPages)
+        implementation(serverCallLogging)
+        implementation(serverDefaultHeaders)
+        implementation(serverCachingHeaders)
         implementation(serverContentNegotiation)
         implementation(json)
     }
@@ -37,13 +40,13 @@ dependencies {
 }
 
 tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "1.8"
+    kotlinOptions.jvmTarget = "19"
 }
 
 tasks.named<ProcessResources>("processResources") {
     dependsOn(":compose-web:assemble")
     from(File(rootProject.project("compose-web").buildDir, "distributions/")) {
-        into("app")
+        into("WEB-INF")
     }
 }
 

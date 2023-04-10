@@ -1,55 +1,35 @@
 package net.redyeti.gallery.web
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.InternalCoroutinesApi
 import net.redyeti.gallery.di.initKoin
-import net.redyeti.gallery.remote.Album
-import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.repository.PhotoGalleryInterface
-import net.redyeti.gallery.web.components.AlbumCover
-import net.redyeti.gallery.web.style.AppStyleSheet
-import net.redyeti.gallery.web.style.TextStyle
+import net.redyeti.gallery.web.components.AlbumPage
+import net.redyeti.gallery.web.components.IndexPage
+import net.redyeti.gallery.web.components.PhotoPage
+import net.redyeti.gallery.web.style.AppStyle
 import org.jetbrains.compose.web.css.Style
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.H1
-import org.jetbrains.compose.web.dom.H2
-import org.jetbrains.compose.web.dom.Text
 import org.jetbrains.compose.web.renderComposable
 
 private val koin = initKoin(enableNetworkLogs = true).koin
+
+enum class PageState {
+  Index, Album, Photo
+}
 
 @InternalCoroutinesApi
 fun main() {
   val repo = koin.get<PhotoGalleryInterface>()
 
   renderComposable(rootElementId = "root") {
-    Style(AppStyleSheet)
+    var (pageState, setPageState) = remember { mutableStateOf(PageState.Index) }
+    Style(AppStyle)
 
-    var albums by remember { mutableStateOf(emptyList<Album>()) }
-
-    LaunchedEffect(true) {
-      albums = repo.fetchAlbums()
-    }
-
-    val gpsCoordinates by produceState(initialValue = GpsCoordinates(0.0, 0.0, 0.0), repo) {
-      repo.pollISSPosition().collect { value = it }
-    }
-
-    H1(attrs = { classes(TextStyle.titleText) }) {
-      Text("Photo Gallery")
-    }
-    H2 {
-      Text("Location: latitude = ${gpsCoordinates.latitude}, longitude = ${gpsCoordinates.longitude}")
-    }
-
-    H1 {
-      Text("Albums")
-    }
-
-    Div(attrs = { classes(AppStyleSheet.divWrapper) }) {
-      albums.forEach { album ->
-        AlbumCover(album)
-      }
+    when (pageState) {
+      PageState.Index -> IndexPage(repo, setPageState)
+      PageState.Album -> AlbumPage(repo, setPageState)
+      PageState.Photo -> PhotoPage(repo, setPageState)
     }
   }
 }
