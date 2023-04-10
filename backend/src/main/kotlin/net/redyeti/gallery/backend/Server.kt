@@ -40,7 +40,7 @@ fun main() {
 
 fun Application.photoGalleryAppModule() {
   features()
-  configureRouting(appData)
+  configureRouting()
 }
 
 fun initGallery(config: AppConfig): AppData {

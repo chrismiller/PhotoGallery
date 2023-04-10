@@ -1,9 +1,19 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import app.softwork.routingcompose.RouteBuilder
+import app.softwork.routingcompose.Routing
 import net.redyeti.gallery.repository.PhotoGalleryInterface
-import net.redyeti.gallery.web.PageState
 
+@Routing
 @Composable
-fun PhotoPage(repo: PhotoGalleryInterface, setPageState: (PageState) -> Unit) {
+fun RouteBuilder.PhotoPage(repo: PhotoGalleryInterface) {
+  int { albumID ->
+    int { photoID ->
+      LaunchedEffect(albumID) {
+        val album = repo.fetchAlbum(albumID)
+      }
+    }
+  }
 }

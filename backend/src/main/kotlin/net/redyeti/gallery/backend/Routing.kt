@@ -9,7 +9,7 @@ import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import java.io.File
 
-fun Application.configureRouting(appData: AppData) = routing {
+fun Application.configureRouting() = routing {
   api()
   staticContent()
 }
@@ -36,8 +36,7 @@ private fun Route.api() = route("/api") {
 }
 
 private fun Routing.staticContent() = static {
-  get("/application.env") { call.respondText("TODO: ???") }
-  val folder = "WEB-INF"
+  val folder = "/WEB-INF"
   val index = "$folder/index.html"
   files(folder)
   default(index)
