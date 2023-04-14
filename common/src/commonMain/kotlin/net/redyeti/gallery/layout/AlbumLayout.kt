@@ -104,12 +104,12 @@ class Row(
   val width: Int,
   val spacing: Int,
   val targetRowHeight: Int,
-  val tolerance: Double
+  val tolerance: Double,
+  val absoluteMinRowHeight: Int = targetRowHeight / 2,
+  val absoluteMaxRowHeight: Int = 2 * targetRowHeight
 ) {
   val minAspectRatio = width / targetRowHeight * (1 - tolerance)
   val maxAspectRatio = width / targetRowHeight * (1 + tolerance)
-  val absoluteMinRowHeight = 0.0
-  val absoluteMaxRowHeight = 0.0
   var height = 0
   val itemAspectRatios = mutableListOf<Double>()
   val boxes = mutableListOf<Box>()
@@ -145,7 +145,7 @@ class Row(
   fun isLayoutComplete() = height > 0
 
   fun completeLayout(newHeight: Int) {
-    val clampedHeight = max(absoluteMinRowHeight.roundToInt(), min(newHeight, absoluteMaxRowHeight.roundToInt()))
+    val clampedHeight = max(absoluteMinRowHeight, min(newHeight, absoluteMaxRowHeight))
     val clampedToNativeRatio: Double
     if (newHeight != clampedHeight) {
       height = clampedHeight
