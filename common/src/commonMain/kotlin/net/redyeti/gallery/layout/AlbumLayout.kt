@@ -14,11 +14,12 @@ class LayoutConfig(
   val padding: ContainerPadding = ContainerPadding(10, 10, 10, 10),
   val boxSpacing: BoxSpacing = BoxSpacing(10, 10),
   val targetRowHeight: Int = 320,
-  val targetTolerance: Double = 0.25,
-  var widowCount: Int = 0
-)
+  val tolerance: Double = 0.25
+) {
+  var widowCount = 0
+}
 
-class Box(var top: Int, var left: Int, var width: Int, var height: Int)
+data class Box(var top: Int, var left: Int, var width: Int, var height: Int)
 
 class LayoutData(var containerHeight: Int) {
   val layoutBoxes = mutableListOf<Box>()
@@ -44,14 +45,14 @@ object AlbumLayout {
       config.width - config.padding.left - config.padding.right,
       config.boxSpacing.horizontal,
       config.targetRowHeight,
-      config.targetTolerance
+      config.tolerance
     )
   }
 
   fun compute(config: LayoutConfig, data: LayoutData, aspectRatios: List<Double>): LayoutResult {
     val laidOutItems = mutableListOf<Double>()
     var currentRow: Row? = null
-    aspectRatios.forEachIndexed { i, ratio ->
+    aspectRatios.forEach { ratio ->
       var current = currentRow
       // Make a new row if one isn't already in progress
       if (current == null) {
@@ -85,7 +86,7 @@ object AlbumLayout {
       if (data.rows.isNotEmpty()) {
         current.completeLayout(data.rows.last().height)
       } else {
-        current.completeLayout(current.targetRowHeight)
+        current.completeLayout(current.targetHeight)
       }
       laidOutItems += addRow(config, data, current)
       config.widowCount = current.itemAspectRatios.size
@@ -103,13 +104,13 @@ class Row(
   val left: Int,
   val width: Int,
   val spacing: Int,
-  val targetRowHeight: Int,
+  val targetHeight: Int,
   val tolerance: Double,
-  val absoluteMinRowHeight: Int = targetRowHeight / 2,
-  val absoluteMaxRowHeight: Int = 2 * targetRowHeight
+  val minAllowedHeight: Int = targetHeight / 2,
+  val maxAllowedHeight: Int = 2 * targetHeight
 ) {
-  val minAspectRatio = width / targetRowHeight * (1 - tolerance)
-  val maxAspectRatio = width / targetRowHeight * (1 + tolerance)
+  val minAspectRatio = width / targetHeight * (1 - tolerance)
+  val maxAspectRatio = width / targetHeight * (1 + tolerance)
   var height = 0
   val itemAspectRatios = mutableListOf<Double>()
   val boxes = mutableListOf<Box>()
@@ -117,7 +118,7 @@ class Row(
   fun addItem(aspectRatio: Double): Boolean {
     val widthWithoutSpacing = width - itemAspectRatios.size * spacing
     val newAspectRatio = itemAspectRatios.sumOf { it } + aspectRatio
-    val targetAspectRatio = widthWithoutSpacing / targetRowHeight
+    val targetAspectRatio = widthWithoutSpacing.toDouble() / targetHeight.toDouble()
 
     if (newAspectRatio < minAspectRatio) {
       itemAspectRatios.add(aspectRatio)
@@ -131,7 +132,7 @@ class Row(
       }
       val prevWidthWithoutSpacing = width - (itemAspectRatios.size - 1) * spacing
       val prevAspectRatio = itemAspectRatios.sumOf { it }
-      val prevTargetAspectRatio = prevWidthWithoutSpacing / targetRowHeight
+      val prevTargetAspectRatio = prevWidthWithoutSpacing / targetHeight
       if (abs(newAspectRatio - targetAspectRatio) > abs(prevAspectRatio - prevTargetAspectRatio)) {
         completeLayout((prevWidthWithoutSpacing.toDouble() / prevAspectRatio).roundToInt())
         return false
@@ -145,7 +146,7 @@ class Row(
   fun isLayoutComplete() = height > 0
 
   fun completeLayout(newHeight: Int) {
-    val clampedHeight = max(absoluteMinRowHeight, min(newHeight, absoluteMaxRowHeight))
+    val clampedHeight = max(minAllowedHeight, min(newHeight, maxAllowedHeight))
     val clampedToNativeRatio: Double
     if (newHeight != clampedHeight) {
       height = clampedHeight
@@ -157,7 +158,7 @@ class Row(
 
     var widthSum = left
     itemAspectRatios.forEach { ratio ->
-      val box = Box(top, (ratio * height * clampedToNativeRatio).roundToInt(), height, left)
+      val box = Box(top, left, (ratio * height * clampedToNativeRatio).roundToInt(), height)
       widthSum += box.width + spacing
       boxes += box
     }
