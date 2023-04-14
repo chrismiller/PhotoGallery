@@ -117,8 +117,7 @@ class Row(
 
   fun addItem(aspectRatio: Double): Boolean {
     val widthWithoutSpacing = width - itemAspectRatios.size * spacing
-    val newAspectRatio = itemAspectRatios.sumOf { it } + aspectRatio
-    val targetAspectRatio = widthWithoutSpacing.toDouble() / targetHeight.toDouble()
+    val newAspectRatio = itemAspectRatios.sum() + aspectRatio
 
     if (newAspectRatio < minAspectRatio) {
       itemAspectRatios.add(aspectRatio)
@@ -130,13 +129,17 @@ class Row(
         completeLayout((widthWithoutSpacing.toDouble() / newAspectRatio).roundToInt())
         return true
       }
+      val targetAspectRatio = widthWithoutSpacing.toDouble() / targetHeight.toDouble()
       val prevWidthWithoutSpacing = width - (itemAspectRatios.size - 1) * spacing
-      val prevAspectRatio = itemAspectRatios.sumOf { it }
+      val prevAspectRatio = itemAspectRatios.sum()
       val prevTargetAspectRatio = prevWidthWithoutSpacing / targetHeight
       if (abs(newAspectRatio - targetAspectRatio) > abs(prevAspectRatio - prevTargetAspectRatio)) {
         completeLayout((prevWidthWithoutSpacing.toDouble() / prevAspectRatio).roundToInt())
         return false
       }
+      itemAspectRatios.add(aspectRatio)
+      completeLayout((widthWithoutSpacing.toDouble() / newAspectRatio).roundToInt())
+      return true
     }
     itemAspectRatios.add(aspectRatio)
     completeLayout((widthWithoutSpacing.toDouble() / newAspectRatio).roundToInt())
