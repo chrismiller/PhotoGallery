@@ -5,7 +5,11 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.roundToInt
 
-class ContainerPadding(val top: Int, val left: Int, val bottom: Int, val right: Int)
+class ContainerPadding(val top: Int, val left: Int, val bottom: Int, val right: Int) {
+  companion object {
+    val None = ContainerPadding(0, 0, 0, 0)
+  }
+}
 
 class BoxSpacing(val horizontal: Int, val vertical: Int)
 
