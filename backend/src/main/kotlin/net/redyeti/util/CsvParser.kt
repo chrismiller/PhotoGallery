@@ -80,9 +80,12 @@ class CsvParser(val delimiter: Char = ',', val quoteChar: Char = '"', val escape
           continue
         }
         '\n' -> {
-          if (state == State.QuotedField) throw IllegalStateException("Missing end quote at line $lineNumber, col $columnNumber")
-          endField()
-          break
+          // If we're within a quoted field, treat this as a multiline string
+          if (state != State.QuotedField) {
+            endField()
+            state = State.Start
+            continue
+          }
         }
         else -> {
           if (state == State.Start) {

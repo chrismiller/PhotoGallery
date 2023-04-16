@@ -63,7 +63,7 @@ class AlbumScanner(val config: AppConfig) {
           albums += loadAlbum(album)
           logger.i("Loaded ${album.name}")
         } catch (e: Exception) {
-          logger.e("Error loading album '${album.name}', skipping...'", e)
+          logger.e("Error loading album '${album.name}'. Reason: ${e.message}", e)
         }
       }
     }
@@ -87,31 +87,52 @@ class AlbumScanner(val config: AppConfig) {
     val params = listOf(config.exiftool.toString()) + EXIFTOOL_METADATA_SCAN
     val parser = CsvParser()
     val headers = mutableListOf<String>()
-    val processor: (String) -> Unit = { s ->
-      print(s)
-      val fields = parser.parseLine(s.reader())
-      if (headers.isEmpty()) {
-        headers += fields
-      } else {
-        val row = parser.parseLine(s.reader(), headers)
-        val filename = row["FileName"]!!
-        val timeTaken = row["DateTimeOriginal"]
-        val timeOffset = row["OffsetTimeOriginal"]
-        val timeStr = if (timeTaken != null && timeOffset != null) "$timeTaken $timeOffset" else timeTaken!!
-        val description = row["Description"] ?: ""
-        val width = row["ImageWidth"].asInt()
-        val height = row["ImageHeight"].asInt()
-        val latitude = row["GPSLatitude#"].asDouble()
-        val longitude = row["GPSLongitude#"].asDouble()
-        val altitude = row["GPSAltitude#"].asDouble()
-        val location = if (latitude != 0.0 || longitude != 0.0 || altitude != 0.0) {
-          GpsCoordinates(latitude, longitude, altitude)
-        } else {
-          null
+
+    class RowCollector {
+      private var fullRow = ""
+      private var quoteCount = 0
+      fun gather(s: String): Boolean {
+        quoteCount += s.count { it == '"' }
+        fullRow = if (fullRow.isEmpty()) s else "$fullRow\n$s"
+        return quoteCount % 2 == 0
+      }
+
+      fun take(): String {
+        return fullRow.also {
+          fullRow = ""
+          quoteCount = 0
         }
-        val photo = Photo(photoId++, filename, description, width, height, timeStr, location)
-        println(photo)
-        photos += photo
+      }
+    }
+
+    val collector = RowCollector()
+    val processor: (String) -> Unit = { s ->
+      if (collector.gather(s)) {
+        val csvRow = collector.take()
+        print(csvRow)
+        if (headers.isEmpty()) {
+          headers += parser.parseLine(csvRow.reader())
+        } else {
+          val row = parser.parseLine(csvRow.reader(), headers)
+          val filename = row["FileName"]!!
+          val timeTaken = row["DateTimeOriginal"]
+          val timeOffset = row["OffsetTimeOriginal"]
+          val timeStr = if (timeTaken != null && timeOffset != null) "$timeTaken $timeOffset" else timeTaken!!
+          val description = row["Description"] ?: ""
+          val width = row["ImageWidth"].asInt()
+          val height = row["ImageHeight"].asInt()
+          val latitude = row["GPSLatitude#"].asDouble()
+          val longitude = row["GPSLongitude#"].asDouble()
+          val altitude = row["GPSAltitude#"].asDouble()
+          val location = if (latitude != 0.0 || longitude != 0.0 || altitude != 0.0) {
+            GpsCoordinates(latitude, longitude, altitude)
+          } else {
+            null
+          }
+          val photo = Photo(photoId++, filename, description, width, height, timeStr, location)
+          println(photo)
+          photos += photo
+        }
       }
     }
     val exitCode = execute(params, processor, {}, originalsDir)
