@@ -27,6 +27,12 @@ class TestCsvParser {
   }
 
   @Test
+  fun testMultilineField() {
+    val parser = CsvParser()
+    assertEquals(listOf("a", "b\nc", "d"), parser.parseLine("a,\"b\nc\",d".reader()))
+  }
+
+  @Test
   fun testEscaping() {
     val parser = CsvParser()
 
