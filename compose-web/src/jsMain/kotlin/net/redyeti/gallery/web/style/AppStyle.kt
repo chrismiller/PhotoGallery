@@ -83,4 +83,18 @@ object AppStyle : StyleSheet() {
   val divFloat by style {
     property("float", "left")
   }
+
+  val wrapper by style {
+    position(Position.Relative)
+    marginTop(0.px)
+    marginBottom(0.px)
+    property("margin-left", auto)
+    property("margin-right", auto)
+    backgroundColor(StyleVars.colourGreyLight.value())
+  }
+
+  val box by style {
+    position(Position.Absolute)
+    backgroundColor(StyleVars.colourGreyMedium.value())
+  }
 }

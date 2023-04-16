@@ -25,7 +25,7 @@ class LayoutConfig(
 
 data class Box(var top: Int, var left: Int, var width: Int, var height: Int)
 
-class LayoutData(var containerHeight: Int) {
+class LayoutData(var containerHeight: Int = 10) {
   val layoutBoxes = mutableListOf<Box>()
   val rows = mutableListOf<Row>()
 }
