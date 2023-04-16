@@ -14,11 +14,11 @@ class ContainerPadding(val top: Int, val left: Int, val bottom: Int, val right: 
 class BoxSpacing(val horizontal: Int, val vertical: Int)
 
 class LayoutConfig(
-  val width: Int = 1060,
+  val width: Int = 1000,
   val padding: ContainerPadding = ContainerPadding(10, 10, 10, 10),
   val boxSpacing: BoxSpacing = BoxSpacing(10, 10),
-  val targetRowHeight: Int = 320,
-  val tolerance: Double = 0.25
+  val targetRowHeight: Int = 200,
+  val tolerance: Double = 0.2
 ) {
   var widowCount = 0
 }
@@ -120,7 +120,7 @@ class Row(
   val boxes = mutableListOf<Box>()
 
   fun addItem(aspectRatio: Double): Boolean {
-    val widthWithoutSpacing = width - itemAspectRatios.size * spacing
+    val widthWithoutSpacing = (width - itemAspectRatios.size * spacing).toDouble()
     val newAspectRatio = itemAspectRatios.sum() + aspectRatio
 
     if (newAspectRatio < minAspectRatio) {
@@ -129,11 +129,12 @@ class Row(
     }
     if (newAspectRatio > maxAspectRatio) {
       if (itemAspectRatios.isEmpty()) {
+        // A wide panorama, we have to accept this
         itemAspectRatios.add(aspectRatio)
-        completeLayout((widthWithoutSpacing.toDouble() / newAspectRatio).roundToInt())
+        completeLayout((widthWithoutSpacing / newAspectRatio).roundToInt())
         return true
       }
-      val targetAspectRatio = widthWithoutSpacing.toDouble() / targetHeight.toDouble()
+      val targetAspectRatio = widthWithoutSpacing / targetHeight.toDouble()
       val prevWidthWithoutSpacing = width - (itemAspectRatios.size - 1) * spacing
       val prevAspectRatio = itemAspectRatios.sum()
       val prevTargetAspectRatio = prevWidthWithoutSpacing / targetHeight
@@ -142,11 +143,11 @@ class Row(
         return false
       }
       itemAspectRatios.add(aspectRatio)
-      completeLayout((widthWithoutSpacing.toDouble() / newAspectRatio).roundToInt())
+      completeLayout((widthWithoutSpacing / newAspectRatio).roundToInt())
       return true
     }
     itemAspectRatios.add(aspectRatio)
-    completeLayout((widthWithoutSpacing.toDouble() / newAspectRatio).roundToInt())
+    completeLayout((widthWithoutSpacing / newAspectRatio).roundToInt())
     return true
   }
 
@@ -165,7 +166,7 @@ class Row(
 
     var widthSum = left
     itemAspectRatios.forEach { ratio ->
-      val box = Box(top, left, (ratio * height * clampedToNativeRatio).roundToInt(), height)
+      val box = Box(top, widthSum, (ratio * height * clampedToNativeRatio).roundToInt(), height)
       widthSum += box.width + spacing
       boxes += box
     }

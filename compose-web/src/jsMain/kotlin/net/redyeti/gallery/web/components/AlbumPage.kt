@@ -42,7 +42,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 
     val albumWidth = window.innerWidth - 16
     val layout = AlbumLayout.compute(
-      LayoutConfig(albumWidth),
+      LayoutConfig(albumWidth, targetRowHeight = 150, tolerance = 0.2),
       LayoutData(),
       popAlbum.photos.map { p -> p.width.toDouble() / p.height.toDouble() }
     )
@@ -68,11 +68,5 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
         }
       }
     }
-
-//    Div(attrs = { classes(AppStyle.divWrapper) }) {
-//      popAlbum.photos.forEach { photo ->
-//        PhotoThumbnail(popAlbum.album, photo)
-//      }
-//    }
   }
 }
