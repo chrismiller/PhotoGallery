@@ -26,7 +26,7 @@ kotlin {
             }
         }
     }
-    jvmToolchain(8)
+    jvmToolchain(19)
 }
 
 // workaround for https://youtrack.jetbrains.com/issue/KT-48273
