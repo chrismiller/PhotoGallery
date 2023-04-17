@@ -4,29 +4,33 @@ import androidx.compose.runtime.*
 import app.softwork.routingcompose.RouteBuilder
 import app.softwork.routingcompose.Routing
 import kotlinx.browser.window
-import net.redyeti.gallery.layout.AlbumLayout
-import net.redyeti.gallery.layout.ContainerPadding
-import net.redyeti.gallery.layout.LayoutConfig
-import net.redyeti.gallery.layout.LayoutData
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
-import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.TextStyle
-import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H1
 import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.Text
-import kotlin.js.Date
+import org.w3c.dom.events.Event
 
 @Routing
 @Composable
 fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
+  var albumWidth by remember { mutableStateOf(window.innerWidth - 20) }
 
   int { albumID ->
     LaunchedEffect(albumID) {
       album = repo.fetchAlbum(albumID)
+    }
+
+    DisposableEffect(albumID) {
+      val resizeListener: (Event) -> Unit = {
+        albumWidth = window.innerWidth - 20
+      }
+      window.addEventListener("resize", resizeListener)
+      onDispose {
+        window.removeEventListener("resize", resizeListener)
+      }
     }
   }
 
@@ -58,37 +62,6 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
       )[popAlbum.album.month - 1]
       Text("$monthName ${popAlbum.album.year}")
     }
-
-    val albumWidth = window.innerWidth - 20
-    val layout = AlbumLayout.compute(
-      LayoutConfig(
-        albumWidth, padding = ContainerPadding(30, 50, 50, 50),
-        targetRowHeight = 150, tolerance = 0.2
-      ),
-      LayoutData(),
-      popAlbum.photos.map { p -> p.width.toDouble() / p.height.toDouble() }
-    )
-
-    Div(attrs = {
-      classes(AppStyle.justified)
-      style {
-        height(layout.containerHeight.px)
-        width(albumWidth.px)
-      }
-    }) {
-      layout.boxes.forEachIndexed { i, box ->
-        Div(attrs = {
-          classes(AppStyle.box)
-          style {
-            left(box.left.px)
-            top(box.top.px)
-            width(box.width.px)
-            height(box.height.px)
-          }
-        }) {
-          PhotoThumbnail(popAlbum.album, popAlbum.photos[i])
-        }
-      }
-    }
+    AlbumGrid(popAlbum, albumWidth)
   }
 }
