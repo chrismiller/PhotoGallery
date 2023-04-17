@@ -88,9 +88,9 @@ object AlbumLayout {
     val current = currentRow
     if (current != null && current.itemAspectRatios.isNotEmpty()) {
       if (data.rows.isNotEmpty()) {
-        current.completeLayout(data.rows.last().height)
+        current.completeLayout(data.rows.last().height, false)
       } else {
-        current.completeLayout(current.targetHeight)
+        current.completeLayout(current.targetHeight, false)
       }
       laidOutItems += addRow(config, data, current)
       config.widowCount = current.itemAspectRatios.size
@@ -153,7 +153,7 @@ class Row(
 
   fun isLayoutComplete() = height > 0
 
-  fun completeLayout(newHeight: Int) {
+  fun completeLayout(newHeight: Int, justify: Boolean = true) {
     val clampedHeight = max(minAllowedHeight, min(newHeight, maxAllowedHeight))
     val clampedToNativeRatio: Double
     if (newHeight != clampedHeight) {
@@ -171,20 +171,22 @@ class Row(
       boxes += box
     }
 
-    // Apply justification
-    widthSum -= spacing + left
-    val errorWidthPerItem = (widthSum - width).toDouble() / itemAspectRatios.size
-    val roundedCumulativeErrors =
-      itemAspectRatios.mapIndexed { i, item -> ((i + 1).toDouble() * errorWidthPerItem).roundToInt() }
-    if (boxes.size == 1) {
-      boxes.first().width -= errorWidthPerItem.roundToInt()
-    } else {
-      boxes.forEachIndexed { i, box ->
-        if (i > 0) {
-          box.left -= roundedCumulativeErrors[i - 1]
-          box.width -= roundedCumulativeErrors[i] - roundedCumulativeErrors[i - 1]
-        } else {
-          box.width -= roundedCumulativeErrors[i]
+    if (justify) {
+      // Apply justification
+      widthSum -= spacing + left
+      val errorWidthPerItem = (widthSum - width).toDouble() / itemAspectRatios.size
+      val roundedCumulativeErrors =
+        itemAspectRatios.mapIndexed { i, item -> ((i + 1).toDouble() * errorWidthPerItem).roundToInt() }
+      if (boxes.size == 1) {
+        boxes.first().width -= errorWidthPerItem.roundToInt()
+      } else {
+        boxes.forEachIndexed { i, box ->
+          if (i > 0) {
+            box.left -= roundedCumulativeErrors[i - 1]
+            box.width -= roundedCumulativeErrors[i] - roundedCumulativeErrors[i - 1]
+          } else {
+            box.width -= roundedCumulativeErrors[i]
+          }
         }
       }
     }
