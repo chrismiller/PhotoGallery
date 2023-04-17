@@ -20,8 +20,8 @@ class AlbumScanner(val config: AppConfig) {
     private const val ORIGINAL_PATH = "original"
     private const val LARGE_PATH = "large"
     private const val THUMBNAILS_PATH = "thumb"
-    private const val MAX_LARGE_DIMENSION = 2048
-    private const val MAX_THUMBNAIL_DIMENSION = 256
+    private const val MIN_LARGE_DIMENSION = 1600
+    private const val MIN_THUMBNAIL_DIMENSION = 200
 
     private val EXIFTOOL_METADATA_SCAN = listOf(
       "-S", "-csv", "-FileName", "-DateTimeOriginal",
@@ -178,7 +178,7 @@ class AlbumScanner(val config: AppConfig) {
       val source = originalsDir.resolve(it.filename)
       val large = largeDir.resolve(it.filename)
       if (large.notExists()) {
-        resizer.resize(source, large, MAX_LARGE_DIMENSION)
+        resizer.resize(source, large, MIN_LARGE_DIMENSION)
       }
     }
 
@@ -191,7 +191,7 @@ class AlbumScanner(val config: AppConfig) {
       val large = largeDir.resolve(it.filename)
       val thumbnail = thumbnailDir.resolve(it.filename)
       if (thumbnail.notExists()) {
-        resizer.thumbnail(large, thumbnail, MAX_THUMBNAIL_DIMENSION)
+        resizer.thumbnail(large, thumbnail, MIN_THUMBNAIL_DIMENSION)
       }
     }
   }
