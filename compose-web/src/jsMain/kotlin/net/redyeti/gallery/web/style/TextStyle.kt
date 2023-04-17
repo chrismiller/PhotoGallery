@@ -4,7 +4,7 @@ import org.jetbrains.compose.web.css.*
 
 object TextStyle : StyleSheet(AppStyle) {
   val titleText by style {
-    color(rgb(23, 24, 28))
+    color(StyleVars.colourGreyLight.value())
     fontSize(50.px)
     property("font-size", 50.px)
     property("letter-spacing", (-1.5).px)
@@ -18,7 +18,7 @@ object TextStyle : StyleSheet(AppStyle) {
   }
 
   val albumText by style {
-    color(rgb(23, 24, 28))
+    color(StyleVars.colourGreyLight.value())
     fontSize(24.px)
     property("font-size", 28.px)
     property("letter-spacing", "normal")

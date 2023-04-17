@@ -27,15 +27,13 @@ object AppStyle : StyleSheet() {
   init {
     "body" style {
       fontFamily("Helvetica", "Geneva", "Arial", "sans-serif")
-      color(StyleVars.colourGreyMedium.value())
+      color(StyleVars.colourGreyLight.value())
       backgroundColor(Color.black)
       textAlign("center")
     }
 
     "img" style {
       border(1.px, LineStyle.Solid, Color.white)
-      marginLeft(StyleVars.imageSideMargin.value())
-      marginRight(StyleVars.imageSideMargin.value())
 
       "logo" style {
         border(0.px)
@@ -82,6 +80,11 @@ object AppStyle : StyleSheet() {
 
   val divFloat by style {
     property("float", "left")
+  }
+
+  val justified by style {
+    position(Position.Relative)
+    backgroundColor(Color.black)
   }
 
   val wrapper by style {

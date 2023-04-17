@@ -5,17 +5,19 @@ import app.softwork.routingcompose.RouteBuilder
 import app.softwork.routingcompose.Routing
 import kotlinx.browser.window
 import net.redyeti.gallery.layout.AlbumLayout
+import net.redyeti.gallery.layout.ContainerPadding
 import net.redyeti.gallery.layout.LayoutConfig
 import net.redyeti.gallery.layout.LayoutData
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
 import net.redyeti.gallery.web.style.AppStyle
-import net.redyeti.gallery.web.style.AppStyle.left
 import net.redyeti.gallery.web.style.TextStyle
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.H1
+import org.jetbrains.compose.web.dom.H3
 import org.jetbrains.compose.web.dom.Text
+import kotlin.js.Date
 
 @Routing
 @Composable
@@ -39,16 +41,36 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     H1(attrs = { classes(TextStyle.titleText) }) {
       Text(popAlbum.album.name)
     }
+    H3 {
+      val monthName = listOf(
+        "January",
+        "February",
+        "March",
+        "April",
+        "May",
+        "June",
+        "July",
+        "August",
+        "September",
+        "October",
+        "November",
+        "December"
+      )[popAlbum.album.month - 1]
+      Text("$monthName ${popAlbum.album.year}")
+    }
 
-    val albumWidth = window.innerWidth - 16
+    val albumWidth = window.innerWidth - 20
     val layout = AlbumLayout.compute(
-      LayoutConfig(albumWidth, targetRowHeight = 150, tolerance = 0.2),
+      LayoutConfig(
+        albumWidth, padding = ContainerPadding(30, 50, 50, 50),
+        targetRowHeight = 150, tolerance = 0.2
+      ),
       LayoutData(),
       popAlbum.photos.map { p -> p.width.toDouble() / p.height.toDouble() }
     )
 
     Div(attrs = {
-      classes(AppStyle.wrapper)
+      classes(AppStyle.justified)
       style {
         height(layout.containerHeight.px)
         width(albumWidth.px)
