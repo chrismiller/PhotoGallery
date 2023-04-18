@@ -10,11 +10,18 @@ import io.ktor.server.util.*
 import java.io.File
 
 fun Application.configureRouting(staticBase: String) = routing {
-  api()
+  route("/api") {
+    api()
+  }
   staticContent(staticBase)
+  singlePageApplication {
+    useResources = true
+    filesPath = "WEB-INF"
+    defaultPage = "index.html"
+  }
 }
 
-private fun Route.api() = route("/api") {
+private fun Route.api() {
   get("/status") { call.respond(HttpStatusCode.OK) }
 
   get("/albums") {
@@ -36,13 +43,6 @@ private fun Route.api() = route("/api") {
 }
 
 private fun Routing.staticContent(basePath: String) = static {
-  val folder = "/WEB-INF"
-  val index = "$folder/index.html"
-  files(folder)
-  default(index)
-  resources(folder)
-  defaultResource(index)
-
   static("/image") {
     staticRootFolder = File(basePath, "Albums")
     files(".")
