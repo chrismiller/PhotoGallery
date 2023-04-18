@@ -46,7 +46,7 @@ tasks.withType<KotlinCompile> {
 tasks.named<ProcessResources>("processResources") {
     dependsOn(":compose-web:assemble")
     from(File(rootProject.project("compose-web").buildDir, "distributions/")) {
-        into("WEB-INF")
+        into("app")
     }
 }
 

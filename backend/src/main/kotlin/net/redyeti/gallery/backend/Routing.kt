@@ -16,7 +16,7 @@ fun Application.configureRouting(staticBase: String) = routing {
   staticContent(staticBase)
   singlePageApplication {
     useResources = true
-    filesPath = "WEB-INF"
+    filesPath = "app"
     defaultPage = "index.html"
   }
 }
@@ -42,9 +42,7 @@ private fun Route.api() {
   }
 }
 
-private fun Routing.staticContent(basePath: String) = static {
-  static("/image") {
-    staticRootFolder = File(basePath, "Albums")
-    files(".")
-  }
+private fun Routing.staticContent(basePath: String) = static("/image") {
+  staticRootFolder = File(basePath, "Albums")
+  files(".")
 }
