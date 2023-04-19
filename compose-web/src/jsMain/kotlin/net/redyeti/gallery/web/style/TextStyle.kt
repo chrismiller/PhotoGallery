@@ -11,10 +11,7 @@ object TextStyle : StyleSheet(AppStyle) {
     property("font-weight", 900)
     property("line-height", 58.px)
 
-    property(
-      "font-family",
-      "Gotham SSm A,Gotham SSm B,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,Arial,sans-serif"
-    )
+    property("font-family", "Source Sans Pro, sans-serif")
   }
 
   val albumText by style {
@@ -25,9 +22,6 @@ object TextStyle : StyleSheet(AppStyle) {
     property("font-weight", 300)
     property("line-height", 40.px)
 
-    property(
-      "font-family",
-      "Gotham SSm A,Gotham SSm B,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Droid Sans,Helvetica Neue,Arial,sans-serif"
-    )
+    property("font-family", "Source Sans Pro, sans-serif")
   }
 }

@@ -26,7 +26,7 @@ object StyleVars {
 object AppStyle : StyleSheet() {
   init {
     "body" style {
-      fontFamily("Helvetica", "Geneva", "Arial", "sans-serif")
+      fontFamily("Source Sans Pro", "sans-serif")
       color(StyleVars.colourGreyLight.value())
       backgroundColor(Color.black)
       textAlign("center")
@@ -34,10 +34,6 @@ object AppStyle : StyleSheet() {
 
     "img" style {
       border(1.px, LineStyle.Solid, Color.white)
-
-      "logo" style {
-        border(0.px)
-      }
     }
 
     "a" style {
