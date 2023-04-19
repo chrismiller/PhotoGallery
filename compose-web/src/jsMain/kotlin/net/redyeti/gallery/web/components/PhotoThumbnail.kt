@@ -11,7 +11,7 @@ import org.jetbrains.compose.web.dom.Img
 
 @Composable
 fun PhotoThumbnail(album: Album, photo: Photo) {
-  NavLink(to = "/photo/${album.id}/${photo.id}") {
+  NavLink(to = "/album/${album.id}/${photo.id}") {
     Img(
       src = "/image/${album.directory}/thumb/${photo.filename}",
       alt = photo.description,

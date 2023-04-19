@@ -65,7 +65,6 @@ object AppStyle : StyleSheet() {
   }
 
   val divHeader by style {
-    width(1200.px)
     marginTop(0.px)
     marginBottom(0.px)
     property("margin-left", auto)
@@ -95,5 +94,18 @@ object AppStyle : StyleSheet() {
   val box by style {
     position(Position.Absolute)
     backgroundColor(StyleVars.colourGreyMedium.value())
+  }
+
+  val lightbox by style {
+    position(Position.Absolute)
+    top(0.px)
+    left(0.px)
+    backgroundColor(StyleVars.colourGreyDark.value())
+    overflow("hidden")
+    textAlign("center")
+  }
+
+  val lightboximg by style {
+    padding(5.percent)
   }
 }

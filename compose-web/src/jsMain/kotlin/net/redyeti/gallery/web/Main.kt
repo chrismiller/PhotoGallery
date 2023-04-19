@@ -5,7 +5,6 @@ import net.redyeti.gallery.di.initKoin
 import net.redyeti.gallery.repository.PhotoGalleryInterface
 import net.redyeti.gallery.web.components.AlbumPage
 import net.redyeti.gallery.web.components.IndexPage
-import net.redyeti.gallery.web.components.PhotoPage
 import net.redyeti.gallery.web.style.AppStyle
 import org.jetbrains.compose.web.css.Style
 import org.jetbrains.compose.web.renderComposableInBody
@@ -20,9 +19,6 @@ fun main() {
     BrowserRouter("/") {
       route("album") {
         AlbumPage(repo)
-      }
-      route("photo") {
-        PhotoPage(repo)
       }
       route("") {
         IndexPage(repo)
