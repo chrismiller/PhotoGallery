@@ -67,7 +67,9 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     AlbumGrid(popAlbum, albumWidth)
 
     if (photoID >= 0) {
-      PhotoLightbox(popAlbum, popAlbum.photos[photoID])
+      Lightbox {
+        PhotoFull(popAlbum.album, popAlbum.photos[photoID])
+      }
     }
   }
 }

@@ -97,15 +97,41 @@ object AppStyle : StyleSheet() {
   }
 
   val lightbox by style {
-    position(Position.Absolute)
+    position(Position.Fixed)
     top(0.px)
     left(0.px)
-    backgroundColor(StyleVars.colourGreyDark.value())
-    overflow("hidden")
-    textAlign("center")
+    width(100.vw)
+    height(100.vh)
+    backgroundColor(rgba(0, 0, 0, 0.5))
+    display(DisplayStyle.Flex)
+    alignItems(AlignItems.Center)
+    justifyContent(JustifyContent.Center)
+    boxSizing("border-box")
+    padding(15.px)
   }
 
-  val lightboximg by style {
-    padding(5.percent)
+  val lightboxInner by style {
+    position(Position.Relative)
+    width(100.percent)
+    maxWidth(3200.px)
+    minHeight(200.px)
+    backgroundColor(Color.black)
+    property("box-shadow", "0 0 25px rgba(0, 0, 0, 0.5)")
+  }
+
+  val lightboxClose by style {
+    background("none")
+    property("border", "none")
+    outline("none")
+    position(Position.Absolute)
+    top(0.px)
+    right(0.px)
+    padding(0.px, 10.px)
+    fontSize(3.em)
+    cursor("pointer")
+    color(rgba(0, 0, 0, 0.5))
+    hover {
+      color(rgba(0, 0, 0, 0.8))
+    }
   }
 }
