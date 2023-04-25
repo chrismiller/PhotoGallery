@@ -1,7 +1,9 @@
 package net.redyeti.gallery.web.style
 
+import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
+import kotlin.time.Duration.Companion.seconds
 
 object StyleVars {
   val colourGreyLight by variable<CSSColorValue>()
@@ -96,27 +98,58 @@ object AppStyle : StyleSheet() {
     backgroundColor(StyleVars.colourGreyMedium.value())
   }
 
+  @OptIn(ExperimentalComposeWebApi::class)
   val lightbox by style {
     position(Position.Fixed)
-    top(0.px)
-    left(0.px)
-    width(100.vw)
-    height(100.vh)
-    backgroundColor(rgba(0, 0, 0, 0.5))
     display(DisplayStyle.Flex)
     alignItems(AlignItems.Center)
     justifyContent(JustifyContent.Center)
-    boxSizing("border-box")
-    padding(15.px)
+    top(0.px)
+    left(0.px)
+    width(100.percent)
+    height(100.vh)
+    backgroundColor(rgba(0, 0, 0, 0.4))
+    opacity(0.01) // this prevents a repaint between 0 and 0.01
+    this.blank
+    transitions {
+      opacity(0.3)
+      defaultTimingFunction(AnimationTimingFunction.Ease)
+      default
+    }
+    property("z-index", "1000")
+    property("will-change", "opacity")
+
+    style(firstChild) {
+
+    }
   }
 
+  @OptIn(ExperimentalComposeWebApi::class)
   val lightboxInner by style {
-    position(Position.Relative)
-    width(100.percent)
-    maxWidth(3200.px)
-    minHeight(200.px)
-    backgroundColor(Color.black)
-    property("box-shadow", "0 0 25px rgba(0, 0, 0, 0.5)")
+    maxWidth(100.percent)
+    transform { scale(0.9) }
+    transitions {
+      transform {
+        defaultDuration(0.4.s)
+        defaultTimingFunction(AnimationTimingFunction.Ease)
+      }
+    }
+    property("z-index", "1")
+    property("will-change", "transform")
+
+    "image" style {
+      display(DisplayStyle.Block)
+      position(Position.Absolute)
+      top(0.px)
+      left(0.px)
+      bottom(0.px)
+      right(0.px)
+      property("margin", auto)
+      maxWidth(95.percent)
+      maxHeight(95.percent)
+      width(auto)
+      height(auto)
+    }
   }
 
   val lightboxClose by style {

@@ -9,7 +9,7 @@ object Versions {
 
     const val kmpNativeCoroutinesVersion = "1.0.0-ALPHA-5"
 
-    const val composeDesktopWeb = "1.4.0-rc03"
+    const val composeDesktopWeb = "1.4.0"
 
     const val routingCompose = "0.2.12"
 

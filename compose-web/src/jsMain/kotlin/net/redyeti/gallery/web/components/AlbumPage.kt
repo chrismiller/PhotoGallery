@@ -10,6 +10,7 @@ import net.redyeti.gallery.repository.PhotoGalleryInterface
 import net.redyeti.gallery.web.style.TextStyle
 import org.jetbrains.compose.web.dom.H1
 import org.jetbrains.compose.web.dom.H3
+import org.jetbrains.compose.web.dom.Small
 import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.events.Event
 import kotlin.math.max
@@ -68,7 +69,16 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 
     if (photoID >= 0) {
       Lightbox {
-        PhotoFull(popAlbum.album, popAlbum.photos[photoID])
+        val photo = popAlbum.photos[photoID]
+        LightboxImage(
+          "/image/${popAlbum.album.directory}/large/${photo.filename}",
+          Count(photoID, popAlbum.photos.size)
+        ) {
+          Text(photo.description)
+          Small {
+            Text("by Chris Miller")
+          }
+        }
       }
     }
   }
