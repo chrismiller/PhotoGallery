@@ -36,7 +36,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
       photoID = min(photoID, album!!.photos.size - 1)
     }
 
-    DisposableEffect(albumID) {
+    DisposableEffect(albumWidth) {
       val resizeListener: (Event) -> Unit = {
         albumWidth = window.innerWidth - 20
       }

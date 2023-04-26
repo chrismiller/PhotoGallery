@@ -1,9 +1,7 @@
 package net.redyeti.gallery.web.components
 
-import androidx.compose.runtime.Composable
-import app.softwork.routingcompose.Routing
+import androidx.compose.runtime.*
 import kotlinx.browser.window
-import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.attributes.ButtonType
 import org.jetbrains.compose.web.attributes.type
@@ -13,6 +11,7 @@ import org.jetbrains.compose.web.dom.Button
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Img
 import org.jetbrains.compose.web.dom.Text
+import org.w3c.dom.events.Event
 
 @Composable
 fun Lightbox(content: @Composable () -> Unit) {
@@ -37,10 +36,21 @@ fun LightboxImage(imageUrl: String, count: Count? = null, caption: @Composable (
       type(ButtonType.Button)
     }) { Text("×") }
     Figure {
+      var maxHeight by remember { mutableStateOf(window.innerHeight) }
+
+      DisposableEffect(maxHeight) {
+        val resizeListener: (Event) -> Unit = {
+          maxHeight = window.innerHeight
+        }
+        window.addEventListener("resize", resizeListener)
+        onDispose {
+          window.removeEventListener("resize", resizeListener)
+        }
+      }
       Img(src = imageUrl, attrs = {
         classes(LightboxStyle.lbImage)
         // The following line prevents the image from exceeding the window height
-        style { maxHeight(window.innerHeight.px) }
+        style { maxHeight(maxHeight.px) }
       })
       FigCaption {
         Div(attrs = { classes(LightboxStyle.lbBottomBar) }) {
