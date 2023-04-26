@@ -21,6 +21,14 @@ fun Lightbox(content: @Composable () -> Unit) {
       Div(attrs = { classes(LightboxStyle.lbContent) }) {
         content()
       }
+      Button(attrs = {
+        title("Previous (Left arrow key)")
+        classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowLeft)}
+      ) {}
+      Button(attrs = {
+        title("Next (Right arrow key)")
+        classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowRight)}
+      ) {}
     }
   }
 }
