@@ -1,6 +1,9 @@
 package net.redyeti.gallery.backend
 
 import co.touchlab.kermit.Logger
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -173,26 +176,38 @@ class AlbumScanner(val config: AppConfig) {
     largeDir.createDirectories()
     thumbnailDir.createDirectories()
 
-    // Create large versions of the images if they don't already exist
-    album.photos.forEach {
-      val source = originalsDir.resolve(it.filename)
-      val large = largeDir.resolve(it.filename)
-      if (large.notExists()) {
-        resizer.resize(source, large, MIN_LARGE_DIMENSION)
+    runBlocking {
+      val createLarge = launch(Dispatchers.Default) {
+        // Create large versions of the images if they don't already exist
+        album.photos.forEach {
+          val source = originalsDir.resolve(it.filename)
+          val large = largeDir.resolve(it.filename)
+          if (large.notExists()) {
+            launch {
+              resizer.resize(source, large, MIN_LARGE_DIMENSION)
+            }
+          }
+        }
       }
-    }
+      createLarge.join()
 
-    // Strip out as much EXIF data as we can
-    val params = listOf(config.exiftool.toString()) + EXIFTOOL_STRIP_EXIF
-    execute(params, {}, {}, largeDir)
+      // Strip out as much EXIF data as we can
+      val params = listOf(config.exiftool.toString()) + EXIFTOOL_STRIP_EXIF
+      execute(params, {}, {}, largeDir)
 
-    // Now create thumbnails from the large versions
-    album.photos.forEach {
-      val large = largeDir.resolve(it.filename)
-      val thumbnail = thumbnailDir.resolve(it.filename)
-      if (thumbnail.notExists()) {
-        resizer.thumbnail(large, thumbnail, MIN_THUMBNAIL_DIMENSION)
+      val createThumbnails = launch(Dispatchers.Default) {
+        // Now create thumbnails from the large versions
+        album.photos.forEach {
+          val large = largeDir.resolve(it.filename)
+          val thumbnail = thumbnailDir.resolve(it.filename)
+          if (thumbnail.notExists()) {
+            launch {
+              resizer.resize(large, thumbnail, MIN_THUMBNAIL_DIMENSION)
+            }
+          }
+        }
       }
+      createThumbnails.join()
     }
   }
 }
