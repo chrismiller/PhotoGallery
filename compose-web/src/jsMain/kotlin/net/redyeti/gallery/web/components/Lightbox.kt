@@ -1,6 +1,7 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
+import app.softwork.routingcompose.NavLink
 import kotlinx.browser.window
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.attributes.ButtonType
@@ -14,21 +15,29 @@ import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.events.Event
 
 @Composable
-fun Lightbox(content: @Composable () -> Unit) {
+fun Lightbox(previousUrl: String?, nextUrl: String?, content: @Composable () -> Unit) {
   Div(attrs = { classes(LightboxStyle.lbBackground, LightboxStyle.lbReady) }) {}
   Div(attrs = { classes(LightboxStyle.lbPopup, LightboxStyle.lbCloseButtonIn, LightboxStyle.lbReady) }) {
     Div(attrs = { classes(LightboxStyle.lbContainer, LightboxStyle.lbImageHolder) }) {
       Div(attrs = { classes(LightboxStyle.lbContent) }) {
         content()
       }
-      Button(attrs = {
-        title("Previous (Left arrow key)")
-        classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowLeft)}
-      ) {}
-      Button(attrs = {
-        title("Next (Right arrow key)")
-        classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowRight)}
-      ) {}
+      if (previousUrl != null) {
+        NavLink(previousUrl) {
+          Button(attrs = {
+            title("Previous (Left arrow key)")
+            classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowLeft)}
+          ) {}
+        }
+      }
+      if (nextUrl != null) {
+        NavLink(nextUrl) {
+          Button(attrs = {
+            title("Next (Right arrow key)")
+            classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowRight)}
+          ) {}
+        }
+      }
     }
   }
 }

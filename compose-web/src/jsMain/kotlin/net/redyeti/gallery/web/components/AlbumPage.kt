@@ -68,18 +68,30 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     AlbumGrid(popAlbum, albumWidth)
 
     if (photoID >= 0) {
-      Lightbox {
-        val photo = popAlbum.photos[photoID]
-        LightboxImage(
-          "/image/${popAlbum.album.directory}/large/${photo.filename}",
-          Count(photoID, popAlbum.photos.size)
-        ) {
-          Text(photo.description)
-          Small {
-            Text("by Chris Miller")
+      val previousUrl = popAlbum.photoUrl(photoID - 1)
+      val nextUrl = popAlbum.photoUrl(photoID + 1)
+        Lightbox(previousUrl, nextUrl) {
+          val photo = popAlbum.photos[photoID]
+          LightboxImage(
+            popAlbum.imageUrl(photoID),
+            Count(photoID, popAlbum.photos.size)
+          ) {
+            Text(photo.description)
+            Small {
+              Text("by Chris Miller")
+            }
           }
         }
-      }
     }
   }
+}
+
+fun PopulatedAlbum.photoUrl(id: Int): String {
+  val wrappedId = (id + photos.size) % photos.size
+  return "/album/${album.id}/$wrappedId"
+}
+
+fun PopulatedAlbum.imageUrl(id: Int): String {
+  val wrappedId = (id + photos.size) % photos.size
+  return "/image/${album.directory}/large/${photos[wrappedId].filename}"
 }
