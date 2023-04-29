@@ -3,7 +3,6 @@ package net.redyeti.gallery.web.style
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.keywords.auto
-import kotlin.time.Duration.Companion.seconds
 
 object StyleVars {
   val colourGreyLight by variable<CSSColorValue>()
@@ -32,10 +31,6 @@ object AppStyle : StyleSheet() {
       color(StyleVars.colourGreyLight.value())
       backgroundColor(Color.black)
       textAlign("center")
-    }
-
-    "img" style {
-      border(1.px, LineStyle.Solid, Color.white)
     }
 
     "a" style {
@@ -82,6 +77,12 @@ object AppStyle : StyleSheet() {
   val justified by style {
     position(Position.Relative)
     backgroundColor(Color.black)
+  }
+
+  val thumb by style {
+    border(1.px, LineStyle.Solid, Color.white)
+    width(100.percent)
+    height(100.percent)
   }
 
   val wrapper by style {

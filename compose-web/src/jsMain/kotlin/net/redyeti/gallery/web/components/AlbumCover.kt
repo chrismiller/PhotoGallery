@@ -29,6 +29,7 @@ fun AlbumCover(album: Album) {
   Div(attrs = { classes(AppStyle.divFloat) }) {
     NavLink(to = "/album/${album.id}") {
       Img(
+        attrs = { classes(AppStyle.thumb) },
         src = "/image/${album.directory}/thumb/${album.coverImage}",
         alt = album.name
       )
