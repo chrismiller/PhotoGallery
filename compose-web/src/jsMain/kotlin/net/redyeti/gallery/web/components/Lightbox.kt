@@ -35,12 +35,13 @@ fun Lightbox(
 data class Count(val current: Int, val total: Int)
 
 @Composable
-fun LightboxImage(imageUrl: String, count: Count? = null, caption: @Composable () -> Unit) {
+fun LightboxImage(imageUrl: String, count: Count? = null, close: () -> Unit, caption: @Composable () -> Unit) {
   Div(attrs = { classes(LightboxStyle.lbFigure) }) {
     Button(attrs = {
       classes(LightboxStyle.lbClose)
       title("Close (Esc)")
       type(ButtonType.Button)
+      onClick { close() }
     }) { Text("×") }
     Figure {
       var maxHeight by remember { mutableStateOf(window.innerHeight) }

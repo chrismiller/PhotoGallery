@@ -3,7 +3,9 @@ package net.redyeti.gallery.web.components
 import androidx.compose.runtime.*
 import app.softwork.routingcompose.NavLink
 import app.softwork.routingcompose.RouteBuilder
+import app.softwork.routingcompose.Router
 import app.softwork.routingcompose.Routing
+import kotlinx.browser.document
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
@@ -21,6 +23,8 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
   var albumWidth by remember { mutableStateOf(window.innerWidth - 20) }
 
   var photoID = 0
+  val router = Router.current
+
   int { albumID ->
     int {
       // A photo ID was provided
@@ -41,6 +45,18 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
       window.addEventListener("resize", resizeListener)
       onDispose {
         window.removeEventListener("resize", resizeListener)
+      }
+    }
+
+    DisposableEffect(albumWidth) {
+      document.onkeydown = { e ->
+        if (e.key == "Escape") {
+          // Close the popup
+          router.navigate("/album/$albumID")
+        }
+      }
+      onDispose {
+        document.onkeydown = null
       }
     }
   }
@@ -66,13 +82,15 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     AlbumGrid(popAlbum, albumWidth)
 
     if (photoID >= 0) {
-      PhotoPopup(popAlbum, photoID)
+      PhotoPopup(popAlbum, photoID) {
+        router.navigate("/album/${popAlbum.album.id}")
+      }
     }
   }
 }
 
 @Composable
-private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int) {
+private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit) {
   var id by remember { mutableStateOf(photoID) }
   Lightbox(
     previous = {
@@ -103,7 +121,8 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int) {
     val photo = popAlbum.photos[id]
     val imageUrl = "/image/${popAlbum.album.directory}/large/${photo.filename}"
     LightboxImage(imageUrl,
-      Count(id, popAlbum.photos.size)
+      Count(id, popAlbum.photos.size),
+      close
     ) {
       Text(photo.description)
       Small {
