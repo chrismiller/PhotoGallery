@@ -7,11 +7,9 @@ import app.softwork.routingcompose.Routing
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
+import net.redyeti.gallery.web.style.LightboxStyle
 import net.redyeti.gallery.web.style.TextStyle
-import org.jetbrains.compose.web.dom.H1
-import org.jetbrains.compose.web.dom.H3
-import org.jetbrains.compose.web.dom.Small
-import org.jetbrains.compose.web.dom.Text
+import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.events.Event
 import kotlin.math.max
 import kotlin.math.min
@@ -68,30 +66,51 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     AlbumGrid(popAlbum, albumWidth)
 
     if (photoID >= 0) {
-      val previousUrl = popAlbum.photoUrl(photoID - 1)
-      val nextUrl = popAlbum.photoUrl(photoID + 1)
-        Lightbox(previousUrl, nextUrl) {
-          val photo = popAlbum.photos[photoID]
-          LightboxImage(
-            popAlbum.imageUrl(photoID),
-            Count(photoID, popAlbum.photos.size)
-          ) {
-            Text(photo.description)
-            Small {
-              Text("by Chris Miller")
-            }
-          }
-        }
+      PhotoPopup(popAlbum, photoID)
     }
   }
 }
 
-fun PopulatedAlbum.photoUrl(id: Int): String {
-  val wrappedId = (id + photos.size) % photos.size
-  return "/album/${album.id}/$wrappedId"
+@Composable
+private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int) {
+  var id by remember { mutableStateOf(photoID) }
+  Lightbox(
+    previous = {
+      val prevID = popAlbum.wrappedID(id - 1)
+      val prevUrl = "/album/${popAlbum.album.id}/$prevID"
+      NavLink(prevUrl) {
+        Button(attrs = {
+          title("Previous (Left arrow key)")
+          classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowLeft)
+          onClick { id = prevID }
+        }
+        ) {}
+      }
+    },
+    next = {
+      val nextID = popAlbum.wrappedID(id + 1)
+      val nextUrl = "/album/${popAlbum.album.id}/$nextID"
+      NavLink(nextUrl) {
+        Button(attrs = {
+          title("Next (Right arrow key)")
+          classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowRight)
+          onClick { id = nextID }
+        }
+        ) {}
+      }
+    }
+  ) {
+    val photo = popAlbum.photos[id]
+    val imageUrl = "/image/${popAlbum.album.directory}/large/${photo.filename}"
+    LightboxImage(imageUrl,
+      Count(id, popAlbum.photos.size)
+    ) {
+      Text(photo.description)
+      Small {
+        Text("by Chris Miller")
+      }
+    }
+  }
 }
 
-fun PopulatedAlbum.imageUrl(id: Int): String {
-  val wrappedId = (id + photos.size) % photos.size
-  return "/image/${album.directory}/large/${photos[wrappedId].filename}"
-}
+fun PopulatedAlbum.wrappedID(id: Int) = (id + photos.size) % photos.size

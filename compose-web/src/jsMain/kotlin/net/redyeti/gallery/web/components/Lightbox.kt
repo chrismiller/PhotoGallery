@@ -15,34 +15,24 @@ import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.events.Event
 
 @Composable
-fun Lightbox(previousUrl: String?, nextUrl: String?, content: @Composable () -> Unit) {
+fun Lightbox(
+  previous: @Composable () -> Unit,
+  next: @Composable () -> Unit,
+  content: @Composable () -> Unit
+) {
   Div(attrs = { classes(LightboxStyle.lbBackground, LightboxStyle.lbReady) }) {}
   Div(attrs = { classes(LightboxStyle.lbPopup, LightboxStyle.lbCloseButtonIn, LightboxStyle.lbReady) }) {
     Div(attrs = { classes(LightboxStyle.lbContainer, LightboxStyle.lbImageHolder) }) {
       Div(attrs = { classes(LightboxStyle.lbContent) }) {
         content()
       }
-      if (previousUrl != null) {
-        NavLink(previousUrl) {
-          Button(attrs = {
-            title("Previous (Left arrow key)")
-            classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowLeft)}
-          ) {}
-        }
-      }
-      if (nextUrl != null) {
-        NavLink(nextUrl) {
-          Button(attrs = {
-            title("Next (Right arrow key)")
-            classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowRight)}
-          ) {}
-        }
-      }
+      previous()
+      next()
     }
   }
 }
 
-class Count(val current: Int, val total: Int)
+data class Count(val current: Int, val total: Int)
 
 @Composable
 fun LightboxImage(imageUrl: String, count: Count? = null, caption: @Composable () -> Unit) {
