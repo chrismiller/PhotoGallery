@@ -9,6 +9,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
+import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.LightboxStyle
 import net.redyeti.gallery.web.style.TextStyle
 import org.jetbrains.compose.web.dom.*
