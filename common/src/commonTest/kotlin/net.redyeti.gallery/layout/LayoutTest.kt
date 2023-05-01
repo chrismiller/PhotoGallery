@@ -45,6 +45,24 @@ class LayoutTest : KoinTest {
   }
 
   @Test
+  fun testMore() {
+    val config = LayoutConfig(
+      width = 1000,
+      targetRowHeight = 200,
+      tolerance = 0.2
+    )
+    val data = LayoutData(config.padding.top)
+    val items = listOf(1.5, 1.5, 1.5, 1.5, 1.5)
+    val layout = AlbumLayout.compute(config, data, items)
+    with(layout) {
+      assertEquals(items.size, boxes.size)
+      assertEquals(323, boxes[0].height)
+      assertEquals(323, boxes[1].height)
+      assertEquals(323, boxes[2].height)
+    }
+  }
+
+  @Test
   fun testNoPadding() {
     val config = LayoutConfig(
       width = 1000,
