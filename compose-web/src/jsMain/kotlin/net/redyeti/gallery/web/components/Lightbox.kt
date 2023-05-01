@@ -64,8 +64,8 @@ fun LightboxImage(imageUrl: String, count: Count? = null, close: () -> Unit, cap
           Div(attrs = { classes(LightboxStyle.title) }) {
             caption()
           }
-          Div(attrs = { classes(LightboxStyle.counter) }) {
-            if (count != null) {
+          if (count != null) {
+            Div(attrs = { classes(LightboxStyle.counter) }) {
               Text("${count.current} of ${count.total}")
             }
           }

@@ -2,7 +2,6 @@ package net.redyeti.gallery.web.style
 
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.keywords.auto
 
 object StyleVars {
   val colourGreyLight by variable<CSSColorValue>()
@@ -42,22 +41,15 @@ object AppStyle : StyleSheet() {
     }
   }
 
-  val divWrapper by style {
-    width(1200.px)
-    property("margin", "0 auto")
-  }
-
   val divHeader by style {
-    marginTop(0.px)
-    marginBottom(0.px)
-    property("margin-left", auto)
-    property("margin-right", auto)
+    property("margin", "0 auto")
     overflow("auto")
     property("clear", "both")
   }
 
-  val divFloat by style {
-    property("float", "left")
+  val albumCover by style {
+    margin(10.px)
+    display(DisplayStyle.InlineBlock)
   }
 
   val justified by style {
@@ -73,11 +65,9 @@ object AppStyle : StyleSheet() {
 
   val wrapper by style {
     position(Position.Relative)
-    marginTop(0.px)
-    marginBottom(0.px)
-    property("margin-left", auto)
-    property("margin-right", auto)
-    backgroundColor(StyleVars.colourGreyLight.value())
+    paddingLeft(10.percent)
+    paddingRight(10.percent)
+    property("margin", "0 auto")
   }
 
   val box by style {

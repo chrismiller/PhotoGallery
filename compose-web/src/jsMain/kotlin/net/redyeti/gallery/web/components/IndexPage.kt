@@ -22,10 +22,8 @@ fun IndexPage(repo: PhotoGalleryInterface) {
 
   Header("Photo Gallery", "© Chris Miller 2005-2023")
   Div(attrs = { classes(AppStyle.wrapper)}) {
-    Div(attrs = { classes(AppStyle.divWrapper) }) {
-      albums.forEach { album ->
-        AlbumCover(album)
-      }
+    albums.forEach { album ->
+      AlbumCover(album)
     }
   }
 }

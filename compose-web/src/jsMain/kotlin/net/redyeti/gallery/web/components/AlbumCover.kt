@@ -26,17 +26,17 @@ val Album.monthName: String
 
 @Composable
 fun AlbumCover(album: Album) {
-  Div(attrs = { classes(AppStyle.divFloat) }) {
+  Div(attrs = { classes(AppStyle.albumCover) }) {
     NavLink(to = "/album/${album.id}") {
       Img(
         attrs = { classes(AppStyle.thumb) },
         src = "/image/${album.directory}/thumb/${album.coverImage}",
         alt = album.name
       )
-      Br {}
-      P {
-        B { Text(album.name) }
-        Br {}
+      Br()
+      B { Text(album.name) }
+      Br()
+      Small {
         Text("${album.monthName} ${album.year}")
       }
     }
