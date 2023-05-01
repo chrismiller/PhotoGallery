@@ -8,7 +8,7 @@ import org.koin.core.component.KoinComponent
 
 @Serializable
 data class Album(
-  val id: Int, val name: String, val year: Int, val month: Int, val directory: String, val coverImage: String
+  val id: Int, val title: String, val subtitle: String, val directory: String, val coverImage: String
 )
 
 @Serializable

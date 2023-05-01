@@ -75,10 +75,10 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     Div(attrs = { classes(AppStyle.loader) }) {}
   } else {
     H1(attrs = { classes(TextStyle.titleText) }) {
-      Text(popAlbum.album.name)
+      Text(popAlbum.album.title)
     }
     H3 {
-      Text("${popAlbum.album.monthName} ${popAlbum.album.year}")
+      Text(popAlbum.album.subtitle)
     }
     AlbumGrid(popAlbum, albumWidth)
 

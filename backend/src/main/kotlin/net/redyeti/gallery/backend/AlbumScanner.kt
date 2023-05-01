@@ -54,19 +54,18 @@ class AlbumScanner(val config: AppConfig) {
       }
       val row = parser.parseLine(it.reader(), headers)
       val id = albumId++
-      val name = row["name"]
-      val year = row["year"].asInt()
-      val month = row["month"].asInt()
+      val title = row["title"]
+      val subtitle = row["subtitle"]
       val directory = row["directory"]
       val coverImage = row["cover"]
-      if (name != null && directory != null && coverImage != null) {
-        val album = Album(id, name, year, month, directory, coverImage)
+      if (title != null && subtitle != null && directory != null && coverImage != null) {
+        val album = Album(id, title, subtitle, directory, coverImage)
         println(album)
         try {
           albums += loadAlbum(album)
-          logger.i("Loaded ${album.name}")
+          logger.i("Loaded ${album.title}")
         } catch (e: Exception) {
-          logger.e("Error loading album '${album.name}'. Reason: ${e.message}", e)
+          logger.e("Error loading album '${album.title}'. Reason: ${e.message}", e)
         }
       }
     }

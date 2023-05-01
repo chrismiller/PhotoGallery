@@ -6,24 +6,6 @@ import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.web.style.AppStyle
 import org.jetbrains.compose.web.dom.*
 
-private val monthNames = listOf(
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-)
-
-val Album.monthName: String
-  get() = monthNames[month - 1]
-
 @Composable
 fun AlbumCover(album: Album) {
   Div(attrs = { classes(AppStyle.albumCover) }) {
@@ -31,14 +13,12 @@ fun AlbumCover(album: Album) {
       Img(
         attrs = { classes(AppStyle.thumb) },
         src = "/image/${album.directory}/thumb/${album.coverImage}",
-        alt = album.name
+        alt = album.title
       )
       Br()
-      B { Text(album.name) }
+      B { Text(album.title) }
       Br()
-      Small {
-        Text("${album.monthName} ${album.year}")
-      }
+      Small { Text(album.subtitle) }
     }
   }
 }
