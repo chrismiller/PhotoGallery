@@ -71,7 +71,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 
   val popAlbum = album
   if (popAlbum == null) {
-    Text("Loading...")
+    Div(attrs = { classes(AppStyle.loader) }) {}
   } else {
     H1(attrs = { classes(TextStyle.titleText) }) {
       Text(popAlbum.album.name)
@@ -120,7 +120,8 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
   ) {
     val photo = popAlbum.photos[id]
     val imageUrl = "/image/${popAlbum.album.directory}/large/${photo.filename}"
-    LightboxImage(imageUrl,
+    LightboxImage(
+      imageUrl,
       Count(id, popAlbum.photos.size),
       close
     ) {

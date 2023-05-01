@@ -12,15 +12,6 @@ object StyleVars {
   val imageSideMargin by variable<CSSUnitValue>()
   val imageBorder by variable<CSSBorder>()
 
-  val heroFontSize by variable<CSSUnitValue>()
-  val heroLineHeight by variable<CSSUnitValue>()
-  val subtitle2FontSize by variable<CSSUnitValue>()
-  val subtitle2LineHeight by variable<CSSUnitValue>()
-  val h2FontSize by variable<CSSUnitValue>()
-  val h2LineHeight by variable<CSSUnitValue>()
-  val h3FontSize by variable<CSSUnitValue>()
-  val h3LineHeight by variable<CSSUnitValue>()
-
   val colCount by variable<StylePropertyNumber>()
 }
 
@@ -53,12 +44,7 @@ object AppStyle : StyleSheet() {
 
   val divWrapper by style {
     width(1200.px)
-    // margin 0.px auto
-    // https://kotlinlang.slack.com/archives/C01F2HV7868/p1665751751246239
-    marginTop(0.px)
-    marginBottom(0.px)
-    property("margin-left", auto)
-    property("margin-right", auto)
+    property("margin", "0 auto")
   }
 
   val divHeader by style {
@@ -99,73 +85,32 @@ object AppStyle : StyleSheet() {
     backgroundColor(StyleVars.colourGreyMedium.value())
   }
 
+  val loading by keyframes {
+    50.percent {
+      property("box-shadow", "19px 0 0 3px, 38px 0 0 7px, 57px 0 0 3px")
+    }
+    100.percent {
+      property("box-shadow", "19px 0 0 0, 38px 0 0 3px, 57px 0 0 7px")
+    }
+  }
+
   @OptIn(ExperimentalComposeWebApi::class)
-  val lightbox by style {
+  val loader by style {
     position(Position.Fixed)
-    display(DisplayStyle.Flex)
-    alignItems(AlignItems.Center)
-    justifyContent(JustifyContent.Center)
-    top(0.px)
-    left(0.px)
-    width(100.percent)
-    height(100.vh)
-    backgroundColor(rgba(0, 0, 0, 0.4))
-    opacity(0.01) // this prevents a repaint between 0 and 0.01
-    this.blank
-    transitions {
-      opacity(0.3)
-      defaultTimingFunction(AnimationTimingFunction.Ease)
-      default
-    }
-    property("z-index", "1000")
-    property("will-change", "opacity")
-
-    style(firstChild) {
-
-    }
-  }
-
-  @OptIn(ExperimentalComposeWebApi::class)
-  val lightboxInner by style {
-    maxWidth(100.percent)
-    transform { scale(0.9) }
-    transitions {
-      transform {
-        defaultDuration(0.4.s)
-        defaultTimingFunction(AnimationTimingFunction.Ease)
-      }
-    }
-    property("z-index", "1")
-    property("will-change", "transform")
-
-    "image" style {
-      display(DisplayStyle.Block)
-      position(Position.Absolute)
-      top(0.px)
-      left(0.px)
-      bottom(0.px)
-      right(0.px)
-      property("margin", auto)
-      maxWidth(95.percent)
-      maxHeight(95.percent)
-      width(auto)
-      height(auto)
-    }
-  }
-
-  val lightboxClose by style {
-    background("none")
-    property("border", "none")
-    outline("none")
-    position(Position.Absolute)
-    top(0.px)
-    right(0.px)
-    padding(0.px, 10.px)
-    fontSize(3.em)
-    cursor("pointer")
-    color(rgba(0, 0, 0, 0.5))
-    hover {
-      color(rgba(0, 0, 0, 0.8))
+    property("z-index", 9999)
+    top(50.percent)
+    left(50.percent)
+    width(4.px)
+    property("aspect-ratio", 1)
+    borderRadius(50.percent)
+    property("box-shadow", "19px 0 0 7px, 38px 0 0 3px, 57px 0 0 0")
+    transform { translate((-50).percent, (-50).percent) }
+    transform { translateX((-38).px) }
+    animation(loading) {
+      duration(0.8.s)
+      timingFunction(AnimationTimingFunction.Linear)
+      direction(AnimationDirection.Alternate)
+      iterationCount(null)
     }
   }
 }

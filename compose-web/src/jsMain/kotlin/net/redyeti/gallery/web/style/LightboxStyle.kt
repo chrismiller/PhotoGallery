@@ -1,6 +1,5 @@
 package net.redyeti.gallery.web.style
 
-import net.redyeti.gallery.web.style.AppStyle.lightboxClose
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.css.Color.transparent
@@ -215,12 +214,12 @@ object LightboxStyle : StyleSheet() {
     opacity(LightboxVars.controlsOpacity)
     margin(0.px)
     top(50.percent)
-    marginTop(-55.px)
+    marginTop((-55).px)
     padding(0.px)
     width(90.px)
     height(110.px)
     active {
-      marginTop(-54.px)
+      marginTop((-54).px)
     }
     group(self + hover, self + focus) style {
       opacity(1)
