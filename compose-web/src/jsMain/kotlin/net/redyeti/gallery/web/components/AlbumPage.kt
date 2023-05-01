@@ -100,7 +100,7 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
       NavLink(prevUrl) {
         Button(attrs = {
           title("Previous (Left arrow key)")
-          classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowLeft)
+          classes(LightboxStyle.arrow, LightboxStyle.arrowLeft)
           onClick { id = prevID }
         }
         ) {}
@@ -112,7 +112,7 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
       NavLink(nextUrl) {
         Button(attrs = {
           title("Next (Right arrow key)")
-          classes(LightboxStyle.lbArrow, LightboxStyle.lbArrowRight)
+          classes(LightboxStyle.arrow, LightboxStyle.arrowRight)
           onClick { id = nextID }
         }
         ) {}

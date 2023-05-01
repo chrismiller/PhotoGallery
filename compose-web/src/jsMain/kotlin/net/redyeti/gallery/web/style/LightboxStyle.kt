@@ -9,14 +9,14 @@ object LightboxVars {
   const val zIndexBase = 2000
 
   // Overlay
-  const val overlayOpacity = 0.8
+  const val overlayOpacity = 0.7
   val overlayColour by variable<CSSColorValue>()
 
   // Spacing
   val popupPaddingLeft by variable<CSSUnitValue>()
 
   // Controls
-  const val controlsOpacity = 0.6
+  const val controlsOpacity = 0.7
   val controlsColour by variable<CSSColorValue>()
   val controlsBorderColour by variable<CSSColorValue>()
   val controlsCloseColour by variable<CSSColorValue>()
@@ -39,7 +39,7 @@ object LightboxStyle : StyleSheet() {
       LightboxVars.overlayColour(Color("#0B0B0B"))
       LightboxVars.popupPaddingLeft(8.px)
 
-      LightboxVars.controlsColour(Color("#0B0B0B"))
+      LightboxVars.controlsColour(Color("#202020"))
       LightboxVars.controlsBorderColour(Color("#3F3F3F"))
       LightboxVars.controlsCloseColour(Color("#333333"))
       LightboxVars.controlsTextColour(Color("#CCCCCC"))
@@ -54,7 +54,7 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbBackground by style {
+  val background by style {
     top(0.px)
     left(0.px)
     width(100.percent)
@@ -66,7 +66,7 @@ object LightboxStyle : StyleSheet() {
     opacity(LightboxVars.overlayOpacity)
   }
 
-  val lbPopup by style {
+  val popup by style {
     top(0.px)
     left(0.px)
     width(100.percent)
@@ -76,7 +76,7 @@ object LightboxStyle : StyleSheet() {
     outline("none !important")
   }
 
-  val lbContainer by style {
+  val container by style {
     textAlign("center")
     position(Position.Absolute)
     width(100.percent)
@@ -105,14 +105,14 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbAlignTop by style {
+  val alignTop by style {
     // .LightboxStyle-lbAlignTop .LightboxStyle-lbContainer::before { ... }
-    className(lbContainer) + before style {
+    className(container) + before style {
       display(DisplayStyle.None)
     }
   }
 
-  val lbContent by style {
+  val content by style {
     position(Position.Relative)
     display(DisplayStyle.InlineBlock)
     property("vertical-align", "middle")
@@ -121,24 +121,24 @@ object LightboxStyle : StyleSheet() {
     property("z-index", LightboxVars.zIndexBase + 5)
   }
 
-  val lbInlineHolder by style {
-    className(lbContent) style {
+  val inlineHolder by style {
+    className(content) style {
       width(100.percent)
       cursor("auto")
     }
   }
 
-  val lbAutoCursor by style {
-    className(lbContent) style {
+  val autoCursor by style {
+    className(content) style {
       cursor("auto")
     }
   }
 
-  val lbHide by style {
+  val hide by style {
     property("display", "none !important")
   }
 
-  val lbPreloader by style {
+  val preloader by style {
     color(Color("#CCCCCC"))
     position(Position.Absolute)
     top(50.percent)
@@ -156,7 +156,7 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbClose by style {
+  val close by style {
     width(44.px)
     height(44.px)
     lineHeight(44.px)
@@ -180,26 +180,26 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbCloseButtonIn by style {
-    className(lbClose) style {
+  val closeButtonIn by style {
+    className(close) style {
       color(LightboxVars.controlsCloseColour.value())
     }
   }
 
-  val lbImageHolder by style {
-    className(lbClose) style {
+  val imageHolder by style {
+    className(close) style {
       color(LightboxVars.controlsColour.value())
       right((-6).px)
       textAlign("right")
       paddingRight(6.px)
       width(100.percent)
     }
-    className(lbContent) style {
+    className(content) style {
       maxWidth(100.percent)
     }
   }
 
-  val lbCounter by style {
+  val counter by style {
     position(Position.Absolute)
     top(0.px)
     right(0.px)
@@ -209,7 +209,7 @@ object LightboxStyle : StyleSheet() {
     whiteSpace("nowrap")
   }
 
-  val lbArrow by style {
+  val arrow by style {
     position(Position.Absolute)
     opacity(LightboxVars.controlsOpacity)
     margin(0.px)
@@ -250,7 +250,7 @@ object LightboxStyle : StyleSheet() {
     }
 
     // .LightboxStyle-lbPreloader, .LightboxStyle-lbArrow, .LightboxStyle-lbClose, .LightboxStyle-lbCounter { ... }
-    group(self, className(lbPreloader), className(lbClose), className(lbCounter)) style {
+    group(self, className(preloader), className(close), className(counter)) style {
       property("user-select", "none")
     }
 
@@ -263,7 +263,7 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbArrowLeft by style {
+  val arrowLeft by style {
     left(0.px)
     self + before style {
       property("border-right", "27px solid ${LightboxVars.controlsBorderColour.value()}")
@@ -280,7 +280,7 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbArrowRight by style {
+  val arrowRight by style {
     right(0.px)
     self + before style {
       property("border-left", "27px solid ${LightboxVars.controlsBorderColour.value()}")
@@ -296,10 +296,10 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbImage by style {
+  val image by style {
   }
 
-  val lbFigure by style {
+  val figure by style {
     lineHeight(0.px)
     self + after style {
       property("content", "''")
@@ -329,7 +329,7 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val lbBottomBar by style {
+  val bottomBar by style {
     marginTop(LightboxVars.bottomBarMargin.value())
     position(Position.Absolute)
     top(100.percent)
@@ -338,7 +338,7 @@ object LightboxStyle : StyleSheet() {
     cursor("auto")
   }
 
-  val lbTitle by style {
+  val title by style {
     textAlign("left")
     lineHeight(18.px)
     color(LightboxVars.imageCaptionTitleColour.value())
@@ -346,20 +346,20 @@ object LightboxStyle : StyleSheet() {
     paddingRight(36.px)
   }
 
-  val lbLoading by style {
-    self + className(lbFigure) style {
+  val loading by style {
+    self + className(figure) style {
       display(DisplayStyle.None)
     }
   }
 
-  val lbReady by style {
-    className(lbPreloader) style {
+  val ready by style {
+    className(preloader) style {
       display(DisplayStyle.None)
     }
   }
 
-  val lbError by style {
-    className(lbContent) style {
+  val error by style {
+    className(content) style {
       display(DisplayStyle.None)
     }
   }
@@ -367,7 +367,7 @@ object LightboxStyle : StyleSheet() {
   init {
     "button" style {
       val self = selector("button")
-      group(self + className(lbClose), self + className(lbArrow)) style {
+      group(self + className(close), self + className(arrow)) style {
         overflow("visible")
         cursor("pointer")
         backgroundColor(transparent)
@@ -382,7 +382,7 @@ object LightboxStyle : StyleSheet() {
     }
 
     "img" style {
-      selector("img") + className(lbImage) style {
+      selector("img") + className(image) style {
         width(auto)
         maxWidth(100.percent)
         height(auto)

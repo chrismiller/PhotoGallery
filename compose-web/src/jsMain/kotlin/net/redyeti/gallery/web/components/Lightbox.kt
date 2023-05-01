@@ -1,7 +1,6 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
-import app.softwork.routingcompose.NavLink
 import kotlinx.browser.window
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.attributes.ButtonType
@@ -20,10 +19,10 @@ fun Lightbox(
   next: @Composable () -> Unit,
   content: @Composable () -> Unit
 ) {
-  Div(attrs = { classes(LightboxStyle.lbBackground, LightboxStyle.lbReady) }) {}
-  Div(attrs = { classes(LightboxStyle.lbPopup, LightboxStyle.lbCloseButtonIn, LightboxStyle.lbReady) }) {
-    Div(attrs = { classes(LightboxStyle.lbContainer, LightboxStyle.lbImageHolder) }) {
-      Div(attrs = { classes(LightboxStyle.lbContent) }) {
+  Div(attrs = { classes(LightboxStyle.background, LightboxStyle.ready) }) {}
+  Div(attrs = { classes(LightboxStyle.popup, LightboxStyle.closeButtonIn, LightboxStyle.ready) }) {
+    Div(attrs = { classes(LightboxStyle.container, LightboxStyle.imageHolder) }) {
+      Div(attrs = { classes(LightboxStyle.content) }) {
         content()
       }
       previous()
@@ -36,9 +35,9 @@ data class Count(val current: Int, val total: Int)
 
 @Composable
 fun LightboxImage(imageUrl: String, count: Count? = null, close: () -> Unit, caption: @Composable () -> Unit) {
-  Div(attrs = { classes(LightboxStyle.lbFigure) }) {
+  Div(attrs = { classes(LightboxStyle.figure) }) {
     Button(attrs = {
-      classes(LightboxStyle.lbClose)
+      classes(LightboxStyle.close)
       title("Close (Esc)")
       type(ButtonType.Button)
       onClick { close() }
@@ -56,16 +55,16 @@ fun LightboxImage(imageUrl: String, count: Count? = null, close: () -> Unit, cap
         }
       }
       Img(src = imageUrl, attrs = {
-        classes(LightboxStyle.lbImage)
+        classes(LightboxStyle.image)
         // The following line prevents the image from exceeding the window height
         style { maxHeight(maxHeight.px) }
       })
       FigCaption {
-        Div(attrs = { classes(LightboxStyle.lbBottomBar) }) {
-          Div(attrs = { classes(LightboxStyle.lbTitle) }) {
+        Div(attrs = { classes(LightboxStyle.bottomBar) }) {
+          Div(attrs = { classes(LightboxStyle.title) }) {
             caption()
           }
-          Div(attrs = { classes(LightboxStyle.lbCounter) }) {
+          Div(attrs = { classes(LightboxStyle.counter) }) {
             if (count != null) {
               Text("${count.current} of ${count.total}")
             }
