@@ -341,6 +341,7 @@ object LightboxStyle : StyleSheet() {
         top(auto)
         padding(3.px, 5.px)
         position(Position.Fixed)
+        backgroundColor(rgba(0, 0, 0, 0.5))
         boxSizing("border-box")
         self + empty style {
           padding(0.px)
