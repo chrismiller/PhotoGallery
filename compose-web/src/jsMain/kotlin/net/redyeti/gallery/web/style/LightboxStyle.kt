@@ -96,13 +96,6 @@ object LightboxStyle : StyleSheet() {
       height(100.percent)
       property("vertical-align", "middle")
     }
-
-    media("all and (max-width: 900px)") {
-      self style {
-        paddingLeft(6.px)
-        paddingRight(6.px)
-      }
-    }
   }
 
   val alignTop by style {
@@ -336,6 +329,25 @@ object LightboxStyle : StyleSheet() {
     left(0.px)
     width(100.percent)
     cursor("auto")
+
+    // @media "screen and..." {
+    //   .LightboxStyle-bottomBar { ... }
+    // }
+    media("screen and (max-width: 800px) and (orientation: landscape), screen and (max-height: 400px)") {
+      self style {
+        // Drop the bottom bar down to the base of the window when the screen size is small
+        bottom(0.px)
+        margin(0.px)
+        top(auto)
+        padding(3.px, 5.px)
+        position(Position.Fixed)
+        boxSizing("border-box")
+        self + empty style {
+          padding(0.px)
+        }
+      }
+    }
+
   }
 
   val title by style {
@@ -343,7 +355,7 @@ object LightboxStyle : StyleSheet() {
     lineHeight(18.px)
     color(LightboxVars.imageCaptionTitleColour.value())
     property("word-wrap", "break-word")
-    paddingRight(36.px)
+    paddingRight(50.px)
   }
 
   val loading by style {
