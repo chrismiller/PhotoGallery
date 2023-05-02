@@ -48,18 +48,6 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
         window.removeEventListener("resize", resizeListener)
       }
     }
-
-    DisposableEffect(albumWidth) {
-      document.onkeydown = { e ->
-        if (e.key == "Escape") {
-          // Close the popup
-          router.navigate("/album/$albumID")
-        }
-      }
-      onDispose {
-        document.onkeydown = null
-      }
-    }
   }
 
   noMatch {
@@ -93,10 +81,38 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 @Composable
 private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit) {
   var id by remember { mutableStateOf(photoID) }
+
+  val router = Router.current
+
+  val prevID = popAlbum.wrappedID(id - 1)
+  val prevUrl = "/album/${popAlbum.album.id}/$prevID"
+  val nextID = popAlbum.wrappedID(id + 1)
+  val nextUrl = "/album/${popAlbum.album.id}/$nextID"
+
+  DisposableEffect(id) {
+    document.onkeydown = { e ->
+      when (e.key) {
+        "Escape" -> {
+          // Close the popup
+          router.navigate("/album/${popAlbum.album.id}")
+        }
+        "ArrowLeft" -> {
+          router.navigate(prevUrl)
+          id = prevID
+        }
+        "ArrowRight" -> {
+          router.navigate(nextUrl)
+          id = nextID
+        }
+      }
+    }
+    onDispose {
+      document.onkeydown = null
+    }
+  }
+
   Lightbox(
     previous = {
-      val prevID = popAlbum.wrappedID(id - 1)
-      val prevUrl = "/album/${popAlbum.album.id}/$prevID"
       NavLink(prevUrl) {
         Button(attrs = {
           title("Previous (Left arrow key)")
@@ -107,8 +123,6 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
       }
     },
     next = {
-      val nextID = popAlbum.wrappedID(id + 1)
-      val nextUrl = "/album/${popAlbum.album.id}/$nextID"
       NavLink(nextUrl) {
         Button(attrs = {
           title("Next (Right arrow key)")
