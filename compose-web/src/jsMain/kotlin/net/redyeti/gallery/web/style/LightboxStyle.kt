@@ -71,7 +71,7 @@ object LightboxStyle : StyleSheet() {
     left(0.px)
     width(100.percent)
     height(100.percent)
-    property("z-index", LightboxVars.zIndexBase + 3)
+    property("z-index", LightboxVars.zIndexBase + 4)
     position(Position.Fixed)
     outline("none !important")
   }
@@ -85,6 +85,7 @@ object LightboxStyle : StyleSheet() {
     left(0.px)
     paddingTop(0.px)
     paddingBottom(0.px)
+    property("z-index", LightboxVars.zIndexBase + 3)
     paddingLeft(LightboxVars.popupPaddingLeft.value())
     paddingRight(LightboxVars.popupPaddingLeft.value())
     boxSizing("border-box")
@@ -388,7 +389,7 @@ object LightboxStyle : StyleSheet() {
         display(DisplayStyle.Block)
         outline("none")
         padding(0.px)
-        property("z-index", LightboxVars.zIndexBase + 6)
+        property("z-index", LightboxVars.zIndexBase + 10)
         property("box-shadow", "none")
         property("touch-action", "manipulation")
       }

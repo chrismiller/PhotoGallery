@@ -93,8 +93,7 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
     document.onkeydown = { e ->
       when (e.key) {
         "Escape" -> {
-          // Close the popup
-          router.navigate("/album/${popAlbum.album.id}")
+          close()
         }
         "ArrowLeft" -> {
           router.navigate(prevUrl)
@@ -112,6 +111,7 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
   }
 
   Lightbox(
+    close = close,
     previous = {
       NavLink(prevUrl) {
         Button(attrs = {

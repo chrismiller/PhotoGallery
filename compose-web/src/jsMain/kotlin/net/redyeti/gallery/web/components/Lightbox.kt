@@ -17,11 +17,20 @@ import org.w3c.dom.events.Event
 fun Lightbox(
   previous: @Composable () -> Unit,
   next: @Composable () -> Unit,
+  close: () -> Unit,
   content: @Composable () -> Unit
 ) {
   Div(attrs = { classes(LightboxStyle.background, LightboxStyle.ready) }) {}
   Div(attrs = { classes(LightboxStyle.popup, LightboxStyle.closeButtonIn, LightboxStyle.ready) }) {
-    Div(attrs = { classes(LightboxStyle.container, LightboxStyle.imageHolder) }) {
+    Div(attrs = {
+      classes(LightboxStyle.container, LightboxStyle.imageHolder)
+      onClick { e ->
+        // Only close if we haven't clicked on an arrow or any other higher level item
+        if (e.target == e.currentTarget) {
+          close()
+        }
+      }
+    }) {
       Div(attrs = { classes(LightboxStyle.content) }) {
         content()
       }
