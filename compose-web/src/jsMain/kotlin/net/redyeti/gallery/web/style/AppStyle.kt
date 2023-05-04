@@ -16,22 +16,6 @@ object StyleVars {
 
 object AppStyle : StyleSheet() {
   init {
-    "body" style {
-      fontFamily("Source Sans Pro", "sans-serif")
-      color(StyleVars.colourGreyLight.value())
-      backgroundColor(Color.black)
-      textAlign("center")
-    }
-
-    "a" style {
-      color(StyleVars.colourGreyMedium.value())
-      textDecoration("none")
-      textAlign("center")
-      hover {
-        color(Color.white)
-      }
-    }
-
     universal style {
       StyleVars.colourGreyLight(Color("#f4f4f4"))
       StyleVars.colourGreyMedium(Color("#b3b3b3"))
@@ -41,15 +25,18 @@ object AppStyle : StyleSheet() {
     }
   }
 
-  val divHeader by style {
-    property("margin", "0 auto")
-    overflow("auto")
-    property("clear", "both")
+  val pageWrapper by style {
+    paddingLeft(5.percent)
+    paddingRight(5.percent)
+    minHeight(100.vh)
+    display(DisplayStyle.Flex)
+    flexDirection(FlexDirection.Column)
   }
 
   val albumCover by style {
     margin(10.px)
     display(DisplayStyle.InlineBlock)
+    textAlign("center")
   }
 
   val justified by style {
@@ -65,9 +52,8 @@ object AppStyle : StyleSheet() {
 
   val wrapper by style {
     position(Position.Relative)
-    paddingLeft(10.percent)
-    paddingRight(10.percent)
     property("margin", "0 auto")
+    textAlign("center")
   }
 
   val box by style {
@@ -101,6 +87,55 @@ object AppStyle : StyleSheet() {
       timingFunction(AnimationTimingFunction.Linear)
       direction(AnimationDirection.Alternate)
       iterationCount(null)
+    }
+  }
+
+  val headerText by style {
+    property("float", "left")
+    "h1" style {
+      fontSize(2.em)
+    }
+
+    "h2" style {
+      fontSize(1.2.em)
+    }
+  }
+
+  val headerLogo by style {
+    property("float", "right")
+  }
+
+  init {
+    "body" style {
+      fontFamily("Source Sans Pro", "sans-serif")
+      color(StyleVars.colourGreyLight.value())
+      backgroundColor(Color.black)
+    }
+
+    "a" style {
+      color(StyleVars.colourGreyMedium.value())
+      textDecoration("none")
+      hover {
+        color(Color.white)
+      }
+    }
+
+    "header" style {
+      margin(20.px, 0.px)
+      backgroundColor(Color("292CFF"))
+    }
+
+    "main" style {
+      // Expand the content so the page fills at least pageWrapper.minHeight
+      flex(1)
+    }
+
+    "footer" style {
+      fontSize(80.percent)
+      backgroundColor(Color("292C2F"))
+      marginTop(20.px)
+      height(30.px)
+      textAlign("center")
     }
   }
 }

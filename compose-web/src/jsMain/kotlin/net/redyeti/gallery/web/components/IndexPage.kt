@@ -5,7 +5,8 @@ import app.softwork.routingcompose.Routing
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.repository.PhotoGalleryInterface
 import net.redyeti.gallery.web.style.AppStyle
-import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.*
+import kotlin.js.Date
 
 @Routing
 @Composable
@@ -16,14 +17,20 @@ fun IndexPage(repo: PhotoGalleryInterface) {
     albums = repo.fetchAlbums()
   }
 
-//  val gpsCoordinates by produceState(initialValue = GpsCoordinates(0.0, 0.0, 0.0), repo) {
-//    repo.pollISSPosition().collect { value = it }
-//  }
-
-  Header("Photo Gallery", "© Chris Miller 2005-2023")
-  Div(attrs = { classes(AppStyle.wrapper)}) {
-    albums.forEach { album ->
-      AlbumCover(album)
+  Div(attrs = { classes(AppStyle.pageWrapper)}) {
+    Header {
+      AppHeader("Travel Photos", "Chris Miller")
+    }
+    Main {
+      Div(attrs = { classes(AppStyle.wrapper)}) {
+        albums.forEach { album ->
+          AlbumCover(album)
+        }
+      }
+    }
+    Footer {
+      val year = Date().getFullYear()
+      Text("Copyright © Chris Miller, 2005-$year. All rights reserved.")
     }
   }
 }
