@@ -11,17 +11,23 @@ import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
 import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.LightboxStyle
-import net.redyeti.gallery.web.style.TextStyle
-import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.dom.Button
+import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.Small
+import org.jetbrains.compose.web.dom.Text
 import org.w3c.dom.events.Event
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 @Routing
 @Composable
 fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
+  // 0.9 = adjustment for pageWrapper.padding left+right
+  fun albumWidth() = (window.innerWidth * 0.9).roundToInt()
+
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
-  var albumWidth by remember { mutableStateOf(window.innerWidth - 20) }
+  var albumWidth by remember { mutableStateOf(albumWidth()) }
 
   var photoID = 0
   val router = Router.current
@@ -41,7 +47,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 
     DisposableEffect(albumWidth) {
       val resizeListener: (Event) -> Unit = {
-        albumWidth = window.innerWidth - 20
+        albumWidth = albumWidth()
       }
       window.addEventListener("resize", resizeListener)
       onDispose {
@@ -54,21 +60,13 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     album = null
   }
 
-  NavLink(to = "/") {
-    Text("<- Back to album index")
-  }
-
   val popAlbum = album
   if (popAlbum == null) {
     Div(attrs = { classes(AppStyle.loader) }) {}
   } else {
-    H1(attrs = { classes(TextStyle.titleText) }) {
-      Text(popAlbum.album.title)
+    Page(popAlbum.album.title, popAlbum.album.subtitle) {
+      AlbumGrid(popAlbum, albumWidth)
     }
-    H3 {
-      Text(popAlbum.album.subtitle)
-    }
-    AlbumGrid(popAlbum, albumWidth)
 
     if (photoID >= 0) {
       PhotoPopup(popAlbum, photoID) {

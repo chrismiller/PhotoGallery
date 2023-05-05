@@ -15,7 +15,7 @@ class BoxSpacing(val horizontal: Int, val vertical: Int)
 
 class LayoutConfig(
   val width: Int = 1000,
-  val padding: ContainerPadding = ContainerPadding(10, 10, 10, 10),
+  val padding: ContainerPadding = ContainerPadding.None,
   val boxSpacing: BoxSpacing = BoxSpacing(10, 10),
   val targetRowHeight: Int = 200,
   val tolerance: Double = 0.2

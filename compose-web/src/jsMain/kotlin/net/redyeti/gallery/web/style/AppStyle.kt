@@ -50,7 +50,7 @@ object AppStyle : StyleSheet() {
     height(100.percent)
   }
 
-  val wrapper by style {
+  val coverWrapper by style {
     position(Position.Relative)
     property("margin", "0 auto")
     textAlign("center")
