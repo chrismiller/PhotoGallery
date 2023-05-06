@@ -9,6 +9,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
+import net.redyeti.gallery.web.Preloader.ImgPreload
 import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.dom.Button
@@ -76,6 +77,11 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
   }
 }
 
+fun PopulatedAlbum.imageUrl(photoID: Int): String {
+  val photo = photos[wrappedID(photoID)]
+  return "/image/${album.directory}/large/${photo.filename}"
+}
+
 @Composable
 private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit) {
   var id by remember { mutableStateOf(photoID) }
@@ -131,14 +137,18 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
       }
     }
   ) {
-    val photo = popAlbum.photos[id]
-    val imageUrl = "/image/${popAlbum.album.directory}/large/${photo.filename}"
+
+    // Preload a few adjacent images, so they can be displayed quickly when needed
+    for (i in listOf(-1, 1, 2, 3)) {
+      ImgPreload(popAlbum.imageUrl(id + i))
+    }
+
     LightboxImage(
-      imageUrl,
+      popAlbum.imageUrl(id),
       Count(id, popAlbum.photos.size),
       close
     ) {
-      Text(photo.description)
+      Text(popAlbum.photos[id].description)
       Small {
         Text("by Chris Miller")
       }
