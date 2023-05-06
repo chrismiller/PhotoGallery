@@ -145,12 +145,14 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
 
     LightboxImage(
       popAlbum.imageUrl(id),
-      Count(id, popAlbum.photos.size),
       close
     ) {
-      Text(popAlbum.photos[id].description)
-      Small {
-        Text("by Chris Miller")
+      val photo = popAlbum.photos[id]
+      GalleryCaption(photo.location, Count(id, popAlbum.photos.size)) {
+        Text(photo.description)
+        Small {
+          Text("Copyright © Chris Miller")
+        }
       }
     }
   }

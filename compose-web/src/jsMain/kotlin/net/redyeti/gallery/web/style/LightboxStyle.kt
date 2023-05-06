@@ -151,9 +151,9 @@ object LightboxStyle : StyleSheet() {
   }
 
   val close by style {
-    width(44.px)
-    height(44.px)
-    lineHeight(44.px)
+    width(34.px)
+    height(34.px)
+    lineHeight(34.px)
     position(Position.Absolute)
     top(0.px)
     right(0.px)
@@ -193,15 +193,31 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
+  // ----------------------------------------------------------------
+  // Styles for the figcaption bottom bar
+  // ----------------------------------------------------------------
+  val title by style {
+    textAlign("left")
+    lineHeight(18.px)
+    color(LightboxVars.imageCaptionTitleColour.value())
+    property("word-wrap", "break-word")
+    marginRight(10.px)
+    flex(1)
+  }
+
   val counter by style {
-    position(Position.Absolute)
-    top(0.px)
-    right(0.px)
     color(LightboxVars.controlsTextColour.value())
     fontSize(12.px)
     lineHeight(18.px)
+    paddingTop(2.px)
+    marginRight(10.px)
     whiteSpace("nowrap")
   }
+
+  val gpsLocation by style {
+    whiteSpace("nowrap")
+  }
+  // ----------------------------------------------------------------
 
   val arrow by style {
     position(Position.Absolute)
@@ -330,6 +346,8 @@ object LightboxStyle : StyleSheet() {
     left(0.px)
     width(100.percent)
     cursor("auto")
+    display(DisplayStyle.Flex)
+    flexDirection(FlexDirection.Row)
 
     // @media "screen and..." {
     //   .LightboxStyle-bottomBar { ... }
@@ -350,14 +368,6 @@ object LightboxStyle : StyleSheet() {
       }
     }
 
-  }
-
-  val title by style {
-    textAlign("left")
-    lineHeight(18.px)
-    color(LightboxVars.imageCaptionTitleColour.value())
-    property("word-wrap", "break-word")
-    paddingRight(50.px)
   }
 
   val loading by style {
