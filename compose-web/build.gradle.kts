@@ -22,6 +22,7 @@ kotlin {
                 implementation(compose.html.core)
                 implementation(compose.runtime)
                 implementation(Deps.Web.routingCompose)
+                implementation(Deps.Web.googleMaps)
                 implementation(project(":common"))
             }
         }

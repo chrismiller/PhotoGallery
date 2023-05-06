@@ -12,11 +12,10 @@ object Versions {
     const val composeDesktopWeb = "1.4.0"
 
     const val routingCompose = "0.2.12"
+    const val googleMaps = "0.3.2-alpha"
 
     const val junit = "4.12"
-    const val testCore = "1.3.0"
     const val mockito = "3.11.2"
-    const val robolectric = "4.6.1"
 
     const val shadow = "7.0.0"
     const val kotlinterGradle = "3.4.5"
@@ -79,6 +78,7 @@ object Deps {
 
     object Web {
         const val routingCompose = "app.softwork:routing-compose:${Versions.routingCompose}"
+        const val googleMaps = "com.github.chihsuanwu:google-maps-compose-web:${Versions.googleMaps}"
     }
 
     object Log {
