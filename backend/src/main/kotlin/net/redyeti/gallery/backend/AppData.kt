@@ -3,7 +3,6 @@ package net.redyeti.gallery.backend
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.remote.PopulatedAlbum
-import java.nio.file.Path
 
 class AppData(albums: List<PopulatedAlbum>) {
   private val albums = albums.map { it.album }
@@ -16,5 +15,3 @@ class AppData(albums: List<PopulatedAlbum>) {
 
   fun getPhoto(albumId: Int, photoId: Int): Photo? = photosByAlbumAndId[albumId]?.get(photoId)
 }
-
-class AppConfig(val exiftool: Path, val imageMagick: Path, val baseAlbumDir: Path, val port: Int)

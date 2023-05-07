@@ -7,9 +7,9 @@ import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
-import java.io.File
+import java.nio.file.Path
 
-fun Application.configureRouting(staticBase: String) = routing {
+fun Application.configureRouting(staticBase: Path) = routing {
   route("/api") {
     api()
   }
@@ -42,7 +42,7 @@ private fun Route.api() {
   }
 }
 
-private fun Routing.staticContent(basePath: String) = static("/image") {
-  staticRootFolder = File(basePath, "Albums")
+private fun Routing.staticContent(staticBase: Path) = static("/image") {
+  staticRootFolder = staticBase.toFile()
   files(".")
 }

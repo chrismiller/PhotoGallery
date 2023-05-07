@@ -19,13 +19,6 @@ class AlbumScanner(val config: AppConfig) {
   companion object {
     val logger = Logger.withTag(this::class.simpleName!!)
 
-    private const val ALBUMS_CSV = "albums.csv"
-    private const val ORIGINAL_PATH = "original"
-    private const val LARGE_PATH = "large"
-    private const val THUMBNAILS_PATH = "thumb"
-    private const val MIN_LARGE_DIMENSION = 1600
-    private const val MIN_THUMBNAIL_DIMENSION = 200
-
     private val EXIFTOOL_METADATA_SCAN = listOf(
       "-S", "-csv", "-FileName", "-DateTimeOriginal",
       "-OffsetTimeOriginal", "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
@@ -47,7 +40,7 @@ class AlbumScanner(val config: AppConfig) {
 
     val headers = mutableListOf<String>()
     val parser = CsvParser()
-    config.baseAlbumDir.resolve(ALBUMS_CSV).forEachLine {
+    config.albumsFile.forEachLine {
       if (headers.isEmpty()) {
         headers.addAll(parser.parseLine(it.reader()))
         return@forEachLine
@@ -74,14 +67,11 @@ class AlbumScanner(val config: AppConfig) {
 
   fun loadAlbum(album: Album): PopulatedAlbum {
     // If a metadata file exists we just use that, otherwise scan and resize+thumbnail the whole album
-    return loadAlbumMetadata(album.directory) ?: scanAndProcessAlbum(album)
+    return loadAlbumMetadata(album) ?: scanAndProcessAlbum(album)
   }
 
   fun scanAndProcessAlbum(album: Album): PopulatedAlbum {
-    var photoId = 0
-
-    val albumDir = config.baseAlbumDir.resolve(album.directory)
-    val originalsDir = albumDir.resolve(ORIGINAL_PATH)
+    val originalsDir = config.originalsDir(album.directory)
 
     // Run exiftool to get all the photo metadata
     val params = listOf(config.exiftool.toString()) + EXIFTOOL_METADATA_SCAN
@@ -142,36 +132,36 @@ class AlbumScanner(val config: AppConfig) {
 
     val populatedAlbum = PopulatedAlbum(album, photosWithIDs)
     resizeAndStripExif(populatedAlbum)
-    saveAlbumMetadata(populatedAlbum)
+    savePhotoMetadata(album.directory, populatedAlbum.photos)
     return populatedAlbum
   }
 
-  private fun metadataFile(albumDir: String) = config.baseAlbumDir.resolve(albumDir).resolve("metadata.json")
+  private fun metadataFile(albumDir: String) = config.metadataDir.resolve("$albumDir.json")
 
   @OptIn(ExperimentalSerializationApi::class)
-  private fun saveAlbumMetadata(album: PopulatedAlbum) {
-    metadataFile(album.album.directory).outputStream().use {
-      Json.encodeToStream(album, it)
+  private fun savePhotoMetadata(albumDir: String, photos: List<Photo>) {
+    metadataFile(albumDir).outputStream().use {
+      Json.encodeToStream(photos, it)
     }
   }
 
   @OptIn(ExperimentalSerializationApi::class)
-  private fun loadAlbumMetadata(albumDir: String): PopulatedAlbum? {
-    val metadataFile = metadataFile(albumDir)
+  private fun loadAlbumMetadata(album: Album): PopulatedAlbum? {
+    val metadataFile = metadataFile(album.directory)
     if (metadataFile.notExists()) {
       return null
     }
     metadataFile.inputStream().use {
-      return Json.decodeFromStream<PopulatedAlbum>(it)
+      return PopulatedAlbum(album, Json.decodeFromStream<List<Photo>>(it))
     }
   }
 
   private fun resizeAndStripExif(album: PopulatedAlbum) {
     val resizer = Resizer(config.imageMagick)
-    val albumDir = config.baseAlbumDir.resolve(album.album.directory)
-    val originalsDir = albumDir.resolve(ORIGINAL_PATH)
-    val largeDir = albumDir.resolve(LARGE_PATH)
-    val thumbnailDir = albumDir.resolve(THUMBNAILS_PATH)
+    val dirName = album.album.directory
+    val originalsDir = config.originalsDir(dirName)
+    val largeDir = config.largeDir(dirName)
+    val thumbnailDir = config.thumbnailDir(dirName)
 
     largeDir.createDirectories()
     thumbnailDir.createDirectories()
@@ -184,7 +174,7 @@ class AlbumScanner(val config: AppConfig) {
           val large = largeDir.resolve(it.filename)
           if (large.notExists()) {
             launch {
-              resizer.resize(source, large, MIN_LARGE_DIMENSION)
+              resizer.resize(source, large, config.minLargeDimension)
             }
           }
         }
@@ -202,7 +192,7 @@ class AlbumScanner(val config: AppConfig) {
           val thumbnail = thumbnailDir.resolve(it.filename)
           if (thumbnail.notExists()) {
             launch {
-              resizer.resize(large, thumbnail, MIN_THUMBNAIL_DIMENSION)
+              resizer.resize(large, thumbnail, config.minThumbDimension)
             }
           }
         }
@@ -212,6 +202,6 @@ class AlbumScanner(val config: AppConfig) {
   }
 }
 
-fun String?.asInt() = if (this.isNullOrEmpty()) 0 else this.toInt()
+fun String?.asInt() = if (this.isNullOrEmpty()) 0 else toInt()
 
-fun String?.asDouble() = if (this.isNullOrEmpty()) 0.0 else this.toDouble()
+fun String?.asDouble() = if (this.isNullOrEmpty()) 0.0 else toDouble()

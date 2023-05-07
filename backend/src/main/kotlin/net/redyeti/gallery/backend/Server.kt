@@ -5,9 +5,6 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import net.redyeti.gallery.di.initKoin
 import net.redyeti.gallery.remote.PhotoGalleryApi
-import java.io.FileInputStream
-import java.util.*
-import kotlin.io.path.Path
 
 
 private const val BASE_DIR = "F:/PhotoGallery"
@@ -20,18 +17,9 @@ fun main() {
   val koin = initKoin(enableNetworkLogs = true).koin
   val photoGalleryApi = koin.get<PhotoGalleryApi>()
 
-  val props = Properties()
-  FileInputStream("$BASE_DIR/config.properties").use {
-    props.load(it)
-  }
+  appConfig = ConfigLoader().load()
 
-  appConfig = AppConfig(
-    Path(props.getProperty("EXIFTOOL", "exiftool.exe")),
-    Path(props.getProperty("IMAGEMAGICK", "imagemagick.exe")),
-    Path(props.getProperty("ALBUMS_DIR", "$BASE_DIR/Albums")),
-    props.getProperty("HTTP_PORT", "8081").toInt()
-  )
-  photoGalleryApi.baseUrl = "http://localhost:${appConfig.port}/api"
+  photoGalleryApi.baseUrl = "http://chrisdesktop:${appConfig.port}/api"
 
   appData = initGallery(appConfig)
 
@@ -40,7 +28,7 @@ fun main() {
 
 fun Application.photoGalleryAppModule() {
   features()
-  configureRouting(BASE_DIR)
+  configureRouting(appConfig.staticwebDir)
 }
 
 fun initGallery(config: AppConfig): AppData {
