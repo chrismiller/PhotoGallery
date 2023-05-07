@@ -45,7 +45,7 @@ fun LightboxImage(
       }
 
       var loaded by remember { mutableStateOf(false) }
-      Preloader.ImgPreload(imageUrl) { loaded = true }
+      Preloader.imgPreload(imageUrl) { loaded = true }
 
       if (!loaded) {
         Img(src = sizedSVG(3000, 2000), attrs = {

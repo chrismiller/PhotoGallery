@@ -9,7 +9,7 @@ import kotlinx.browser.document
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
-import net.redyeti.gallery.web.Preloader.ImgPreload
+import net.redyeti.gallery.web.Preloader.imgPreload
 import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.dom.Button
@@ -140,7 +140,7 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
 
     // Preload a few adjacent images, so they can be displayed quickly when needed
     for (i in listOf(-1, 1, 2, 3)) {
-      ImgPreload(popAlbum.imageUrl(id + i))
+      imgPreload(popAlbum.imageUrl(id + i))
     }
 
     LightboxImage(
