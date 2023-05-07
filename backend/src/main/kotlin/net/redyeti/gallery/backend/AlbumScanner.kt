@@ -83,8 +83,6 @@ class AlbumScanner(val config: AppConfig) {
     val albumDir = config.baseAlbumDir.resolve(album.directory)
     val originalsDir = albumDir.resolve(ORIGINAL_PATH)
 
-    val photos = mutableListOf<Photo>()
-
     // Run exiftool to get all the photo metadata
     val params = listOf(config.exiftool.toString()) + EXIFTOOL_METADATA_SCAN
     val parser = CsvParser()
@@ -107,6 +105,7 @@ class AlbumScanner(val config: AppConfig) {
       }
     }
 
+    val photos = mutableListOf<Photo>()
     val collector = RowCollector()
     val processor: (String) -> Unit = { s ->
       if (collector.gather(s)) {
@@ -131,16 +130,17 @@ class AlbumScanner(val config: AppConfig) {
           } else {
             null
           }
-          val photo = Photo(photoId++, filename, description, width, height, timeStr, location)
-          println(photo)
+          val photo = Photo(-1, filename, description, width, height, timeStr, location)
           photos += photo
         }
       }
     }
     val exitCode = execute(params, processor, {}, originalsDir)
-    photos.sortBy { it.timeTaken }
 
-    val populatedAlbum = PopulatedAlbum(album, photos)
+    photos.sortBy { it.timeTaken }
+    val photosWithIDs = photos.mapIndexed { id, photo -> photo.copy(id = id) }
+
+    val populatedAlbum = PopulatedAlbum(album, photosWithIDs)
     resizeAndStripExif(populatedAlbum)
     saveAlbumMetadata(populatedAlbum)
     return populatedAlbum
