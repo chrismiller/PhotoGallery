@@ -138,6 +138,7 @@ class AlbumScanner(val config: AppConfig) {
       }
     }
     val exitCode = execute(params, processor, {}, originalsDir)
+    photos.sortBy { it.timeTaken }
 
     val populatedAlbum = PopulatedAlbum(album, photos)
     resizeAndStripExif(populatedAlbum)
