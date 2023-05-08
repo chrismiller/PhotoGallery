@@ -20,8 +20,8 @@ object Versions {
     const val shadow = "7.0.0"
     const val kotlinterGradle = "3.4.5"
 
-    const val slf4j = "1.7.30"
-    const val logback = "1.2.3"
+    const val slf4j = "2.0.7"
+    const val log4j2 = "2.20.0"
     const val kermit = "1.0.0"
 
     const val gradleVersionsPlugin = "0.39.0"
@@ -82,8 +82,10 @@ object Deps {
     }
 
     object Log {
-        const val slf4j = "org.slf4j:slf4j-simple:${Versions.slf4j}"
-        const val logback = "ch.qos.logback:logback-classic:${Versions.logback}"
+        const val slf4j = "org.slf4j:slf4j-api:${Versions.slf4j}"
+        const val log4jslf4j = "org.apache.logging.log4j:log4j-slf4j2-impl:${Versions.log4j2}"
+        const val log4j2api = "org.apache.logging.log4j:log4j-api:${Versions.log4j2}"
+        const val log4j2 = "org.apache.logging.log4j:log4j-core:${Versions.log4j2}"
         const val kermit = "co.touchlab:kermit:${Versions.kermit}"
     }
 }

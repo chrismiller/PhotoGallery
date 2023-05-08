@@ -33,7 +33,9 @@ dependencies {
     }
 
     with(Deps.Log) {
-        implementation(logback)
+        implementation(log4jslf4j)
+        implementation(log4j2api)
+        implementation(log4j2)
     }
 
     implementation(project(":common"))
