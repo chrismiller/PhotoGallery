@@ -39,13 +39,13 @@ object LightboxStyle : StyleSheet() {
       LightboxVars.overlayColour(Color("#0B0B0B"))
       LightboxVars.popupPaddingLeft(8.px)
 
-      LightboxVars.controlsColour(Color("#202020"))
+      LightboxVars.controlsColour(Color("#555555"))
       LightboxVars.controlsBorderColour(Color("#3F3F3F"))
       LightboxVars.controlsCloseColour(Color("#333333"))
       LightboxVars.controlsTextColour(Color("#CCCCCC"))
       LightboxVars.controlsTextHoverColour(Color("#FFFFFF"))
 
-      LightboxVars.imageBackgroundColour(Color("#444444"))
+      LightboxVars.imageBackgroundColour(transparent)
       LightboxVars.imageCaptionTitleColour(Color("#F3F3F3"))
       LightboxVars.imageCaptionSubtitleColour(Color("#BBBBBB"))
       LightboxVars.imagePaddingTop(40.px)
@@ -99,10 +99,29 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val alignTop by style {
-    // .LightboxStyle-lbAlignTop .LightboxStyle-lbContainer::before { ... }
-    className(container) + before style {
-      display(DisplayStyle.None)
+  val fullscreen by style {
+    cursor("pointer")
+    // backgroundImage("url(\"/fullscreen.svg\")")
+    // fullscreenExit.svg after running through https://yoksel.github.io/url-encoder/
+    backgroundImage("url(\"data:image/svg+xml,%3Csvg width='40px' height='40px' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath fill='%23999999' opacity='0.7' d='M7 2H2v5l1.8-1.8L6.5 8 8 6.5 5.2 3.8 7 2zm6 0l1.8 1.8L12 6.5 13.5 8l2.7-2.7L18 7V2h-5zm.5 10L12 13.5l2.7 2.7L13 18h5v-5l-1.8 1.8-2.7-2.8zm-7 0l-2.7 2.7L2 13v5h5l-1.8-1.8L8 13.5 6.5 12z'/%3E%3C/g%3E%3C/svg%3E")
+    position(Position.Absolute)
+    right(0.px)
+    bottom(40.px)
+    width(40.px)
+    height(40.px)
+    property("z-index", LightboxVars.zIndexBase + 6)
+    self + hover style {
+      color(rgb(1, 1, 0))
+    }
+  }
+
+  init {
+    // :fullscreen .fullscreen { ... }
+    desc(":fullscreen", className(fullscreen)) style {
+      // fullscreenExit.svg after running through https://yoksel.github.io/url-encoder/
+      backgroundImage("url(\"data:image/svg+xml,%3Csvg width='40px' height='40px' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath fill='%23999999' opacity='0.7' d='M3.4 2L2 3.4l2.8 2.8L3 8h5V3L6.2 4.8 3.4 2zm11.8 4.2L18 3.4 16.6 2l-2.8 2.8L12 3v5h5l-1.8-1.8zM4.8 13.8L2 16.6 3.4 18l2.8-2.8L8 17v-5H3l1.8 1.8zM17 12h-5v5l1.8-1.8 2.8 2.8 1.4-1.4-2.8-2.8L17 12z'/%3E%3C/g%3E%3C/svg%3E")
+      bottom(0.px)
+      position(Position.Fixed)
     }
   }
 
@@ -113,23 +132,6 @@ object LightboxStyle : StyleSheet() {
     property("margin", "0 auto")
     textAlign("left")
     property("z-index", LightboxVars.zIndexBase + 5)
-  }
-
-  val inlineHolder by style {
-    className(content) style {
-      width(100.percent)
-      cursor("auto")
-    }
-  }
-
-  val autoCursor by style {
-    className(content) style {
-      cursor("auto")
-    }
-  }
-
-  val hide by style {
-    property("display", "none !important")
   }
 
   val preloader by style {
@@ -311,6 +313,7 @@ object LightboxStyle : StyleSheet() {
 
   val figure by style {
     lineHeight(0.px)
+    // figure::after { ... }
     self + after style {
       property("content", "''")
       position(Position.Absolute)
@@ -371,9 +374,8 @@ object LightboxStyle : StyleSheet() {
   }
 
   val loading by style {
-    self + className(figure) style {
-      display(DisplayStyle.None)
-    }
+    textAlign("center")
+    property("box-shadow", "none")
   }
 
   val ready by style {
@@ -406,6 +408,7 @@ object LightboxStyle : StyleSheet() {
     }
 
     "img" style {
+      // img.image { ... }
       selector("img") + className(image) style {
         width(auto)
         maxWidth(100.percent)
@@ -413,7 +416,7 @@ object LightboxStyle : StyleSheet() {
         display(DisplayStyle.Block)
         lineHeight(0.px)
         boxSizing("border-box")
-        padding(40.px, 0.px, 40.px)
+        padding(34.px, 0.px, 40.px)
         property("margin", "0 auto")
       }
     }

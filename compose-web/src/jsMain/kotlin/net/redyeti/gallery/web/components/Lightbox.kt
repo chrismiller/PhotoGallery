@@ -12,7 +12,11 @@ fun Lightbox(
   content: @Composable () -> Unit
 ) {
   Div(attrs = { classes(LightboxStyle.background, LightboxStyle.ready) }) {}
-  Div(attrs = { classes(LightboxStyle.popup, LightboxStyle.closeButtonIn, LightboxStyle.ready) }) {
+  Div(attrs = {
+    id("fs")
+    classes(LightboxStyle.popup, LightboxStyle.closeButtonIn, LightboxStyle.ready)
+  })
+  {
     Div(attrs = {
       classes(LightboxStyle.container, LightboxStyle.imageHolder)
       onClick { e ->
@@ -24,6 +28,7 @@ fun Lightbox(
     }) {
       Div(attrs = { classes(LightboxStyle.content) }) {
         content()
+        Fullscreen("fs")
       }
       previous()
       next()
