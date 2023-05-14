@@ -14,6 +14,7 @@ import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.util.CsvParser
 import kotlin.io.path.*
+import kotlin.math.max
 
 class AlbumScanner(val config: AppConfig) {
   companion object {
@@ -120,7 +121,12 @@ class AlbumScanner(val config: AppConfig) {
           } else {
             null
           }
-          val photo = Photo(-1, filename, description, width, height, timeStr, location)
+
+          // TODO: it's possible this suffers from off-by-one rounding issues compared to the actual sizes.
+          //  Not sure if that matters or not, but if so we might have to scan the resized photo metadata instead.
+          val w = max(config.minLargeDimension, width * config.minLargeDimension / height)
+          val h = max(config.minLargeDimension, height * config.minLargeDimension / width)
+          val photo = Photo(-1, filename, description, w, h, timeStr, location)
           photos += photo
         }
       }
