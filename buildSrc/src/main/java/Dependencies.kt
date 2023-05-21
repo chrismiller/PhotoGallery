@@ -12,7 +12,7 @@ object Versions {
     const val composeDesktopWeb = "1.4.0"
 
     const val routingCompose = "0.2.12"
-    const val googleMaps = "0.3.2-alpha"
+    const val googleMaps = "0.3.3-alpha"
 
     const val junit = "4.12"
     const val mockito = "3.11.2"

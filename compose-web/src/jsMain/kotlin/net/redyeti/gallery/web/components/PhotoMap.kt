@@ -6,7 +6,6 @@ import com.chihsuanwu.maps.compose.web.*
 import com.chihsuanwu.maps.compose.web.drawing.Marker
 import com.chihsuanwu.maps.compose.web.drawing.MarkerState
 import net.redyeti.gallery.remote.Photo
-import org.jetbrains.compose.web.css.*
 
 @Composable
 fun PhotoMap(photos: List<Photo>) {
@@ -28,15 +27,9 @@ fun PhotoMap(photos: List<Photo>) {
   GoogleMap(
     apiKey = "AIzaSyDm41vgFLFbuCLCTIYTKZpQ9phGBRAPPc4",
     mapOptions = mapOptions,
-    cameraPositionState = cameraPositionState,
-    attrs = {
-      style {
-        width(600.px)
-        height(400.px)
-      }
-    }
+    cameraPositionState = cameraPositionState
   ) {
-    photos.forEach { p->
+    photos.forEach { p ->
       val coords = p.location
       if (coords != null) {
         Marker(
