@@ -12,7 +12,7 @@ fun AlbumCover(album: Album) {
     NavLink(to = "/album/${album.id}") {
       Img(
         attrs = { classes(AppStyle.thumb) },
-        src = "/image/${album.directory}/thumb/${album.coverImage}",
+        src = album.thumbnailUrl(album.coverImage),
         alt = album.title
       )
       Br()

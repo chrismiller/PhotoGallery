@@ -12,7 +12,7 @@ fun PhotoThumbnail(album: Album, photo: Photo) {
   NavLink(to = "/album/${album.id}/${photo.id}") {
     Img(
       attrs = { classes(AppStyle.thumb) },
-      src = "/image/${album.directory}/thumb/${photo.filename}",
+      src = album.thumbnailUrl(photo),
       alt = photo.description
     )
   }

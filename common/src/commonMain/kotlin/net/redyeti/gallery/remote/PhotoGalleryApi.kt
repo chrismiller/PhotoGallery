@@ -1,7 +1,7 @@
 package net.redyeti.gallery.remote
 
 import io.ktor.client.*
-import io.ktor.client.call.body
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
@@ -9,7 +9,12 @@ import org.koin.core.component.KoinComponent
 @Serializable
 data class Album(
   val id: Int, val title: String, val subtitle: String, val directory: String, val coverImage: String
-)
+) {
+  fun imageUrl(photo: Photo) = imageUrl(photo.filename)
+  fun thumbnailUrl(photo: Photo) = thumbnailUrl(photo.filename)
+  fun imageUrl(filename: String) = "/image/$directory/large/$filename"
+  fun thumbnailUrl(filename: String) = "/image/$directory/thumb/$filename"
+}
 
 @Serializable
 data class Photo(
@@ -18,7 +23,19 @@ data class Photo(
 )
 
 @Serializable
-data class PopulatedAlbum(val album: Album, val photos: List<Photo>)
+data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
+  fun wrappedID(id: Int) = (id + photos.size) % photos.size
+
+  fun imageUrl(photoID: Int): String {
+    val photo = photos[wrappedID(photoID)]
+    return album.imageUrl(photo)
+  }
+
+  fun thumbnailUrl(photoID: Int): String {
+    val photo = photos[wrappedID(photoID)]
+    return album.thumbnailUrl(photo)
+  }
+}
 
 @Serializable
 data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double)

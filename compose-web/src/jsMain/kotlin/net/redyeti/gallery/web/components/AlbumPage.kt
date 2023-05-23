@@ -77,11 +77,6 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
   }
 }
 
-fun PopulatedAlbum.imageUrl(photoID: Int): String {
-  val photo = photos[wrappedID(photoID)]
-  return "/image/${album.directory}/large/${photo.filename}"
-}
-
 @Composable
 private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit) {
   var id by remember { mutableStateOf(photoID) }
@@ -157,5 +152,3 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
     }
   }
 }
-
-fun PopulatedAlbum.wrappedID(id: Int) = (id + photos.size) % photos.size
