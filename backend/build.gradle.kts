@@ -46,10 +46,14 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.named<ProcessResources>("processResources") {
-    dependsOn(":compose-web:assemble")
-    from(File(rootProject.project("compose-web").buildDir, "distributions/")) {
+    dependsOn(":compose-web:jsBrowserDevelopmentExecutableDistribution")
+    from(File(rootProject.project("compose-web").buildDir, "developmentExecutable/")) {
         into("app")
     }
+//    dependsOn(":compose-web:assemble")
+//    from(File(rootProject.project("compose-web").buildDir, "distributions/")) {
+//        into("app")
+//    }
 }
 
 application {
