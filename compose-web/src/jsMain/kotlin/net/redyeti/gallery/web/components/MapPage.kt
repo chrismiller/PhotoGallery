@@ -40,7 +40,7 @@ fun RouteBuilder.MapPage(repo: PhotoGalleryInterface) {
         }
       }
     ) {
-      PhotoMap(popAlbum.photos)
+      PhotoMap(popAlbum)
     }
   }
 }
