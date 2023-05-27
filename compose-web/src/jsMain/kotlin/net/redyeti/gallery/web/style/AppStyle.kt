@@ -20,7 +20,7 @@ object AppStyle : StyleSheet() {
       StyleVars.colourGreyLight(Color("#f4f4f4"))
       StyleVars.colourGreyMedium(Color("#b3b3b3"))
       StyleVars.colourGreyDark(Color("#323236"))
-      StyleVars.imageSideMargin(20.px)
+      StyleVars.imageSideMargin(15.px)
       margin(0.px)
     }
   }
@@ -121,7 +121,7 @@ object AppStyle : StyleSheet() {
     }
 
     "header" style {
-      margin(20.px, 0.px)
+      margin(15.px, 0.px)
       backgroundColor(Color("292CFF"))
     }
 
@@ -133,7 +133,7 @@ object AppStyle : StyleSheet() {
     "footer" style {
       fontSize(80.percent)
       backgroundColor(Color("292C2F"))
-      marginTop(20.px)
+      marginTop(15.px)
       height(30.px)
       textAlign("center")
     }
