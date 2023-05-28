@@ -39,6 +39,11 @@ data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
     val photo = photos[wrappedID(photoID)]
     return album.imageUrl(photo)
   }
+
+  fun thumbnailUrl(photoID: Int): String {
+    val photo = photos[wrappedID(photoID)]
+    return album.thumbnailUrl(photo)
+  }
 }
 
 @Serializable

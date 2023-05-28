@@ -64,7 +64,7 @@ fun PhotoMap(album: PopulatedAlbum) {
       Marker(state = marker,
         title = photo.filename,
         icon = MarkerIcon.Icon(
-          url = album.imageUrl(photo.id),
+          url = album.thumbnailUrl(photo.id),
           scaledSize = Size(height.toDouble(), width.toDouble())
         ),
         onClick = {
