@@ -22,6 +22,9 @@ fun main() {
 //    LightboxStyle.cssRules.forEach {
 //      console.info(it.stringPresentation())
 //    }
+//    AppStyle.cssRules.forEach {
+//      console.info(it.stringPresentation())
+//    }
     Style(AppStyle)
     Style(TextStyle)
     Style(LightboxStyle)
