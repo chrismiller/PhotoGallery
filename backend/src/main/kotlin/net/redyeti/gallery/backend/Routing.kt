@@ -13,7 +13,7 @@ fun Application.configureRouting(staticBase: Path) = routing {
   route("/api") {
     api()
   }
-  staticContent(staticBase)
+  staticFiles("/image", staticBase.toFile())
   singlePageApplication {
     useResources = true
     filesPath = "app"
@@ -40,9 +40,4 @@ private fun Route.api() {
     val result = appData.getPhoto(albumId, photoId) ?: throw RequestValidationException(photoId, listOf("Invalid photo ID"))
     call.respond(result)
   }
-}
-
-private fun Routing.staticContent(staticBase: Path) = static("/image") {
-  staticRootFolder = staticBase.toFile()
-  files(".")
 }
