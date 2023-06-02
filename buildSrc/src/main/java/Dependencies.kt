@@ -1,13 +1,11 @@
 object Versions {
 
-    const val kotlinCoroutines = "1.6.4"
-    const val kotlinxSerialization = "1.4.1"
-    const val ktor = "2.2.4"
-    const val koinCore = "3.3.2"
-    const val koinAndroid = "3.3.2"
+    const val kotlinCoroutines = "1.7.1"
+    const val kotlinxSerialization = "1.5.1"
+    const val ktor = "2.3.1"
+    const val koinCore = "3.4.1"
+    const val koinAndroid = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
-
-    const val kmpNativeCoroutinesVersion = "1.0.0-ALPHA-5"
 
     const val composeDesktopWeb = "1.4.0"
 
@@ -15,26 +13,20 @@ object Versions {
     const val googleMaps = "0.3.3-alpha"
 
     const val junit = "4.12"
-    const val mockito = "3.11.2"
+    const val mockito = "5.2.0"
 
-    const val shadow = "7.0.0"
-    const val kotlinterGradle = "3.4.5"
+    const val shadow = "8.1.1"
+    const val kotlinterGradle = "3.15.0"
 
     const val slf4j = "2.0.7"
     const val log4j2 = "2.20.0"
-    const val kermit = "1.0.0"
+    const val kermit = "2.0.0-RC4"
 
-    const val gradleVersionsPlugin = "0.39.0"
+    const val gradleVersionsPlugin = "0.46.0"
 }
 
 
 object Deps {
-    object Gradle {
-        const val kotlinter = "org.jmailen.gradle:kotlinter-gradle:${Versions.kotlinterGradle}"
-        const val shadow = "gradle.plugin.com.github.jengelman.gradle.plugins:shadow:${Versions.shadow}"
-        const val gradleVersionsPlugin = "com.github.ben-manes:gradle-versions-plugin:${Versions.gradleVersionsPlugin}"
-    }
-
     object Kotlinx {
         const val serializationCore = "org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerialization}"
         const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"

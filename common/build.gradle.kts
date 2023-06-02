@@ -4,7 +4,6 @@ plugins {
     kotlin("multiplatform")
     id("kotlinx-serialization")
     id("com.google.devtools.ksp")
-    id("com.rickclephas.kmp.nativecoroutines")
 }
 
 kotlin {

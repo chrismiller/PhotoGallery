@@ -1,3 +1,9 @@
+plugins {
+    id("com.github.johnrengelman.shadow") version Versions.shadow
+    id("com.github.ben-manes.versions") version Versions.gradleVersionsPlugin
+    id("org.jmailen.kotlinter") version Versions.kotlinterGradle
+}
+
 buildscript {
     val kotlinVersion: String by project
     println(kotlinVersion)
@@ -6,7 +12,6 @@ buildscript {
         google()
         mavenCentral()
         gradlePluginPortal()
-        maven(uri("https://plugins.gradle.org/m2/")) // For kotlinter-gradle
     }
 
     dependencies {
@@ -14,20 +19,11 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.4.0")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
-
-        with(Deps.Gradle) {
-            classpath(shadow)
-            classpath(kotlinter)
-            classpath(gradleVersionsPlugin)
-            classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.8.20-1.0.10")
-            classpath("com.rickclephas.kmp:kmp-nativecoroutines-gradle-plugin:${Versions.kmpNativeCoroutinesVersion}")
-        }
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.8.20-1.0.10")
     }
 }
 
 allprojects {
-    apply(plugin = "org.jmailen.kotlinter")
-
     repositories {
         google()
         mavenCentral()
