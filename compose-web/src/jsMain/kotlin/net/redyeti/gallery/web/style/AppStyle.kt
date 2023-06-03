@@ -36,7 +36,8 @@ object AppStyle : StyleSheet() {
   val albumCover by style {
     margin(10.px)
     display(DisplayStyle.InlineBlock)
-    textAlign("center")
+    minWidth(0.px)
+    minHeight(0.px)
   }
 
   val photoGrid by style {
@@ -72,11 +73,29 @@ object AppStyle : StyleSheet() {
 
   val truncatedText by style {
     display(DisplayStyle.Block)
+    flex(1)
     overflow("hidden")
     property("text-overflow", "ellipsis")
     property("text-shadow", "0 0 3px #000")
     whiteSpace("nowrap")
     width(100.percent)
+  }
+
+  val thumbText by style {
+    flex(1)
+    minWidth(0.px)
+    minHeight(0.px)
+    marginRight(8.px)
+  }
+
+  val thumbTitle by style {
+    fontSize(14.px)
+    color(Color.white)
+  }
+
+  val thumbSubTitle by style {
+    fontSize(11.px)
+    //color(hsla(0, 0, 1, 0.1))
   }
 
   val overlay by style {
@@ -130,7 +149,6 @@ object AppStyle : StyleSheet() {
   val coverWrapper by style {
     position(Position.Relative)
     property("margin", "0 auto")
-    textAlign("center")
   }
 
   val photoGridCell by style {
@@ -192,9 +210,6 @@ object AppStyle : StyleSheet() {
     "a" style {
       color(StyleVars.colourGreyMedium.value())
       textDecoration("none")
-      hover {
-        color(Color.white)
-      }
     }
 
     "header" style {

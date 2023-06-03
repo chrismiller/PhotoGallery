@@ -1,7 +1,9 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
+import app.softwork.routingcompose.NavLink
 import kotlinx.browser.window
+import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.web.Preloader
 import net.redyeti.gallery.web.style.LightboxStyle
@@ -9,10 +11,8 @@ import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.ButtonType
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.attributes.type
-import org.jetbrains.compose.web.css.height
 import org.jetbrains.compose.web.css.maxHeight
 import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.events.Event
 
@@ -48,14 +48,18 @@ fun LightboxImage(
       Preloader.imgPreload(imageUrl) { loaded = true }
 
       if (!loaded) {
-        Img(src = sizedSVG(3000, 2000), attrs = {
-          classes(LightboxStyle.image)
-          style {
-            width(640.px)
-            height(480.px)
-            maxHeight(maxHeight.px)
-          }
-        })
+//        Div(attrs = {
+//          classes(LightboxStyle.loading)
+//          style { width(640.px); height(480.px) }
+//        }
+//        ) {
+//          Img(src = "/loading.svg", attrs = {
+//            classes(LightboxStyle.image)
+//            style {
+//              backgroundColor(rgba(0, 0, 0, 0.5))
+//            }
+//          })
+//        }
       } else {
         Img(src = imageUrl, attrs = {
           classes(LightboxStyle.image)
@@ -104,10 +108,20 @@ fun GpsLink(location: GpsCoordinates?) {
     A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
       target(ATarget.Blank)
     }) {
-      Img(src = "/location.svg", attrs = {
+      Img(src = "/location3.svg", attrs = {
         attr("width", "20px")
         attr("height", "20px")
       })
     }
+  }
+}
+
+@Composable
+fun MapLink(album: Album) {
+  NavLink(to = "/map/${album.id}") {
+    Img(src = "/map.svg", attrs = {
+      attr("width", "24px")
+      attr("height", "24px")
+    })
   }
 }

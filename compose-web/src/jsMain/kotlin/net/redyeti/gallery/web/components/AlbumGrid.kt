@@ -9,8 +9,6 @@ import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.web.style.AppStyle
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.Img
-import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
@@ -38,29 +36,18 @@ fun AlbumGrid(album: PopulatedAlbum, albumWidth: Int) {
           height(box.height.px)
         }
       }) {
-        Div(attrs = { classes(AppStyle.thumbnailContainer) }) {
-          Img(
-            attrs = {
-              classes(AppStyle.thumb)
-              attr("loading", "lazy")
-            },
-            src = album.album.thumbnailUrl(photo),
-            alt = photo.description
-          )
-          Div(attrs = { classes(AppStyle.interactionView) }) {
-            Div(attrs = { classes(AppStyle.photoInteraction) }) {
-              NavLink(attrs = { classes(AppStyle.overlay) }, to = "/album/${album.album.id}/${photo.id}")
-              Div(attrs = { classes(AppStyle.interactionBar) }) {
-                Div(attrs = { classes(AppStyle.interactionItem) }) {
-                  Span(attrs = { classes(AppStyle.truncatedText) }) {
-                    Text(photo.timeTaken)
-                  }
-                }
-                Div(attrs = { classes(AppStyle.interactionItem) }) {
-                  GpsLink(photo.location)
-                }
-              }
+        val photoUrl = "/album/${album.album.id}/${photo.id}"
+        PhotoThumbnail(imageUrl = album.album.thumbnailUrl(photo), to = photoUrl) {
+          NavLink(
+            attrs = { classes(AppStyle.thumbText) },
+            to = photoUrl
+          ) {
+            Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbTitle) }) {
+              Text(photo.description)
             }
+          }
+          Div(attrs = { classes(AppStyle.interactionItem) }) {
+            GpsLink(photo.location)
           }
         }
       }
