@@ -98,17 +98,16 @@ fun AlbumCounter(count: Count?) {
 
 @Composable
 fun GpsLink(location: GpsCoordinates?) {
-  Div(attrs = { classes(LightboxStyle.gpsLocation) }) {
-    if (location != null) {
-      val lat = location.latitude
-      val long = location.longitude
-      A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
-        target(ATarget.Blank)
-      }) {
-        Img(src = "/globe.png", attrs = {
-          style { width(27.px); height(25.px) }
-        })
-      }
+  if (location != null) {
+    val lat = location.latitude
+    val long = location.longitude
+    A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
+      target(ATarget.Blank)
+    }) {
+      Img(src = "/location.svg", attrs = {
+        attr("width", "20px")
+        attr("height", "20px")
+      })
     }
   }
 }

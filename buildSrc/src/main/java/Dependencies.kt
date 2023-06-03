@@ -1,5 +1,4 @@
 object Versions {
-
     const val kotlinCoroutines = "1.7.1"
     const val kotlinxSerialization = "1.5.1"
     const val ktor = "2.3.1"

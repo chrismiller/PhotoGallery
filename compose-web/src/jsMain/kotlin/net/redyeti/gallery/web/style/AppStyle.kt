@@ -39,9 +39,86 @@ object AppStyle : StyleSheet() {
     textAlign("center")
   }
 
-  val justified by style {
+  val photoGrid by style {
     position(Position.Relative)
     backgroundColor(Color.black)
+  }
+
+  val thumbnailContainer by style {
+    position(Position.Relative)
+    width(100.percent)
+    height(100.percent)
+  }
+
+  @OptIn(ExperimentalComposeWebApi::class)
+  val interactionView by style {
+    position(Position.Absolute)
+    left(0.px)
+    top(0.px)
+    width(100.percent)
+    height(100.percent)
+    opacity(0.0)
+    transitions {
+      "opacity" {
+        duration(0.3.s)
+        timingFunction(AnimationTimingFunction.EaseInOut)
+      }
+    }
+    self + hover style {
+      opacity(1.0)
+      backgroundImage("linear-gradient(transparent 65%, rgba(0,0,0,0.35))")
+    }
+  }
+
+  val truncatedText by style {
+    display(DisplayStyle.Block)
+    overflow("hidden")
+    property("text-overflow", "ellipsis")
+    property("text-shadow", "0 0 3px #000")
+    whiteSpace("nowrap")
+    width(100.percent)
+  }
+
+  val overlay by style {
+    width(100.percent)
+    height(100.percent)
+    position(Position.Absolute)
+    property("z-index", "1")
+  }
+
+  val photoInteraction by style {
+    cursor("pointer")
+    width(100.percent)
+    height(100.percent)
+    position(Position.Absolute)
+  }
+
+  val interactionBar by style {
+    display(DisplayStyle.Flex)
+    flexDirection(FlexDirection.Row)
+    alignItems(AlignItems.FlexEnd)
+    bottom(0.px)
+    left(0.px)
+    padding(0.px, 4.px, 4.px)
+    boxSizing("border-box")
+    position(Position.Absolute)
+    width(100.percent)
+    property("z-index", "2")
+  }
+
+  val interactionItem by style {
+    cursor("pointer")
+    display(DisplayStyle.Flex)
+    minWidth(0.px)
+    minHeight(0.px)
+    marginRight(4.px)
+    color(Color.white)
+    self + firstChild style {
+      flex(1)
+    }
+    self + lastChild style {
+      marginRight(0.px)
+    }
   }
 
   val thumb by style {
@@ -56,7 +133,7 @@ object AppStyle : StyleSheet() {
     textAlign("center")
   }
 
-  val box by style {
+  val photoGridCell by style {
     position(Position.Absolute)
     backgroundColor(StyleVars.colourGreyMedium.value())
   }
