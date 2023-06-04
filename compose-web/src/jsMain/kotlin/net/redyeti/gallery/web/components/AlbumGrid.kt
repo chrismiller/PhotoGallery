@@ -42,7 +42,7 @@ fun AlbumGrid(album: PopulatedAlbum, albumWidth: Int) {
             attrs = { classes(AppStyle.thumbText) },
             to = photoUrl
           ) {
-            Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbTitle) }) {
+            Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
               Text(photo.description)
             }
           }

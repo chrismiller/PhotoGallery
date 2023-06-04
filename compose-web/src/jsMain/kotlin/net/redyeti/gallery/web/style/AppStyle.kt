@@ -97,7 +97,7 @@ object AppStyle : StyleSheet() {
 
   val thumbSubTitle by style {
     fontSize(11.px)
-    //color(hsla(0, 0, 1, 0.1))
+    color(Color.white)
   }
 
   val overlay by style {
@@ -150,6 +150,7 @@ object AppStyle : StyleSheet() {
 
   val coverWrapper by style {
     position(Position.Relative)
+    textAlign("center")
     property("margin", "0 auto")
   }
 
