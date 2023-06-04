@@ -6,6 +6,7 @@ import app.softwork.routingcompose.Routing
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.repository.PhotoGalleryInterface
 import net.redyeti.gallery.web.style.AppStyle
+import org.jetbrains.compose.web.css.textAlign
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 
@@ -28,15 +29,26 @@ fun IndexPage(repo: PhotoGalleryInterface) {
               attrs = { classes(AppStyle.thumbText) },
               to = albumUrl
             ) {
-              Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbTitle) }) {
-                Text(album.title)
-              }
               Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
-                Text(album.subtitle)
+                // TODO: show photo count etc?
               }
             }
             Div(attrs = { classes(AppStyle.interactionItem) }) {
               MapLink(album)
+            }
+          }
+          Div {
+            Div(attrs = {
+              classes(AppStyle.truncatedText, AppStyle.thumbTitle)
+              style { textAlign("center") }
+            }) {
+              Text(album.title)
+            }
+            Div(attrs = {
+              classes(AppStyle.truncatedText, AppStyle.thumbSubTitle)
+              style { textAlign("center") }
+            }) {
+              Text(album.subtitle)
             }
           }
         }

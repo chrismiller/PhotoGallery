@@ -34,6 +34,8 @@ object AppStyle : StyleSheet() {
   }
 
   val albumCover by style {
+    display(DisplayStyle.Flex)
+    flexDirection(FlexDirection.Column)
     margin(10.px)
     display(DisplayStyle.InlineBlock)
     minWidth(0.px)
