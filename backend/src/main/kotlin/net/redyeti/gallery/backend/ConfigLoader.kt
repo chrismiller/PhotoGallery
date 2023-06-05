@@ -12,18 +12,17 @@ class ConfigLoader {
   }
 
   fun load(): AppConfig {
-    // TODO: Get this from the environment?
-    val BASE_DIR = "E:/PhotoGallery"
+    val configFile = System.getenv("REDYETI_CONFIG") ?: "E:/PhotoGallery/config.properties"
 
     val props = Properties()
-    FileInputStream("$BASE_DIR/config.properties").use {
+    FileInputStream(configFile).use {
       props.load(it)
     }
 
     return AppConfig(
       Path(props.getProperty("EXIFTOOL", "exiftool.exe")),
       Path(props.getProperty("IMAGEMAGICK", "imagemagick.exe")),
-      Path(props.getProperty("GALLERY_DIR", BASE_DIR)),
+      Path(props.getProperty("GALLERY_DIR", Path.of(configFile).parent.toString())),
       props.getProperty("HTTP_PORT", "8081").toInt(),
       props.getProperty("MIN_LARGE_DIMENSION", MIN_LARGE_DIMENSION).toInt(),
       props.getProperty("MIN_THUMBNAIL_DIMENSION", MIN_THUMBNAIL_DIMENSION).toInt()
