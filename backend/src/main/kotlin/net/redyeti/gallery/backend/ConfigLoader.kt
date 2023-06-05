@@ -9,6 +9,7 @@ class ConfigLoader {
   companion object {
     private const val MIN_LARGE_DIMENSION = "1600"
     private const val MIN_THUMBNAIL_DIMENSION = "200"
+    private const val DEFAULT_PORT = "8081"
   }
 
   fun load(): AppConfig {
@@ -23,7 +24,7 @@ class ConfigLoader {
       Path(props.getProperty("EXIFTOOL", "exiftool.exe")),
       Path(props.getProperty("IMAGEMAGICK", "imagemagick.exe")),
       Path(props.getProperty("GALLERY_DIR", Path.of(configFile).parent.toString())),
-      props.getProperty("HTTP_PORT", "8081").toInt(),
+      props.getProperty("HTTP_PORT", DEFAULT_PORT).toInt(),
       props.getProperty("MIN_LARGE_DIMENSION", MIN_LARGE_DIMENSION).toInt(),
       props.getProperty("MIN_THUMBNAIL_DIMENSION", MIN_THUMBNAIL_DIMENSION).toInt()
     )
