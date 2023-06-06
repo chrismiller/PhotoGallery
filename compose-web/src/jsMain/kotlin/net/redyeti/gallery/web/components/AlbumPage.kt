@@ -138,11 +138,12 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
       imgPreload(popAlbum.imageUrl(id + i))
     }
 
+    val photo = popAlbum.photos[id]
     LightboxImage(
+      photo,
       popAlbum.imageUrl(id),
       close
     ) {
-      val photo = popAlbum.photos[id]
       GalleryCaption(photo.location, Count(id, popAlbum.photos.size)) {
         Text(photo.description)
         Small {

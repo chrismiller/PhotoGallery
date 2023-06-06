@@ -308,9 +308,6 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val image by style {
-  }
-
   val figure by style {
     lineHeight(0.px)
     // figure::after { ... }
@@ -370,12 +367,6 @@ object LightboxStyle : StyleSheet() {
         }
       }
     }
-
-  }
-
-  val loading by style {
-    textAlign("center")
-    property("box-shadow", "none")
   }
 
   val ready by style {
@@ -384,10 +375,7 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val error by style {
-    className(content) style {
-      display(DisplayStyle.None)
-    }
+  val image by style {
   }
 
   init {

@@ -5,21 +5,25 @@ import app.softwork.routingcompose.NavLink
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.GpsCoordinates
+import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.web.Preloader
+import net.redyeti.gallery.web.sizedSVG
 import net.redyeti.gallery.web.style.LightboxStyle
+import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.ButtonType
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.attributes.type
-import org.jetbrains.compose.web.css.maxHeight
-import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.events.Event
 
 data class Count(val current: Int, val total: Int)
 
+@OptIn(ExperimentalComposeWebApi::class)
 @Composable
 fun LightboxImage(
+  photo: Photo,
   imageUrl: String,
   close: () -> Unit,
   caption: @Composable () -> Unit
@@ -48,18 +52,23 @@ fun LightboxImage(
       Preloader.imgPreload(imageUrl) { loaded = true }
 
       if (!loaded) {
-//        Div(attrs = {
-//          classes(LightboxStyle.loading)
-//          style { width(640.px); height(480.px) }
-//        }
-//        ) {
-//          Img(src = "/loading.svg", attrs = {
-//            classes(LightboxStyle.image)
-//            style {
-//              backgroundColor(rgba(0, 0, 0, 0.5))
-//            }
-//          })
-//        }
+        Div {
+          Img(src = sizedSVG(photo.width, photo.height), attrs = {
+            classes(LightboxStyle.image)
+            // The following line prevents the image from exceeding the window height
+            style { maxHeight(maxHeight.px) }
+          })
+          Span(attrs = {
+            style {
+              position(Position.Absolute)
+              left(50.percent)
+              top(50.percent)
+              transform { translate((-50).percent, (-50).percent) }
+            }
+          }) {
+            Img(src = "/loading.svg")
+          }
+        }
       } else {
         Img(src = imageUrl, attrs = {
           classes(LightboxStyle.image)
