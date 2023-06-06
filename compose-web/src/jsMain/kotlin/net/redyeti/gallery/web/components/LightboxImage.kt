@@ -117,7 +117,7 @@ fun GpsLink(location: GpsCoordinates?) {
     A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
       target(ATarget.Blank)
     }) {
-      Img(src = "/location3.svg", attrs = {
+      Img(src = "/location.svg", attrs = {
         attr("width", "20px")
         attr("height", "20px")
       })
