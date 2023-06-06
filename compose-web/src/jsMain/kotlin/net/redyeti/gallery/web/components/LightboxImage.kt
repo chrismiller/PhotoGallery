@@ -1,18 +1,14 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
-import app.softwork.routingcompose.NavLink
 import kotlinx.browser.window
-import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.web.Preloader
 import net.redyeti.gallery.web.sizedSVG
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
-import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.ButtonType
-import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.attributes.type
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
@@ -106,31 +102,5 @@ fun AlbumCounter(count: Count?) {
     Div(attrs = { classes(LightboxStyle.counter) }) {
       Text("${count.current + 1} of ${count.total}")
     }
-  }
-}
-
-@Composable
-fun GpsLink(location: GpsCoordinates?) {
-  if (location != null) {
-    val lat = location.latitude
-    val long = location.longitude
-    A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
-      target(ATarget.Blank)
-    }) {
-      Img(src = "/location.svg", attrs = {
-        attr("width", "20px")
-        attr("height", "20px")
-      })
-    }
-  }
-}
-
-@Composable
-fun MapLink(album: Album) {
-  NavLink(to = "/map/${album.id}") {
-    Img(src = "/map.svg", attrs = {
-      attr("width", "24px")
-      attr("height", "24px")
-    })
   }
 }

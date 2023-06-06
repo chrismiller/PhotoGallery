@@ -37,17 +37,16 @@ fun AlbumGrid(album: PopulatedAlbum, albumWidth: Int) {
         }
       }) {
         val photoUrl = "/album/${album.album.id}/${photo.id}"
-        PhotoThumbnail(imageUrl = album.album.thumbnailUrl(photo), to = photoUrl) {
-          NavLink(
-            attrs = { classes(AppStyle.thumbText) },
-            to = photoUrl
-          ) {
-            Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
-              Text(photo.description)
+        NavLink(to = photoUrl) {
+          PhotoThumbnail(imageUrl = album.album.thumbnailUrl(photo)) {
+            Div(attrs = { classes(AppStyle.thumbText) }) {
+              Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
+                Text(photo.description)
+              }
             }
-          }
-          Div(attrs = { classes(AppStyle.interactionItem) }) {
-            GpsLink(photo.location)
+            Div(attrs = { classes(AppStyle.interactionItem) }) {
+              GpsLink(photo.location)
+            }
           }
         }
       }

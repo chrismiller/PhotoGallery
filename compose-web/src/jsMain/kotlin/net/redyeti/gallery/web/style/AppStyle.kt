@@ -100,13 +100,6 @@ object AppStyle : StyleSheet() {
     color(Color.white)
   }
 
-  val overlay by style {
-    width(100.percent)
-    height(100.percent)
-    position(Position.Absolute)
-    property("z-index", "1")
-  }
-
   val photoInteraction by style {
     cursor("pointer")
     width(100.percent)

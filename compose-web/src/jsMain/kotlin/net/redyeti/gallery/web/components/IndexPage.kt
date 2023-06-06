@@ -23,32 +23,30 @@ fun IndexPage(repo: PhotoGalleryInterface) {
     Div(attrs = { classes(AppStyle.coverWrapper) }) {
       albums.forEach { album ->
         Div(attrs = { classes(AppStyle.albumCover) }) {
-          val albumUrl = "/album/${album.id}"
-          PhotoThumbnail(imageUrl = album.thumbnailUrl(album.coverImage), to = albumUrl) {
-            NavLink(
-              attrs = { classes(AppStyle.thumbText) },
-              to = albumUrl
-            ) {
-              Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
-                // TODO: show photo count etc?
+          NavLink(to = "/album/${album.id}") {
+            PhotoThumbnail(imageUrl = album.thumbnailUrl(album.coverImage)) {
+              Div(attrs = { classes(AppStyle.thumbText) }) {
+                Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
+                  // TODO: show photo count etc?
+                }
+              }
+              Div(attrs = { classes(AppStyle.interactionItem) }) {
+                MapLink(album)
               }
             }
-            Div(attrs = { classes(AppStyle.interactionItem) }) {
-              MapLink(album)
-            }
-          }
-          Div {
-            Div(attrs = {
-              classes(AppStyle.truncatedText, AppStyle.thumbTitle)
-              style { textAlign("center") }
-            }) {
-              Text(album.title)
-            }
-            Div(attrs = {
-              classes(AppStyle.truncatedText, AppStyle.thumbSubTitle)
-              style { textAlign("center") }
-            }) {
-              Text(album.subtitle)
+            Div {
+              Div(attrs = {
+                classes(AppStyle.truncatedText, AppStyle.thumbTitle)
+                style { textAlign("center") }
+              }) {
+                Text(album.title)
+              }
+              Div(attrs = {
+                classes(AppStyle.truncatedText, AppStyle.thumbSubTitle)
+                style { textAlign("center") }
+              }) {
+                Text(album.subtitle)
+              }
             }
           }
         }
