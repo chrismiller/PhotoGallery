@@ -19,7 +19,7 @@ fun IndexPage(repo: PhotoGalleryInterface) {
     albums = repo.fetchAlbums()
   }
 
-  Page("Travel Photos", "Chris Miller") {
+  Page("Travel Photos", header = { AppHeader("Travel Photos", "Chris Miller") }) {
     Div(attrs = { classes(AppStyle.coverWrapper) }) {
       albums.forEach { album ->
         Div(attrs = { classes(AppStyle.albumCover) }) {

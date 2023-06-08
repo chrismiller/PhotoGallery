@@ -11,8 +11,9 @@ import kotlin.js.Date
 @Routing
 @Composable
 fun Page(
-  title: String, subtitle: String,
+  title: String,
   attrs: AttrBuilderContext<HTMLDivElement>? = null,
+  header: @Composable () -> Unit,
   content: @Composable () -> Unit
 ) {
   document.title = "Travel Photos - $title"
@@ -21,7 +22,7 @@ fun Page(
     attrs?.invoke(this)
   }) {
     Header {
-      AppHeader(title, subtitle)
+      header()
     }
     Main {
       content()

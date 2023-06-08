@@ -55,7 +55,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
   if (popAlbum == null) {
     Div(attrs = { classes(AppStyle.loader) }) {}
   } else {
-    Page(popAlbum.album.title, popAlbum.album.subtitle) {
+    Page(popAlbum.album.title, header = { AppHeader(popAlbum.album.title, popAlbum.album.subtitle) }) {
       AlbumGrid(popAlbum, albumWidth)
     }
 

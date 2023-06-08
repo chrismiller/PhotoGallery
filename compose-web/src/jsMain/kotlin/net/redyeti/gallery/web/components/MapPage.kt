@@ -47,12 +47,12 @@ fun RouteBuilder.MapPage(repo: PhotoGalleryInterface) {
   } else {
     Page(
       popAlbum.album.title,
-      popAlbum.album.subtitle,
       attrs = {
         style {
           height(100.vh)
         }
-      }
+      },
+      header = { AppHeader(popAlbum.album.title, popAlbum.album.subtitle) }
     ) {
       PhotoMap(popAlbum)
     }
