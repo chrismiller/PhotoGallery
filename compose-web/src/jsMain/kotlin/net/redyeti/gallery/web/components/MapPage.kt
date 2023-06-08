@@ -2,7 +2,6 @@ package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
 import app.softwork.routingcompose.RouteBuilder
-import app.softwork.routingcompose.Router
 import app.softwork.routingcompose.Routing
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.repository.PhotoGalleryInterface
@@ -20,7 +19,6 @@ fun RouteBuilder.MapPage(repo: PhotoGalleryInterface) {
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
 
   var photoID = -1
-  val router = Router.current
 
   int { albumID ->
     int {
