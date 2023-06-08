@@ -29,9 +29,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
   var albumWidth by remember { mutableStateOf(albumWidth()) }
-
-  var photoID = 0
-  val router = Router.current
+  var photoID = -1
 
   int { albumID ->
     int {
@@ -70,23 +68,22 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     }
 
     if (photoID >= 0) {
-      PhotoPopup(popAlbum, photoID) {
-        router.navigate("/album/${popAlbum.album.id}")
-      }
+      PhotoPopup(popAlbum, photoID, "/album")
     }
   }
 }
 
 @Composable
-private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit) {
+fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   var id by remember { mutableStateOf(photoID) }
 
   val router = Router.current
 
   val prevID = popAlbum.wrappedID(id - 1)
-  val prevUrl = "/album/${popAlbum.album.id}/$prevID"
+  val prevUrl = "$base/${popAlbum.album.id}/$prevID"
   val nextID = popAlbum.wrappedID(id + 1)
-  val nextUrl = "/album/${popAlbum.album.id}/$nextID"
+  val nextUrl = "$base/${popAlbum.album.id}/$nextID"
+  val close = { router.navigate("$base/${popAlbum.album.id}") }
 
   DisposableEffect(id) {
     document.onkeydown = { e ->
@@ -141,8 +138,7 @@ private fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, close: () -> Unit
     val photo = popAlbum.photos[id]
     LightboxImage(
       photo,
-      popAlbum.imageUrl(id),
-      close
+      popAlbum.imageUrl(id)
     ) {
       GalleryCaption(photo.location, Count(id, popAlbum.photos.size)) {
         Text(photo.description)

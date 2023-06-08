@@ -36,8 +36,7 @@ fun AlbumGrid(album: PopulatedAlbum, albumWidth: Int) {
           height(box.height.px)
         }
       }) {
-        val photoUrl = "/album/${album.album.id}/${photo.id}"
-        NavLink(to = photoUrl) {
+        NavLink(to = "/album/${album.album.id}/${photo.id}") {
           PhotoThumbnail(imageUrl = album.album.thumbnailUrl(photo)) {
             Div(attrs = { classes(AppStyle.thumbText) }) {
               Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {

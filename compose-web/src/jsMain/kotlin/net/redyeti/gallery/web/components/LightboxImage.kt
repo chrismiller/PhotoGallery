@@ -8,8 +8,6 @@ import net.redyeti.gallery.web.Preloader
 import net.redyeti.gallery.web.sizedSVG
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
-import org.jetbrains.compose.web.attributes.ButtonType
-import org.jetbrains.compose.web.attributes.type
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 import org.w3c.dom.events.Event
@@ -21,16 +19,9 @@ data class Count(val current: Int, val total: Int)
 fun LightboxImage(
   photo: Photo,
   imageUrl: String,
-  close: () -> Unit,
   caption: @Composable () -> Unit
 ) {
   Div(attrs = { classes(LightboxStyle.figure) }) {
-    Button(attrs = {
-      classes(LightboxStyle.close)
-      title("Close (Esc)")
-      type(ButtonType.Button)
-      onClick { close() }
-    }) { Text("×") }
     Figure {
       var maxHeight by remember { mutableStateOf(window.innerHeight) }
 

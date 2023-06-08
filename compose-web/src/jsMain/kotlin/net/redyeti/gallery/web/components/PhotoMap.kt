@@ -1,6 +1,7 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
+import app.softwork.routingcompose.Router
 import com.chihsuanwu.maps.compose.web.*
 import com.chihsuanwu.maps.compose.web.drawing.Marker
 import com.chihsuanwu.maps.compose.web.drawing.MarkerIcon
@@ -57,6 +58,7 @@ fun PhotoMap(album: PopulatedAlbum) {
       state.selectedPhoto = null
     }
   ) {
+    val router = Router.current
     state.markers.forEach {
       val (photo, marker) = it
       val width = min(markerPhotoSize, photo.width * markerPhotoSize / photo.height)
@@ -68,21 +70,22 @@ fun PhotoMap(album: PopulatedAlbum) {
           scaledSize = Size(height.toDouble(), width.toDouble())
         ),
         onClick = {
-          console.info("Lat=${marker.position.lat}, ${photo.filename}")
           state.selectedMarker?.hideInfoWindow()
           state.selectedMarker = marker
           state.selectedPhoto = photo
           marker.showInfoWindow()
         },
         infoContent = {
-          PhotoInfo(album.album, photo)
+          NavOnlyLink(to = "/map/${album.album.id}/${photo.id}", router = router) {
+            MapInfoWindow(album.album, photo)
+          }
         })
     }
   }
 }
 
 @Composable
-fun PhotoInfo(album: Album, photo: Photo) {
+fun MapInfoWindow(album: Album, photo: Photo) {
   Div(
     attrs = {
       style {

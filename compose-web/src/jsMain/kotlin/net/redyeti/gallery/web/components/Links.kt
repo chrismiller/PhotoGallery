@@ -45,9 +45,9 @@ fun MapLink(album: Album) {
 fun NavOnlyLink(
   to: String,
   attrs: (AttrsScope<HTMLAnchorElement>.(Boolean) -> Unit)? = null,
+  router: Router = Router.current,
   content: ContentBuilder<HTMLAnchorElement>? = null
 ) {
-  val router = Router.current
   A(
     href = to,
     attrs = {
