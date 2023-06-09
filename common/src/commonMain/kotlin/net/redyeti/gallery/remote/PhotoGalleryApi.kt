@@ -47,7 +47,7 @@ data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
 }
 
 @Serializable
-data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double)
+data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double = 0.0)
 
 class PhotoGalleryApi(private val client: HttpClient, var baseUrl: String = "/api") :
   KoinComponent {
