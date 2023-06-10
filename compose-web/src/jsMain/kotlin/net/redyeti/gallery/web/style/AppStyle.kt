@@ -181,6 +181,32 @@ object AppStyle : StyleSheet() {
     }
   }
 
+  val sideMenu by style {
+    position(Position.Fixed)
+    display(DisplayStyle.Flex)
+    flexDirection(FlexDirection.Column)
+    minWidth(0.px)
+    minHeight(0.px)
+    margin(24.px)
+    gap(12.px)
+    property("z-index", 100)
+  }
+
+  @OptIn(ExperimentalComposeWebApi::class)
+  val sideImageSelected by style {
+    filter { saturate(0.percent) }
+  }
+
+  @OptIn(ExperimentalComposeWebApi::class)
+  val sideImg by style {
+    filter { saturate(50.percent) }
+    width(40.px)
+    height(40.px)
+    self + hover style {
+      filter { saturate(100.percent) }
+    }
+  }
+
   val headerText by style {
     property("float", "left")
     "h1" style {
@@ -188,7 +214,7 @@ object AppStyle : StyleSheet() {
     }
 
     "h2" style {
-      fontSize(1.2.em)
+      fontSize(1.1.em)
     }
   }
 

@@ -3,9 +3,7 @@ package net.redyeti.gallery.web
 import app.softwork.routingcompose.BrowserRouter
 import net.redyeti.gallery.di.initKoin
 import net.redyeti.gallery.repository.PhotoGalleryInterface
-import net.redyeti.gallery.web.components.AlbumPage
-import net.redyeti.gallery.web.components.IndexPage
-import net.redyeti.gallery.web.components.MapPage
+import net.redyeti.gallery.web.components.*
 import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.gallery.web.style.LightboxStyle
 import net.redyeti.gallery.web.style.TextStyle
@@ -28,14 +26,21 @@ fun main() {
     Style(AppStyle)
     Style(TextStyle)
     Style(LightboxStyle)
+
     BrowserRouter("/") {
       route("album") {
+        int { albumID ->
+          SideMenu(albumID, SideMenuItem.album)
+        }
         AlbumPage(repo)
       }
       route("map") {
+        int { albumID ->
+          SideMenu(albumID, SideMenuItem.map)
+        }
         MapPage(repo)
       }
-      route("") {
+      noMatch {
         IndexPage(repo)
       }
     }
