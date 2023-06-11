@@ -32,7 +32,7 @@ fun getMapRegion(locations: List<GpsCoordinates>, mapWidth: Double, mapHeight: D
   }
   val centre = LatLng((minLat + maxLat) / 2.0, midLong)
   val zoomLevel = getBoundsZoomLevel(LatLngBounds(maxLong, maxLat, minLat, minLong), mapWidth, mapHeight)
-  return MapRegion(centre, floor(zoomLevel))
+  return MapRegion(centre, zoomLevel)
 }
 
 fun getBoundsZoomLevel(bounds: LatLngBounds, mapWidth: Double, mapHeight: Double): Double {
@@ -46,7 +46,6 @@ fun getBoundsZoomLevel(bounds: LatLngBounds, mapWidth: Double, mapHeight: Double
     return ln(mapPx / worldPx / fraction) / LN2
   }
 
-  console.info("${bounds.north} ${bounds.east} ${bounds.south} ${bounds.west}")
   val latFraction = (latRad(bounds.north) - latRad(bounds.south)) / PI
 
   val lngDiff = bounds.east - bounds.west

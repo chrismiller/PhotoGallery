@@ -43,13 +43,13 @@ const val markerPhotoSize = 50
 fun PhotoMap(album: PopulatedAlbum) {
   val mapWidth = window.innerWidth * 0.8
   val mapHeight = window.innerHeight * 0.7
-
   val state = State(album, mapWidth, mapHeight)
 
   val mapOptions by remember {
     mutableStateOf(
       MapOptions(
-        fullscreenControl = true
+        fullscreenControl = true,
+        isFractionalZoomEnabled = true
       )
     )
   }
