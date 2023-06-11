@@ -6,9 +6,11 @@ import com.chihsuanwu.maps.compose.web.*
 import com.chihsuanwu.maps.compose.web.drawing.Marker
 import com.chihsuanwu.maps.compose.web.drawing.MarkerIcon
 import com.chihsuanwu.maps.compose.web.drawing.MarkerState
+import kotlinx.browser.window
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.remote.PopulatedAlbum
+import net.redyeti.gallery.web.map.getMapRegion
 import net.redyeti.gallery.web.style.AppStyle
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
@@ -17,13 +19,12 @@ import org.jetbrains.compose.web.dom.Span
 import org.jetbrains.compose.web.dom.Text
 import kotlin.math.min
 
-private class State(album: PopulatedAlbum) {
+private class State(album: PopulatedAlbum, mapWidth: Double, mapHeight: Double) {
   val photos = album.photos
-  val avgLat = photos.mapNotNull { it.location?.latitude }.average()
-  val avgLong = photos.mapNotNull { it.location?.longitude }.average()
+  val mapRegion = getMapRegion(photos.mapNotNull { it.location }, mapWidth, mapHeight)
   val cameraPositionState = CameraPositionState(
     CameraPosition(
-      center = LatLng(avgLat, avgLong), zoom = 7.6
+      center = mapRegion.centre, zoom = mapRegion.zoomLevel
     )
   )
   var selectedPhoto: Photo? by mutableStateOf(null)
@@ -40,11 +41,16 @@ const val markerPhotoSize = 50
 
 @Composable
 fun PhotoMap(album: PopulatedAlbum) {
-  val state = remember { State(album) }
+  val mapWidth = window.innerWidth * 0.8
+  val mapHeight = window.innerHeight * 0.7
 
-  val mapOptions = remember {
-    MapOptions(
-      fullscreenControl = true
+  val state = State(album, mapWidth, mapHeight)
+
+  val mapOptions by remember {
+    mutableStateOf(
+      MapOptions(
+        fullscreenControl = true
+      )
     )
   }
 
