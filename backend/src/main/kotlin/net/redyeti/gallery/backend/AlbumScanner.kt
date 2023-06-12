@@ -42,6 +42,10 @@ class AlbumScanner(val config: AppConfig) {
     val headers = mutableListOf<String>()
     val parser = CsvParser()
     config.albumsFile.forEachLine {
+      if (it.isBlank() || it.startsWith("//")) {
+        // Ignore blank lines and comments
+        return@forEachLine
+      }
       if (headers.isEmpty()) {
         headers.addAll(parser.parseLine(it.reader()))
         return@forEachLine
@@ -63,6 +67,8 @@ class AlbumScanner(val config: AppConfig) {
         }
       }
     }
+    // Reverse the order so the newest albums are shown first
+    albums.reverse()
     return albums
   }
 
