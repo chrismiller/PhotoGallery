@@ -3,7 +3,6 @@ object Versions {
     const val kotlinxSerialization = "1.5.1"
     const val ktor = "2.3.1"
     const val koinCore = "3.4.1"
-    const val koinAndroid = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
 
     const val composeDesktopWeb = "1.4.0"
@@ -11,7 +10,7 @@ object Versions {
     const val routingCompose = "0.2.12"
     const val googleMaps = "0.3.3-alpha"
 
-    const val junit = "4.12"
+    const val junit = "4.13.2"
     const val mockito = "5.2.0"
 
     const val shadow = "8.1.1"
@@ -40,8 +39,6 @@ object Deps {
     object Koin {
         const val core = "io.insert-koin:koin-core:${Versions.koinCore}"
         const val test = "io.insert-koin:koin-test:${Versions.koinCore}"
-        const val testJUnit4 = "io.insert-koin:koin-test-junit4:${Versions.koinCore}"
-        const val android = "io.insert-koin:koin-android:${Versions.koinAndroid}"
         const val compose = "io.insert-koin:koin-androidx-compose:${Versions.koinAndroidCompose}"
     }
 
