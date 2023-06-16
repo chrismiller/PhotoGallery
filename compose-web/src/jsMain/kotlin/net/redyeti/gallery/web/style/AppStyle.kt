@@ -246,6 +246,7 @@ object AppStyle : StyleSheet() {
 
     "footer" style {
       fontSize(80.percent)
+      color(StyleVars.colourGreyMedium.value())
       backgroundColor(Color("292C2F"))
       marginTop(15.px)
       height(30.px)
