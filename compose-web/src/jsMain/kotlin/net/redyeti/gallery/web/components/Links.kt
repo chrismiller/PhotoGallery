@@ -46,6 +46,7 @@ fun NavOnlyLink(
   to: String,
   attrs: (AttrsScope<HTMLAnchorElement>.(Boolean) -> Unit)? = null,
   router: Router = Router.current,
+  hide: Boolean = false,
   content: ContentBuilder<HTMLAnchorElement>? = null
 ) {
   A(
@@ -60,7 +61,7 @@ fun NavOnlyLink(
 
       onClick {
         if (it.ctrlKey || it.metaKey) return@onClick
-        router.navigate(to)
+        router.navigate(to, hide)
         it.preventDefault()
         it.stopPropagation()
       }

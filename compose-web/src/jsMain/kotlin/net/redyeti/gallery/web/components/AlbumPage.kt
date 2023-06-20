@@ -21,7 +21,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
 
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
   var albumWidth by remember { mutableStateOf(albumWidth()) }
-  var photoID = -1
+  var photoID by remember { mutableStateOf(-1) }
 
   int { albumID ->
     int {

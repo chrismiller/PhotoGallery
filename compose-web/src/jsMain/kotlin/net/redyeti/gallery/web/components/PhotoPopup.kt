@@ -1,9 +1,9 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
-import app.softwork.routingcompose.NavLink
 import app.softwork.routingcompose.Router
 import kotlinx.browser.document
+import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.web.Preloader
 import net.redyeti.gallery.web.style.LightboxStyle
@@ -15,12 +15,14 @@ import org.jetbrains.compose.web.dom.Text
 fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   var id by remember { mutableStateOf(photoID) }
 
-  val router = Router.current
+  val updateId: (Int) -> Unit = { newId ->
+    val newID = popAlbum.wrappedID(newId)
+    val newUrl = "$base/${popAlbum.album.id}/$newID"
+    window.history.replaceState(null, "", newUrl)
+    id = newID
+  }
 
-  val prevID = popAlbum.wrappedID(id - 1)
-  val prevUrl = "$base/${popAlbum.album.id}/$prevID"
-  val nextID = popAlbum.wrappedID(id + 1)
-  val nextUrl = "$base/${popAlbum.album.id}/$nextID"
+  val router = Router.current
   val close = { router.navigate("$base/${popAlbum.album.id}") }
 
   DisposableEffect(id) {
@@ -31,13 +33,11 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
         }
 
         "ArrowLeft" -> {
-          router.navigate(prevUrl)
-          id = prevID
+          updateId(id - 1)
         }
 
         "ArrowRight" -> {
-          router.navigate(nextUrl)
-          id = nextID
+          updateId(id + 1)
         }
       }
     }
@@ -49,24 +49,24 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   Lightbox(
     close = close,
     previous = {
-      NavLink(prevUrl) {
-        Button(attrs = {
-          title("Previous (Left arrow key)")
-          classes(LightboxStyle.arrow, LightboxStyle.arrowLeft)
-          onClick { id = prevID }
+      Button(attrs = {
+        title("Previous (Left arrow key)")
+        classes(LightboxStyle.arrow, LightboxStyle.arrowLeft)
+        onClick {
+          updateId(id - 1)
         }
-        ) {}
       }
+      ) {}
     },
     next = {
-      NavLink(nextUrl) {
-        Button(attrs = {
-          title("Next (Right arrow key)")
-          classes(LightboxStyle.arrow, LightboxStyle.arrowRight)
-          onClick { id = nextID }
+      Button(attrs = {
+        title("Next (Right arrow key)")
+        classes(LightboxStyle.arrow, LightboxStyle.arrowRight)
+        onClick {
+          updateId(id + 1)
         }
-        ) {}
       }
+      ) {}
     }
   ) {
 

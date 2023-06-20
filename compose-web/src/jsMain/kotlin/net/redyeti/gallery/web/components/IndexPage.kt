@@ -1,7 +1,6 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
-import app.softwork.routingcompose.NavLink
 import app.softwork.routingcompose.Routing
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.repository.PhotoGalleryInterface
@@ -23,7 +22,7 @@ fun IndexPage(repo: PhotoGalleryInterface) {
     Div(attrs = { classes(AppStyle.coverWrapper) }) {
       albums.forEach { album ->
         Div(attrs = { classes(AppStyle.albumCover) }) {
-          NavLink(to = "/album/${album.id}") {
+          NavOnlyLink(to = "/album/${album.id}") {
             PhotoThumbnail(imageUrl = album.thumbnailUrl(album.coverImage)) {
               Div(attrs = { classes(AppStyle.thumbText) }) {
                 Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {

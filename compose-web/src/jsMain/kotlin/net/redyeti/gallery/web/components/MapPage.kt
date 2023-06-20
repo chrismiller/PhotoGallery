@@ -17,8 +17,7 @@ import kotlin.math.min
 @Composable
 fun RouteBuilder.MapPage(repo: PhotoGalleryInterface) {
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
-
-  var photoID = -1
+  var photoID by remember { mutableStateOf(-1) }
 
   int { albumID ->
     int {

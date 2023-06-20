@@ -1,7 +1,6 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.Composable
-import app.softwork.routingcompose.NavLink
 import net.redyeti.gallery.layout.AlbumLayout
 import net.redyeti.gallery.layout.LayoutConfig
 import net.redyeti.gallery.layout.LayoutData
@@ -36,7 +35,7 @@ fun AlbumGrid(album: PopulatedAlbum, albumWidth: Int) {
           height(box.height.px)
         }
       }) {
-        NavLink(to = "/album/${album.album.id}/${photo.id}") {
+        NavOnlyLink(to = "/album/${album.album.id}/${photo.id}") {
           PhotoThumbnail(imageUrl = album.album.thumbnailUrl(photo)) {
             Div(attrs = { classes(AppStyle.thumbText) }) {
               Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
