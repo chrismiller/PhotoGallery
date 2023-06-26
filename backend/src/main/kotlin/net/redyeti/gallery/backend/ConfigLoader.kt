@@ -13,7 +13,7 @@ class ConfigLoader {
   }
 
   fun load(): AppConfig {
-    val configFile = System.getenv("REDYETI_CONFIG") ?: "E:/PhotoGallery/config.properties"
+    val configFile = System.getenv("REDYETI_CONFIG") ?: "D:/Photos/PhotoGallery/config.properties"
 
     val props = Properties()
     FileInputStream(configFile).use {
