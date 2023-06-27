@@ -2,7 +2,6 @@ package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
 import kotlinx.browser.window
-import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.web.Preloader
 import net.redyeti.gallery.web.sizedSVG
@@ -67,31 +66,6 @@ fun LightboxImage(
       FigCaption {
         caption()
       }
-    }
-  }
-}
-
-@Composable
-fun GalleryCaption(location: GpsCoordinates?, count: Count?, caption: @Composable () -> Unit) {
-  Div(attrs = { classes(LightboxStyle.bottomBar) }) {
-    ImageDescription(caption)
-    AlbumCounter(count)
-    GpsLink(location)
-  }
-}
-
-@Composable
-fun ImageDescription(caption: @Composable () -> Unit) {
-  Div(attrs = { classes(LightboxStyle.title) }) {
-    caption()
-  }
-}
-
-@Composable
-fun AlbumCounter(count: Count?) {
-  if (count != null) {
-    Div(attrs = { classes(LightboxStyle.counter) }) {
-      Text("${count.current + 1} of ${count.total}")
     }
   }
 }

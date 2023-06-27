@@ -4,11 +4,13 @@ import androidx.compose.runtime.Composable
 import app.softwork.routingcompose.Router
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.GpsCoordinates
+import net.redyeti.gallery.web.style.LightboxVars
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.AttrsScope
 import org.jetbrains.compose.web.attributes.target
 import org.jetbrains.compose.web.dom.A
 import org.jetbrains.compose.web.dom.ContentBuilder
+import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Img
 import org.w3c.dom.HTMLAnchorElement
 
@@ -17,16 +19,18 @@ fun GpsLink(location: GpsCoordinates?) {
   if (location != null) {
     val lat = location.latitude
     val long = location.longitude
-    A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
-      target(ATarget.Blank)
-      onClick {
-        it.stopPropagation()
+    Div {
+      A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
+        target(ATarget.Blank)
+        onClick {
+          it.stopPropagation()
+        }
+      }) {
+        Img(src = "/location.svg", attrs = {
+          attr("width", "${LightboxVars.CAPTION_ICON_SIZE}px")
+          attr("height", "${LightboxVars.CAPTION_ICON_SIZE}px")
+        })
       }
-    }) {
-      Img(src = "/location.svg", attrs = {
-        attr("width", "20px")
-        attr("height", "20px")
-      })
     }
   }
 }
