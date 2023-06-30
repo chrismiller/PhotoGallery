@@ -5,7 +5,7 @@ object Versions {
     const val koinCore = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
 
-    const val composeDesktopWeb = "1.4.0"
+    const val composeDesktopWeb = "1.4.1"
 
     const val routingCompose = "0.2.12"
     const val googleMaps = "0.3.3-alpha"
