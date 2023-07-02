@@ -223,6 +223,7 @@ object LightboxStyle : StyleSheet() {
 
   // Placeholders
   val lightboxImage by style {}
+  val imageWrapper by style {}
   val lightboxCaption by style {}
   val captionText by style {}
   val captionIcons by style {}
@@ -236,13 +237,20 @@ object LightboxStyle : StyleSheet() {
     justifyContent(JustifyContent.Center)
     property("z-index", LightboxVars.zIndexBase + 1)
 
+    className(imageWrapper) style {
+      width(100.percent)
+      overflow("hidden")
+      display(DisplayStyle.Flex)
+      alignItems(AlignItems.Center)
+      justifyContent(JustifyContent.Center)
+      flex(1)
+    }
+
     // The full sized image popup
     className(lightboxImage) style {
-      property("object-fit", "contain");
       maxWidth(100.percent)
       maxHeight(100.percent)
       minHeight(5.percent)
-      flex(1)
     }
 
     // The caption for the full sized image

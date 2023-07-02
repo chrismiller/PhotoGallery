@@ -63,14 +63,8 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   Div(attrs = {
     id("fs")
     classes(LightboxStyle.lightbox)
-    onClick { e ->
-      // Close the lightbox when clicking on it, but only if an arrow or any other higher level item wasn't the target
-      if (e.target == e.currentTarget) {
-        close()
-      }
-    }
   }) {
-    PopupImage(photo, imageUrl, loaded)
+    PopupImage(photo, imageUrl, loaded, close)
     PhotoCaption(photo, Count(id, popAlbum.photos.size))
     NavButton("Previous (left arrow key)", LightboxStyle.arrowLeft, prev)
     NavButton("Next (right arrow key)", LightboxStyle.arrowRight, next)
@@ -84,14 +78,24 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 
 @OptIn(ExperimentalComposeWebApi::class)
 @Composable
-fun PopupImage(photo: Photo, imageUrl: String, loaded: Boolean) {
+fun PopupImage(photo: Photo, imageUrl: String, loaded: Boolean, close: () -> Unit) {
   if (loaded) {
-    Img(
-      attrs = {
-        classes(LightboxStyle.lightboxImage)
-      },
-      src = imageUrl
-    )
+    Div(attrs = {
+      classes(LightboxStyle.imageWrapper)
+      onClick { e ->
+        // Close the lightbox when clicking on it, but only if an arrow or any other higher level item wasn't the target
+        if (e.target == e.currentTarget) {
+          close()
+        }
+      }
+    }) {
+      Img(
+        attrs = {
+          classes(LightboxStyle.lightboxImage)
+        },
+        src = imageUrl
+      )
+    }
   } else {
     Div {
       Img(src = sizedSVG(photo.width, photo.height), attrs = { classes(LightboxStyle.image) })
