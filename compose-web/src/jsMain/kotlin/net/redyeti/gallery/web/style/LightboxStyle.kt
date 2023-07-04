@@ -225,9 +225,11 @@ object LightboxStyle : StyleSheet() {
   val lightboxImage by style {}
   val imageWrapper by style {}
   val lightboxCaption by style {}
+  val textArea by style {}
   val captionText by style {}
-  val captionIcons by style {}
+  val copyrightText by style {}
   val captionCounter by style {}
+  val captionIcons by style {}
 
   val lightbox by style {
     fullPage()
@@ -257,32 +259,30 @@ object LightboxStyle : StyleSheet() {
     className(lightboxCaption) style {
       display(DisplayStyle.Flex)
       alignItems(AlignItems.FlexEnd)
-      flexWrap(FlexWrap.Wrap)
       gap(10.px)
       width(100.percent)
       backgroundColor(Color.black)
       padding(5.px)
-      className(captionText) style {
-        textAlign("left")
-        property("word-wrap", "break-word")
-        fontSize(14.px)
-        paddingLeft(10.px)
+      className(textArea) style {
         flex(1)
-        "small" style {
+        display(DisplayStyle.Flex)
+        flexWrap(FlexWrap.Wrap)
+        justifyContent(JustifyContent.SpaceBetween)
+        paddingLeft(10.px)
+        className(captionText) style {
+          width(100.percent)
+          textAlign("left")
+          property("word-wrap", "break-word")
+          fontSize(14.px)
+        }
+        group(className(copyrightText), className(captionCounter)) style {
+          flex(0)
           color(LightboxVars.imageCaptionSubtitleColour.value())
-          display(DisplayStyle.Block)
           marginTop(3.px)
           fontSize(12.px)
           lineHeight(14.px)
+          whiteSpace("nowrap")
         }
-      }
-      className(captionCounter) style {
-        flex(0)
-        color(LightboxVars.controlsTextColour.value())
-        fontSize(12.px)
-        lineHeight(18.px)
-        marginRight(10.px)
-        whiteSpace("nowrap")
       }
       className(captionIcons) style {
         flex(0)

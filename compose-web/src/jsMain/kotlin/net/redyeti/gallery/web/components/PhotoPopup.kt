@@ -13,6 +13,8 @@ import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.*
 
+data class Count(val current: Int, val total: Int)
+
 @Composable
 fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   var id by remember { mutableStateOf(photoID) }
