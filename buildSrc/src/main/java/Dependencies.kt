@@ -1,7 +1,7 @@
 object Versions {
-    const val kotlinCoroutines = "1.7.1"
+    const val kotlinCoroutines = "1.7.2"
     const val kotlinxSerialization = "1.5.1"
-    const val ktor = "2.3.1"
+    const val ktor = "2.3.2"
     const val koinCore = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
 
@@ -20,7 +20,7 @@ object Versions {
     const val log4j2 = "2.20.0"
     const val kermit = "2.0.0-RC4"
 
-    const val gradleVersionsPlugin = "0.46.0"
+    const val gradleVersionsPlugin = "0.47.0"
 }
 
 
