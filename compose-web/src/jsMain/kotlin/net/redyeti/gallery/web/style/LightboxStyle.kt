@@ -157,28 +157,6 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val figure by style {
-    lineHeight(0.px)
-    // figure::after { ... }
-    self + after style {
-      property("content", "''")
-      position(Position.Absolute)
-      display(DisplayStyle.Block)
-      left(0.px)
-      right(0.px)
-      // TODO
-      // top(LightboxVars.imagePaddingTop.value())
-      // bottom(LightboxVars.imagePaddingTop.value())
-      top(40.px)
-      bottom(40.px)
-      width(auto)
-      height(auto)
-      property("z-index", "-1")
-      property("box-shadow", "0 0 8px rgba(0, 0, 0, 0.6)")
-      backgroundColor(LightboxVars.imageBackgroundColour.value())
-    }
-  }
-
   val image by style {
   }
 
