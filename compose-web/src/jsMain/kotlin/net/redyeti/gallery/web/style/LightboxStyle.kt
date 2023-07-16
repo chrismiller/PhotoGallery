@@ -24,8 +24,8 @@ object LightboxVars {
 
   // Image
   val imageBackgroundColour by variable<CSSColorValue>()
-  val imageCaptionTitleColour by variable<CSSColorValue>()
-  val imageCaptionSubtitleColour by variable<CSSColorValue>()
+  val imageCaptionTextColour by variable<CSSColorValue>()
+  val imageCaptionSubtextColour by variable<CSSColorValue>()
   val imageCaptionLinkColour by variable<CSSColorValue>()
   val imageCaptionLinkHoverColour by variable<CSSColorValue>()
 
@@ -44,10 +44,10 @@ object LightboxStyle : StyleSheet() {
       LightboxVars.controlsTextColour(Color("#CCCCCC"))
 
       LightboxVars.imageBackgroundColour(transparent)
-      LightboxVars.imageCaptionTitleColour(Color("#F0F0F0"))
-      LightboxVars.imageCaptionSubtitleColour(Color("#BBBBBB"))
-      LightboxVars.imageCaptionLinkColour(Color("#FFFFFF"))
-      LightboxVars.imageCaptionLinkHoverColour(Color("#FFFFC0"))
+      LightboxVars.imageCaptionTextColour(Color("#E0E0E0"))
+      LightboxVars.imageCaptionSubtextColour(Color("#BBBBBB"))
+      LightboxVars.imageCaptionLinkColour(Color("#E0E0E0"))
+      LightboxVars.imageCaptionLinkHoverColour(Color("#FFFFFF"))
     }
   }
 
@@ -61,18 +61,6 @@ object LightboxStyle : StyleSheet() {
       // fullscreenExit.svg after running through https://yoksel.github.io/url-encoder/
       backgroundImage("url(\"data:image/svg+xml,%3Csvg width='${CAPTION_ICON_SIZE}px' height='${CAPTION_ICON_SIZE}px' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg%3E%3Cpath fill='%23FFFFFF' d='M3.4 2L2 3.4l2.8 2.8L3 8h5V3L6.2 4.8 3.4 2zm11.8 4.2L18 3.4 16.6 2l-2.8 2.8L12 3v5h5l-1.8-1.8zM4.8 13.8L2 16.6 3.4 18l2.8-2.8L8 17v-5H3l1.8 1.8zM17 12h-5v5l1.8-1.8 2.8 2.8 1.4-1.4-2.8-2.8L17 12z'/%3E%3C/g%3E%3C/svg%3E")
     }
-  }
-
-  // ----------------------------------------------------------------
-  // Styles for the photo caption panel
-  // ----------------------------------------------------------------
-  val title by style {
-    textAlign("left")
-    lineHeight(18.px)
-    color(LightboxVars.imageCaptionTitleColour.value())
-    property("word-wrap", "break-word")
-    marginRight(10.px)
-    flex(1)
   }
 
   // ----------------------------------------------------------------
@@ -221,6 +209,12 @@ object LightboxStyle : StyleSheet() {
     justifyContent(JustifyContent.Center)
     property("z-index", LightboxVars.zIndexBase + 1)
 
+    property("transition", "transform 1s ease")
+    transitions {
+      defaultDuration(1.s)
+      defaultTimingFunction(AnimationTimingFunction.Ease)
+    }
+
     className(imageWrapper) style {
       width(100.percent)
       overflow("hidden")
@@ -235,6 +229,10 @@ object LightboxStyle : StyleSheet() {
       maxWidth(100.percent)
       maxHeight(100.percent)
       minHeight(5.percent)
+      transitions {
+        defaultDuration(1.s)
+        defaultTimingFunction(AnimationTimingFunction.Ease)
+      }
     }
 
     // The caption for the full sized image
@@ -256,6 +254,7 @@ object LightboxStyle : StyleSheet() {
           textAlign("left")
           property("word-wrap", "break-word")
           fontSize(14.px)
+          color(LightboxVars.imageCaptionTextColour.value())
           "a" style {
             color(LightboxVars.imageCaptionLinkColour.value())
             self + hover style {
@@ -265,7 +264,7 @@ object LightboxStyle : StyleSheet() {
         }
         group(className(copyrightText), className(captionCounter)) style {
           flex(0)
-          color(LightboxVars.imageCaptionSubtitleColour.value())
+          color(LightboxVars.imageCaptionSubtextColour.value())
           marginTop(3.px)
           fontSize(12.px)
           lineHeight(14.px)
