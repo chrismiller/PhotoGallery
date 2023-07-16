@@ -26,6 +26,8 @@ object LightboxVars {
   val imageBackgroundColour by variable<CSSColorValue>()
   val imageCaptionTitleColour by variable<CSSColorValue>()
   val imageCaptionSubtitleColour by variable<CSSColorValue>()
+  val imageCaptionLinkColour by variable<CSSColorValue>()
+  val imageCaptionLinkHoverColour by variable<CSSColorValue>()
 
   const val CAPTION_ICON_SIZE = 20
 }
@@ -42,8 +44,10 @@ object LightboxStyle : StyleSheet() {
       LightboxVars.controlsTextColour(Color("#CCCCCC"))
 
       LightboxVars.imageBackgroundColour(transparent)
-      LightboxVars.imageCaptionTitleColour(Color("#F3F3F3"))
+      LightboxVars.imageCaptionTitleColour(Color("#F0F0F0"))
       LightboxVars.imageCaptionSubtitleColour(Color("#BBBBBB"))
+      LightboxVars.imageCaptionLinkColour(Color("#FFFFFF"))
+      LightboxVars.imageCaptionLinkHoverColour(Color("#FFFFC0"))
     }
   }
 
@@ -252,6 +256,12 @@ object LightboxStyle : StyleSheet() {
           textAlign("left")
           property("word-wrap", "break-word")
           fontSize(14.px)
+          "a" style {
+            color(LightboxVars.imageCaptionLinkColour.value())
+            self + hover style {
+              color(LightboxVars.imageCaptionLinkHoverColour.value())
+            }
+          }
         }
         group(className(copyrightText), className(captionCounter)) style {
           flex(0)
