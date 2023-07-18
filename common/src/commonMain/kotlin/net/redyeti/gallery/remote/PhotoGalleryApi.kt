@@ -20,6 +20,7 @@ data class Album(
 @Serializable
 data class Photo(
   val id: Int, val filename: String, val description: String, val width: Int, val height: Int, val timeTaken: String,
+  val aperture: String, val shutterSpeed: String, val focalLength: String, val iso: String, val lens: String,
   val location: GpsCoordinates?
 ) {
   fun scaledWidth(minDimension: Int): Int {

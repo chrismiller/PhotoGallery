@@ -23,6 +23,7 @@ class AlbumScanner(val config: AppConfig) {
     private val EXIFTOOL_METADATA_SCAN = listOf(
       "-S", "-csv", "-FileName", "-DateTimeOriginal",
       "-OffsetTimeOriginal", "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
+      "-ApertureValue", "-ExposureTime", "-FocalLength", "-ISO", "-LensID",
       "-Description", "*.jpg"
     )
 
@@ -117,6 +118,11 @@ class AlbumScanner(val config: AppConfig) {
           val timeOffset = row["OffsetTimeOriginal"]
           val timeStr = if (timeTaken != null && timeOffset != null) "$timeTaken $timeOffset" else timeTaken!!
           val description = row["Description"] ?: ""
+          val aperture = row["ApertureValue"] ?: ""
+          val focalLength = row["FocalLength"]?.replace(".0 ", "") ?: ""
+          val shutterSpeed = row["ExposureTime"] ?: ""
+          val iso = row["ISO"] ?: ""
+          val lens = row["LensID"] ?: ""
           val width = row["ImageWidth"].asInt()
           val height = row["ImageHeight"].asInt()
           val latitude = row["GPSLatitude#"].asDouble()
@@ -132,7 +138,8 @@ class AlbumScanner(val config: AppConfig) {
           //  Not sure if that matters or not, but if so we might have to scan the resized photo metadata instead.
           val w = max(config.minLargeDimension, width * config.minLargeDimension / height)
           val h = max(config.minLargeDimension, height * config.minLargeDimension / width)
-          val photo = Photo(-1, filename, description, w, h, timeStr, location)
+          val photo =
+            Photo(-1, filename, description, w, h, timeStr, aperture, shutterSpeed, focalLength, iso, lens, location)
           photos += photo
         }
       }
