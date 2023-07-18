@@ -107,7 +107,7 @@ class AlbumScanner(val config: AppConfig) {
     val processor: (String) -> Unit = { s ->
       if (collector.gather(s)) {
         val csvRow = collector.take()
-        print(csvRow)
+        println(csvRow)
         if (headers.isEmpty()) {
           headers += parser.parseLine(csvRow.reader())
         } else {
