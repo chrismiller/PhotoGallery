@@ -9,12 +9,18 @@ import kotlin.math.max
 
 @Serializable
 data class Album(
-  val id: Int, val title: String, val subtitle: String, val directory: String, val coverImage: String
+  val id: Int,
+  val title: String,
+  val subtitle: String,
+  val directory: String,
+  val coverImage: String,
+  val hasGpsTrack: Boolean
 ) {
   fun imageUrl(photo: Photo) = imageUrl(photo.filename)
   fun thumbnailUrl(photo: Photo) = thumbnailUrl(photo.filename)
   fun imageUrl(filename: String) = "/image/$directory/large/$filename"
   fun thumbnailUrl(filename: String) = "/image/$directory/thumb/$filename"
+  fun kmlUrl() = "/gps/${directory}.kmz"
 }
 
 @Serializable

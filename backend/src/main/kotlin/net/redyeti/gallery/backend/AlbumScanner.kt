@@ -57,9 +57,11 @@ class AlbumScanner(val config: AppConfig) {
       val subtitle = row["subtitle"]
       val directory = row["directory"]
       val coverImage = row["cover"]
+
       if (title != null && subtitle != null && directory != null && coverImage != null) {
-        val album = Album(id, title, subtitle, directory, coverImage)
-        println(album)
+        // Take note of the restrictions on KML files here: https://developers.google.com/maps/documentation/javascript/kmllayer#restrictions
+        val hasGpsTrack = config.gpsTrackDir(directory).exists()
+        val album = Album(id, title, subtitle, directory, coverImage, hasGpsTrack)
         try {
           albums += loadAlbum(album)
           logger.i("Loaded ${album.title}")

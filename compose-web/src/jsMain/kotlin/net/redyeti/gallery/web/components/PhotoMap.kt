@@ -6,6 +6,7 @@ import com.chihsuanwu.maps.compose.web.*
 import com.chihsuanwu.maps.compose.web.drawing.Marker
 import com.chihsuanwu.maps.compose.web.drawing.MarkerIcon
 import com.chihsuanwu.maps.compose.web.drawing.MarkerState
+import com.chihsuanwu.maps.compose.web.layers.KMLLayer
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.Photo
@@ -64,6 +65,12 @@ fun PhotoMap(album: PopulatedAlbum) {
       state.selectedPhoto = null
     }
   ) {
+    if (album.album.hasGpsTrack) {
+      val url = "https://www.redyeti.net${album.album.kmlUrl()}"
+      console.info(url)
+      KMLLayer(url = url)
+    }
+
     val router = Router.current
     state.markers.forEach {
       val (photo, marker) = it

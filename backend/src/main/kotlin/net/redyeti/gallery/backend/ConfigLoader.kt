@@ -40,10 +40,13 @@ class AppConfig(
   val minThumbDimension: Int
 ) {
 
-  val staticwebDir get() = galleryDir.resolve("web")
+  val staticImageDir get() = galleryDir.resolve("web")
+  val staticGpsTrackDir get() = galleryDir.resolve("gpstracks")
   val metadataDir get() = galleryDir.resolve("metadata")
   val albumsFile get() = galleryDir.resolve("albums.csv")
-  fun largeDir(albumName: String) = staticwebDir.resolve(albumName).resolve("large")
-  fun thumbnailDir(albumDirectory: String) = staticwebDir.resolve(albumDirectory).resolve("thumb")
+  fun largeDir(albumName: String) = staticImageDir.resolve(albumName).resolve("large")
+  fun thumbnailDir(albumDirectory: String) = staticImageDir.resolve(albumDirectory).resolve("thumb")
   fun originalsDir(albumDirectory: String) = galleryDir.resolve("originals").resolve(albumDirectory)
+
+  fun gpsTrackDir(albumName: String) = staticGpsTrackDir.resolve("${albumName}.kmz")
 }

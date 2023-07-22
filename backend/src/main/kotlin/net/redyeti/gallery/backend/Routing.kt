@@ -9,11 +9,12 @@ import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import java.nio.file.Path
 
-fun Application.configureRouting(staticBase: Path) = routing {
+fun Application.configureRouting(imageBase: Path, gpsBase: Path) = routing {
   route("/api") {
     api()
   }
-  staticFiles("/image", staticBase.toFile())
+  staticFiles("/image", imageBase.toFile())
+  staticFiles("/gps", gpsBase.toFile())
   singlePageApplication {
     useResources = true
     filesPath = "app"
