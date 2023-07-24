@@ -7,8 +7,9 @@ import kotlinx.browser.window
 import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.web.Preloader
 import net.redyeti.gallery.web.style.LightboxStyle
-import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.dom.*
+import org.jetbrains.compose.web.dom.A
+import org.jetbrains.compose.web.dom.Div
+import org.jetbrains.compose.web.dom.Img
 
 data class Count(val current: Int, val total: Int)
 
@@ -62,11 +63,11 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
       id("fs")
       classes(LightboxStyle.lightbox)
     }) {
+      NavButton("Previous (left arrow key)", LightboxStyle.arrowPrev, prev)
+      NavButton("Next (right arrow key)", LightboxStyle.arrowNext, next)
       PopupImage(url, close)
       val photo = popAlbum.photos[id]
       PhotoCaption(photo, Count(id, popAlbum.photos.size))
-      NavButton("Previous (left arrow key)", LightboxStyle.arrowLeft, prev)
-      NavButton("Next (right arrow key)", LightboxStyle.arrowRight, next)
     }
   }
 
@@ -98,7 +99,7 @@ fun PopupImage(imageUrl: String, close: () -> Unit) {
 
 @Composable
 fun NavButton(text: String, style: String, update: () -> Unit) {
-  Button(attrs = {
+  A(attrs = {
     title(text)
     classes(LightboxStyle.arrow, style)
     onClick {

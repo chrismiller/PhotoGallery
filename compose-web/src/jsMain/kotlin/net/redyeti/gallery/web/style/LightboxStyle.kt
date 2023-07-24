@@ -3,6 +3,7 @@ package net.redyeti.gallery.web.style
 import net.redyeti.gallery.web.style.LightboxVars.CAPTION_ICON_SIZE
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.Color.currentColor
 import org.jetbrains.compose.web.css.Color.transparent
 import org.jetbrains.compose.web.css.keywords.auto
 
@@ -17,7 +18,6 @@ object LightboxVars {
   val popupPaddingLeft by variable<CSSUnitValue>()
 
   // Controls
-  const val controlsOpacity = 0.7
   val controlsColour by variable<CSSColorValue>()
   val controlsBorderColour by variable<CSSColorValue>()
   val controlsTextColour by variable<CSSColorValue>()
@@ -66,86 +66,54 @@ object LightboxStyle : StyleSheet() {
   // ----------------------------------------------------------------
 
   val arrow by style {
+    color(Color.white)
     position(Position.Absolute)
-    opacity(LightboxVars.controlsOpacity)
-    margin(0.px)
+    width(52.px)
+    height(52.px)
+    lineHeight(52.px)
+    textAlign("center")
+    borderRadius(50.percent)  // This makes a circle
+    backgroundColor(rgba(17, 17, 17, 0.5))
     top(50.percent)
-    marginTop((-55).px)
-    padding(0.px)
-    width(90.px)
-    height(110.px)
-    active {
-      marginTop((-54).px)
-    }
-    group(self + hover, self + focus) style {
-      opacity(1)
+    transform { translateY((-50).percent) }
+    property("z-index", LightboxVars.zIndexBase + 10)
+    cursor("pointer")
+
+    // opacity(0)
+    transitions {
+      "opacity" { duration(0.3.s) }
+      defaultTimingFunction(AnimationTimingFunction.Ease)
     }
 
-    group(self + before, self + after) style {
-      property("content", "''")
-      display(DisplayStyle.Block)
-      width(0.px)
-      height(0.px)
-      position(Position.Absolute)
-      left(0.px)
-      top(0.px)
-      marginLeft(35.px)
-      marginTop(35.px)
-      property("border", "medium inset transparent")
-    }
     self + before style {
-      property("border-top-width", 21.px)
-      property("border-bottom-width", 21.px)
-      opacity(0.7)
-    }
-
-    self + after style {
-      property("border-top-width", 13.px)
-      property("border-bottom-width", 13.px)
-      top(8.px)
-    }
-
-    property("user-select", "none")
-
-    media(mediaMaxWidth(900.px)) {
-      self style {
-        transform {
-          scale(0.75)
-        }
-      }
+      backgroundColor(currentColor)
+      property("content", "\"\"")
+      display(DisplayStyle.InlineBlock)
+      width(35.px)
+      height(35.px)
+      property("mask-size", "cover")
+      property("vertical-align", "middle")
     }
   }
 
-  val arrowLeft by style {
-    left(0.px)
+  val arrowPrev by style {
+    left(24.px)
     self + before style {
-      property("border-right", "27px solid ${LightboxVars.controlsBorderColour.value()}")
-      marginLeft(25.px)
-    }
-    self + after style {
-      property("border-right", "17px solid ${LightboxVars.controlsBorderColour.value()}")
-      marginLeft(31.px)
-    }
-    media(mediaMaxWidth(900.px)) {
-      self style {
-        property("transform-origin", "0")
-      }
+      property("-webkit-mask-image", "url(/left.svg)")
+      property("mask-image", "url(/left.svg)")
     }
   }
 
-  val arrowRight by style {
-    right(0.px)
+  val arrowNext by style {
+    right(24.px)
+    // opacity(0)
+    transitions {
+      "opacity" { duration(0.3.s) }
+      defaultTimingFunction(AnimationTimingFunction.Ease)
+    }
     self + before style {
-      property("border-left", "27px solid ${LightboxVars.controlsBorderColour.value()}")
-    }
-    self + after style {
-      property("border-left", "17px solid ${LightboxVars.controlsBorderColour.value()}")
-      marginLeft(39.px)
-    }
-    media(mediaMaxWidth(900.px)) {
-      self style {
-        property("transform-origin", "100%")
-      }
+      property("-webkit-mask-image", "url(/right.svg)")
+      property("mask-image", "url(/right.svg)")
     }
   }
 
@@ -313,7 +281,7 @@ object LightboxStyle : StyleSheet() {
     position(Position.Fixed)
     top(0.px)
     left(0.px)
-    width(100.percent)
+    right(0.px)
     height(100.vh)
     overflow("hidden")
   }
