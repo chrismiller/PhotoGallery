@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>LightMode Primary/common/caret left</title>
+    <defs>
+        <path d="M14,18 C13.744,18 13.488,17.902 13.293,17.707 L8.293,12.707 C7.902,12.316 7.902,11.684 8.293,11.293 L13.293,6.293 C13.684,5.902 14.316,5.902 14.707,6.293 C15.098,6.684 15.098,7.316 14.707,7.707 L10.414,12 L14.707,16.293 C15.098,16.684 15.098,17.316 14.707,17.707 C14.512,17.902 14.256,18 14,18 Z"
+              id="path-1"/>
+    </defs>
+    <g id="LightMode-Primary/common/caret-left" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"/>
+        </mask>
+        <g id="Path"/>
+        <rect id="↳-icon-tint" fill="#111111" mask="url(#mask-2)" x="0" y="0" width="24" height="24"/>
+    </g>
+</svg>
