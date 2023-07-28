@@ -17,10 +17,8 @@ import org.w3c.dom.HTMLAnchorElement
 @Composable
 fun GpsLink(location: GpsCoordinates?) {
   if (location != null) {
-    val lat = location.latitude
-    val long = location.longitude
     Div {
-      A(href = "https://maps.google.com/maps?z=16&q=$lat,$long&ll=$lat,$long", attrs = {
+      A(href = location.googleMapsUrl, attrs = {
         target(ATarget.Blank)
         onClick {
           it.stopPropagation()

@@ -5,6 +5,7 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
+import kotlin.math.abs
 import kotlin.math.max
 
 @Serializable
@@ -54,7 +55,23 @@ data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
 }
 
 @Serializable
-data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double = 0.0)
+data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double = 0.0) {
+  val latDMS get() = toDMS(latitude, if (latitude >= 0) 'N' else 'S')
+  val longDMS get() = toDMS(longitude, if (longitude >= 0) 'E' else 'W')
+
+  val googleMapsUrl get() = "https://maps.google.com/maps?z=16&q=$latitude,$longitude&ll=$latitude,$longitude"
+
+  private fun toDMS(value: Double, suffix: Char): String {
+    val v = abs(value)
+    val degrees = v.toInt()
+    val minutesDecimal = (v - degrees) * 60
+    val minutes = minutesDecimal.toInt()
+    val secondsDecimal = (minutesDecimal - minutes) * 60
+    val seconds = secondsDecimal.toInt()
+    val fraction = ((secondsDecimal - seconds) * 10).toInt()
+    return "$degrees° $minutes' $seconds.$fraction\"$suffix"
+  }
+}
 
 class PhotoGalleryApi(private val client: HttpClient, var baseUrl: String = "/api") :
   KoinComponent {
