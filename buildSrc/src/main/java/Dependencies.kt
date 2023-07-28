@@ -1,6 +1,8 @@
 object Versions {
     const val kotlinCoroutines = "1.7.2"
     const val kotlinxSerialization = "1.5.1"
+    const val kotlinxDateTime = "0.4.0"
+
     const val ktor = "2.3.2"
     const val koinCore = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
@@ -30,6 +32,7 @@ object Deps {
         const val serializationCore = "org.jetbrains.kotlinx:kotlinx-serialization-core:${Versions.kotlinxSerialization}"
         const val coroutinesCore = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.kotlinCoroutines}"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.kotlinCoroutines}"
+        const val dateTime = "org.jetbrains.kotlinx:kotlinx-datetime:${Versions.kotlinxDateTime}"
     }
 
     object Test {

@@ -26,9 +26,10 @@ data class Album(
 
 @Serializable
 data class Photo(
-  val id: Int, val filename: String, val description: String, val width: Int, val height: Int, val timeTaken: String,
-  val aperture: String, val shutterSpeed: String, val focalLength: String, val iso: String, val lens: String,
-  val location: GpsCoordinates?
+  val id: Int, val filename: String, val description: String, val width: Int, val height: Int,
+  val originalWidth: Int, val originalHeight: Int, val originalSize: Int,
+  val epochSeconds: Long, val timeOffset: String, val location: GpsCoordinates?,
+  val cameraDetails: CameraDetails
 ) {
   fun scaledWidth(minDimension: Int): Int {
     return max(minDimension, width * minDimension / height)
@@ -38,6 +39,13 @@ data class Photo(
     return max(minDimension, height * minDimension / width)
   }
 }
+
+@Serializable
+data class CameraDetails(
+  val camera: String, val lens: String,
+  val aperture: String, val shutterSpeed: String,
+  val focalLength: String, val iso: Int
+)
 
 @Serializable
 data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
@@ -58,6 +66,8 @@ data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
 data class GpsCoordinates(val latitude: Double, val longitude: Double, val altitude: Double = 0.0) {
   val latDMS get() = toDMS(latitude, if (latitude >= 0) 'N' else 'S')
   val longDMS get() = toDMS(longitude, if (longitude >= 0) 'E' else 'W')
+
+  fun hasCoordinates() = latitude != 0.0 && longitude != 0.0
 
   val googleMapsUrl get() = "https://maps.google.com/maps?z=16&q=$latitude,$longitude&ll=$latitude,$longitude"
 

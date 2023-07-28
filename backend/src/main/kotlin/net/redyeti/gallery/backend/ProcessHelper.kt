@@ -18,13 +18,27 @@ fun execute(
     }
     .start()
 
-  thread(start = true, name = "stdout") {
-    process.inputStream.bufferedReader().forEachLine(stdOutHandler)
+  var failure: Exception? = null
+  val stdoutThread = thread(start = true, name = "stdout") {
+    try {
+      process.inputStream.bufferedReader().forEachLine(stdOutHandler)
+    } catch (e: Exception) {
+      failure = e
+    }
   }
 
-  thread(start = true, name = "stderr") {
+  val stderrThread = thread(start = true, name = "stderr") {
     process.errorStream.bufferedReader().forEachLine(stdErrHandler)
   }
 
-  return process.waitFor()
+  stdoutThread.join()
+  val returnCode = process.waitFor()
+
+  if (returnCode != 0) {
+    throw RuntimeException("Error while running ${arguments.first()}: $returnCode")
+  }
+
+  failure?.also { throw it }
+
+  return 0
 }

@@ -277,6 +277,177 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
+  val showInfoPanel by style {}
+  val infoPanelHeader by style {}
+  val infoSection by style {}
+  val infoItem by style {}
+  val detailItem by style {}
+  val closeDetails by style {}
+  val cameraInfo by style {}
+  val dateInfo by style {}
+  val fileInfo by style {}
+  val locationInfo by style {}
+  val label by style {}
+  val subs by style {}
+
+  // Lays out the info panel
+  val infoPanel by style {
+    position(Position.Fixed)
+    right((-350).px)
+    height(100.percent)
+    left(auto)
+    top(0.px)
+    width(350.px)
+    textAlign("center")
+    backgroundColor(Color.white)
+    overflowY("auto")
+    property("z-index", LightboxVars.zIndexBase + 1)  // Lift it above the shaded background
+    property("transition", "right 0.3s ease")
+
+    // Set the text style for the info panel
+    group(selector("h2"), selector("h4"), selector("p"), selector("span")) style {
+      color(rgb(16, 16, 16))
+    }
+
+    selector("h4") style {
+      marginBottom(10.px)
+    }
+
+    selector("a") style {
+      color(rgb(16, 130, 150))
+    }
+
+    group(className(label), className(subs)) style {
+      display(DisplayStyle.Block)
+      fontSize(14.px)
+    }
+
+    className(label) style {
+      whiteSpace("nowrap")
+      lineHeight(18.px)
+    }
+
+    className(subs) style {
+      property("word-wrap", "break-word")
+      lineHeight(17.px)
+      marginTop(4.px)
+      "span" style {
+        color(rgb(120, 120, 120))
+        marginTop(10.px)
+        marginRight(15.px)
+      }
+    }
+
+    // Positions the info panel header
+    className(infoPanelHeader) style {
+      textAlign("center")
+      padding(25.px, 25.px, 0.px)
+
+      // Positions the 'close' button for the info panel
+      className(closeDetails) style {
+        self + before style {
+          backgroundColor(currentColor)
+          property("content", "\"\"")
+          display(DisplayStyle.InlineBlock)
+          height(20.px)
+          width(20.px)
+          property("-webkit-mask-image", "url(/cancel.svg)")
+          property("-mask-image", "url(/cancel.svg)")
+          property("-webkit-mask-size", "cover")
+          property("-mask-size", "cover")
+          property("vertical-align", "middle")
+        }
+
+        // Moves the 'close' button for the info panel to the RHS
+        property("float", "right")
+        marginTop(2.px)
+        lineHeight("normal")
+        property("z-index", LightboxVars.zIndexBase + 5)
+      }
+    }
+
+    className(infoSection) style {
+      className(infoItem) style {
+        margin(0.px, 25.px)
+        padding(24.px, 0.px, 20.px)
+        property("border-bottom", "1px solid #F1F1F1")
+        minHeight(65.px)
+        textAlign("left")
+
+        // .infoPanel .infoSection .infoItem div.cameraInfo::before
+        combine(selector("div"), className(cameraInfo)) + before style {
+          property("-webkit-mask-image", "url(/cameraInfo.svg)")
+          property("mask-image", "url(/cameraInfo.svg)")
+        }
+        combine(selector("div"), className(dateInfo)) + before style {
+          property("-webkit-mask-image", "url(/dateInfo.svg)")
+          property("mask-image", "url(/dateInfo.svg)")
+        }
+        combine(selector("div"), className(fileInfo)) + before style {
+          property("-webkit-mask-image", "url(/fileInfo.svg)")
+          property("mask-image", "url(/fileInfo.svg)")
+        }
+        combine(selector("div"), className(locationInfo)) + before style {
+          property("-webkit-mask-image", "url(/location.svg)")
+          property("mask-image", "url(/location.svg)")
+        }
+
+        combine(selector("div"), className(detailItem)) + before style {
+          backgroundColor(currentColor)
+          property("content", "\"\"")
+          display(DisplayStyle.InlineBlock)
+          height(22.px)
+          width(22.px)
+          property("-webkit-mask-size", "cover")
+          property("mask-size", "cover")
+          property("vertical-align", "middle")
+          position(Position.Absolute)
+          top(0.px)
+          left(0.px)
+          color(rgb(16, 16, 16))
+        }
+
+        combine(selector("div"), className(detailItem)) style {
+          display(DisplayStyle.Block)
+          textAlign("left")
+          position(Position.Relative)
+          paddingLeft(40.px)
+          lineHeight(20.px)
+        }
+      }
+    }
+
+    "button" style {
+      property("border", "none")
+      background("none")
+      margin(0.px)
+      padding(0.px)
+      font("inherit")
+      cursor("pointer")
+      textAlign("inherit")
+      property("color", "inherit")
+    }
+  }
+
+  val gallery by style {
+    // Animate when the infoPanel appears/disappears
+    className(lightbox) style {
+      property("transition", "right 250ms ease, bottom 250ms ease")
+    }
+
+    combine(self, className(showInfoPanel)) style {
+      className(infoPanel) style {
+        right(0.px)
+        property("box-shadow", "0 0 10px 1px rgba(0,0,0,.1)")
+      }
+      // Moves the image left to make room for the info panel when it is visible
+      className(lightbox) style {
+        right(350.px)
+        bottom(0.px)
+      }
+    }
+  }
+
   private fun CSSBuilder.fullPage() {
     position(Position.Fixed)
     top(0.px)

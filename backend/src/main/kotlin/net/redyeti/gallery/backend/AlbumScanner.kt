@@ -8,23 +8,24 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
-import net.redyeti.gallery.remote.Album
-import net.redyeti.gallery.remote.GpsCoordinates
-import net.redyeti.gallery.remote.Photo
-import net.redyeti.gallery.remote.PopulatedAlbum
+import net.redyeti.gallery.remote.*
 import net.redyeti.util.CsvParser
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.io.path.*
 import kotlin.math.max
+import kotlin.math.roundToInt
 
 class AlbumScanner(val config: AppConfig) {
   companion object {
     val logger = Logger.withTag(this::class.simpleName!!)
 
     private val EXIFTOOL_METADATA_SCAN = listOf(
-      "-S", "-csv", "-FileName", "-DateTimeOriginal",
-      "-OffsetTimeOriginal", "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
-      "-ApertureValue", "-ExposureTime", "-FocalLength", "-ISO", "-LensID",
-      "-Description", "*.jpg"
+      // The # suffix returns the value without any automatic formatting/display conversion
+      "-S", "-csv", "-FileName", "-FileSize#", "-DateTimeOriginal", "-OffsetTimeOriginal",
+      "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
+      "-Model", "-ApertureValue", "-ExposureTime", "-FocalLength", "-ISO#", "-Lens", "-Description",
+      "*.jpg"
     )
 
     private val EXIFTOOL_STRIP_EXIF = listOf(
@@ -66,7 +67,7 @@ class AlbumScanner(val config: AppConfig) {
           albums += loadAlbum(album)
           logger.i("Loaded ${album.title}")
         } catch (e: Exception) {
-          logger.e("Error loading album '${album.title}'. Reason: ${e.message}", e)
+          logger.e("Error loading album '${album.directory}', skipping this album. Reason: ${e.message}", e)
         }
       }
     }
@@ -105,6 +106,9 @@ class AlbumScanner(val config: AppConfig) {
       }
     }
 
+    val pattern = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss z")
+    var prevTimeOffset = "UTC"
+
     val photos = mutableListOf<Photo>()
     val collector = RowCollector()
     val processor: (String) -> Unit = { s ->
@@ -116,17 +120,28 @@ class AlbumScanner(val config: AppConfig) {
         } else {
           val row = parser.parseLine(csvRow.reader(), headers)
           val filename = row["FileName"]!!
-          val timeTaken = row["DateTimeOriginal"]
-          val timeOffset = row["OffsetTimeOriginal"]
-          val timeStr = if (timeTaken != null && timeOffset != null) "$timeTaken $timeOffset" else timeTaken!!
-          val description = row["Description"] ?: ""
-          val aperture = row["ApertureValue"] ?: ""
-          val focalLength = row["FocalLength"]?.replace(".0 ", "") ?: ""
-          val shutterSpeed = row["ExposureTime"] ?: ""
-          val iso = row["ISO"] ?: ""
-          val lens = row["LensID"] ?: ""
-          val width = row["ImageWidth"].asInt()
-          val height = row["ImageHeight"].asInt()
+          val fileSize = row["FileSize#"].asInt()
+          val timeTaken = row["DateTimeOriginal"]!!
+          var timeOffset = row["OffsetTimeOriginal"]
+          if (timeOffset.isNullOrEmpty()) {
+            timeOffset = prevTimeOffset
+            logger.w("No timezone found for $originalsDir\\$filename - using $timeOffset")
+          }
+          prevTimeOffset = timeOffset
+          val epochSeconds = try {
+            ZonedDateTime.parse("$timeTaken $timeOffset", pattern).toEpochSecond()
+          } catch (e: Exception) {
+            throw IllegalArgumentException("Could not parse time for $originalsDir/$filename (${e.message})")
+          }
+          val description = row["Description"].orEmpty()
+          val camera = row["Model"].orEmpty()
+          val lens = row["Lens"].orEmpty()
+          val aperture = row["ApertureValue"].orEmpty()
+          val focalLength = row["FocalLength"].orEmpty()
+          val shutterSpeed = row["ExposureTime"].orEmpty()
+          val iso = row["ISO#"].asInt()
+          val fullWidth = row["ImageWidth"].asInt()
+          val fullHeight = row["ImageHeight"].asInt()
           val latitude = row["GPSLatitude#"].asDouble()
           val longitude = row["GPSLongitude#"].asDouble()
           val altitude = row["GPSAltitude#"].asDouble()
@@ -138,17 +153,22 @@ class AlbumScanner(val config: AppConfig) {
 
           // TODO: it's possible this suffers from off-by-one rounding issues compared to the actual sizes.
           //  Not sure if that matters or not, but if so we might have to scan the resized photo metadata instead.
-          val w = max(config.minLargeDimension, width * config.minLargeDimension / height)
-          val h = max(config.minLargeDimension, height * config.minLargeDimension / width)
-          val photo =
-            Photo(-1, filename, description, w, h, timeStr, aperture, shutterSpeed, focalLength, iso, lens, location)
+          val w = max(config.minLargeDimension, fullWidth * config.minLargeDimension / fullHeight)
+          val h = max(config.minLargeDimension, fullHeight * config.minLargeDimension / fullWidth)
+          val photo = Photo(
+            -1, filename, description, w, h, fullWidth, fullHeight, fileSize,
+            epochSeconds, timeOffset, location, CameraDetails(camera, lens, aperture, shutterSpeed, focalLength, iso)
+          )
           photos += photo
         }
       }
     }
     val exitCode = execute(params, processor, {}, originalsDir)
+    if (exitCode != 0) {
+      throw Exception("Failed to process $originalsDir: $exitCode")
+    }
 
-    photos.sortBy { it.timeTaken }
+    photos.sortBy { it.epochSeconds }
     val photosWithIDs = photos.mapIndexed { id, photo -> photo.copy(id = id) }
 
     val populatedAlbum = PopulatedAlbum(album, photosWithIDs)
@@ -223,6 +243,6 @@ class AlbumScanner(val config: AppConfig) {
   }
 }
 
-fun String?.asInt() = if (this.isNullOrEmpty()) 0 else toInt()
+fun String?.asInt() = if (this.isNullOrEmpty()) 0 else toDouble().roundToInt()
 
 fun String?.asDouble() = if (this.isNullOrEmpty()) 0.0 else toDouble()
