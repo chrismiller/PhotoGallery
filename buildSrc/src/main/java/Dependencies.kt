@@ -5,7 +5,7 @@ object Versions {
     const val koinCore = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
 
-    const val composeDesktopWeb = "1.4.1"
+    const val composeDesktopWeb = "1.4.3"
 
     const val routingCompose = "0.2.12"
     const val googleMaps = "0.3.3-alpha"
@@ -20,6 +20,7 @@ object Versions {
     const val log4j2 = "2.20.0"
     const val kermit = "2.0.0-RC4"
 
+    const val kspGradlePlugin = "1.8.20-1.0.10"
     const val gradleVersionsPlugin = "0.47.0"
 }
 

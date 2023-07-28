@@ -17,7 +17,7 @@ buildscript {
     dependencies {
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
         classpath("org.jetbrains.kotlin:kotlin-serialization:${kotlinVersion}")
-        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:1.8.20-1.0.10")
+        classpath("com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin:${Versions.kspGradlePlugin}")
     }
 }
 
