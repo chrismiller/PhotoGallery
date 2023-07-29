@@ -91,6 +91,7 @@ object LightboxStyle : StyleSheet() {
       display(DisplayStyle.InlineBlock)
       width(35.px)
       height(35.px)
+      property("-webkit-mask-size", "cover")
       property("mask-size", "cover")
       property("vertical-align", "middle")
     }
