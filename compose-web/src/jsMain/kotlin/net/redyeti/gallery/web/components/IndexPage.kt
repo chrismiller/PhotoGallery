@@ -22,7 +22,7 @@ fun IndexPage(repo: PhotoGalleryInterface) {
     Div(attrs = { classes(AppStyle.coverWrapper) }) {
       albums.forEach { album ->
         Div(attrs = { classes(AppStyle.albumCover) }) {
-          NavOnlyLink(to = "/album/${album.id}") {
+          NavOnlyLink(to = "/album/${album.key}") {
             PhotoThumbnail(imageUrl = album.thumbnailUrl(album.coverImage)) {
               Div(attrs = { classes(AppStyle.thumbText) }) {
                 Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {

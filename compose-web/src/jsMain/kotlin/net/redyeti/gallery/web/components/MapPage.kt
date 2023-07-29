@@ -19,7 +19,7 @@ fun RouteBuilder.MapPage(repo: PhotoGalleryInterface) {
   var album: PopulatedAlbum? by remember { mutableStateOf(null) }
   var photoID by remember { mutableStateOf(-1) }
 
-  int { albumID ->
+  string { albumKey ->
     int {
       // A photo ID was provided
       photoID = max(0, it)
@@ -27,8 +27,8 @@ fun RouteBuilder.MapPage(repo: PhotoGalleryInterface) {
     noMatch {
       photoID = -1
     }
-    LaunchedEffect(albumID) {
-      album = repo.fetchAlbum(albumID)
+    LaunchedEffect(albumKey) {
+      album = repo.fetchAlbum(albumKey)
       photoID = min(photoID, album!!.photos.size - 1)
       if (photoID >= 0) {
         Preloader.imgPreload(album!!.imageUrl(photoID))

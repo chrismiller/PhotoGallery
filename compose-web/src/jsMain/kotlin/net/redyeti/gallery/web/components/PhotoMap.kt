@@ -89,7 +89,7 @@ fun PhotoMap(album: PopulatedAlbum) {
           marker.showInfoWindow()
         },
         infoContent = {
-          NavOnlyLink(to = "/map/${album.album.id}/${photo.id}", router = router) {
+          NavOnlyLink(to = "/map/${album.album.key}/${photo.id}", router = router) {
             MapInfoWindow(album.album, photo)
           }
         })

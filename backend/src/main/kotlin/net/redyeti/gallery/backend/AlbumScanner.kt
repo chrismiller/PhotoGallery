@@ -39,8 +39,6 @@ class AlbumScanner(val config: AppConfig) {
 
   fun loadAlbums(): List<PopulatedAlbum> {
     val albums = mutableListOf<PopulatedAlbum>()
-    var albumId = 0
-
     val headers = mutableListOf<String>()
     val parser = CsvParser()
     config.albumsFile.forEachLine {
@@ -53,7 +51,6 @@ class AlbumScanner(val config: AppConfig) {
         return@forEachLine
       }
       val row = parser.parseLine(it.reader(), headers)
-      val id = albumId++
       val title = row["title"]
       val subtitle = row["subtitle"]
       val directory = row["directory"]
@@ -62,7 +59,7 @@ class AlbumScanner(val config: AppConfig) {
       if (title != null && subtitle != null && directory != null && coverImage != null) {
         // Take note of the restrictions on KML files here: https://developers.google.com/maps/documentation/javascript/kmllayer#restrictions
         val hasGpsTrack = config.gpsTrackDir(directory).exists()
-        val album = Album(id, title, subtitle, directory, coverImage, hasGpsTrack)
+        val album = Album(title, subtitle, directory, coverImage, hasGpsTrack)
         try {
           albums += loadAlbum(album)
           logger.i("Loaded ${album.title}")

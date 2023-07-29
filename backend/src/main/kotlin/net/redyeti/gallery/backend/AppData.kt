@@ -6,12 +6,12 @@ import net.redyeti.gallery.remote.PopulatedAlbum
 
 class AppData(albums: List<PopulatedAlbum>) {
   private val albums = albums.map { it.album }
-  private val albumsById = albums.associateBy { it.album.id }
-  private val photosByAlbumAndId = albumsById.mapValues { it.value.photos.associateBy { photo -> photo.id } }
+  private val albumsByKey = albums.associateBy { it.album.directory }
+  private val photosByAlbumAndId = albumsByKey.mapValues { it.value.photos.associateBy { photo -> photo.id } }
 
   fun getAlbums(): List<Album> = albums
 
-  fun getAlbum(id: Int): PopulatedAlbum? = albumsById[id]
+  fun getAlbum(key: String): PopulatedAlbum? = albumsByKey[key]
 
-  fun getPhoto(albumId: Int, photoId: Int): Photo? = photosByAlbumAndId[albumId]?.get(photoId)
+  fun getPhoto(albumKey: String, photoId: Int): Photo? = photosByAlbumAndId[albumKey]?.get(photoId)
 }

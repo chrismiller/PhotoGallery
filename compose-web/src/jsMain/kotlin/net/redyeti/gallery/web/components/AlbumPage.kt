@@ -23,7 +23,7 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
   var albumWidth by remember { mutableStateOf(albumWidth()) }
   var photoID by remember { mutableStateOf(-1) }
 
-  int { albumID ->
+  string { albumKey ->
     int {
       // A photo ID was provided
       photoID = max(0, it)
@@ -31,8 +31,8 @@ fun RouteBuilder.AlbumPage(repo: PhotoGalleryInterface) {
     noMatch {
       photoID = -1
     }
-    LaunchedEffect(albumID) {
-      album = repo.fetchAlbum(albumID)
+    LaunchedEffect(albumKey) {
+      album = repo.fetchAlbum(albumKey)
       photoID = min(photoID, album!!.photos.size - 1)
     }
 

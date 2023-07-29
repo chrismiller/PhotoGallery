@@ -29,13 +29,13 @@ fun main() {
 
     BrowserRouter("/") {
       route("album") {
-        int { albumID ->
+        string { albumID ->
           SideMenu(albumID, SideMenuItem.album)
         }
         AlbumPage(repo)
       }
       route("map") {
-        int { albumID ->
+        string { albumID ->
           SideMenu(albumID, SideMenuItem.map)
         }
         MapPage(repo)

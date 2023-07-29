@@ -10,13 +10,13 @@ import kotlin.math.max
 
 @Serializable
 data class Album(
-  val id: Int,
   val title: String,
   val subtitle: String,
   val directory: String,
   val coverImage: String,
   val hasGpsTrack: Boolean
 ) {
+  val key get() = directory
   fun imageUrl(photo: Photo) = imageUrl(photo.filename)
   fun thumbnailUrl(photo: Photo) = thumbnailUrl(photo.filename)
   fun imageUrl(filename: String) = "/image/$directory/large/$filename"
@@ -89,6 +89,5 @@ class PhotoGalleryApi(private val client: HttpClient, var baseUrl: String = "/ap
     return client.get("$baseUrl/albums").body<List<Album>>()
   }
 
-  suspend fun fetchAlbum(id: Int) = client.get("$baseUrl/album/$id").body<PopulatedAlbum>()
-  suspend fun fetchPhoto(id: Int) = client.get("$baseUrl/photo/$id").body<Photo>()
+  suspend fun fetchAlbum(key: String) = client.get("$baseUrl/album/$key").body<PopulatedAlbum>()
 }

@@ -29,13 +29,13 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 
   val updateId: (Int) -> Unit = { newId ->
     val newID = popAlbum.wrappedID(newId)
-    val newUrl = "$base/${popAlbum.album.id}/$newID"
+    val newUrl = "$base/${popAlbum.album.key}/$newID"
     window.history.replaceState(null, "", newUrl)
     id = newID
   }
 
   val router = Router.current
-  val close = { router.navigate("$base/${popAlbum.album.id}") }
+  val close = { router.navigate("$base/${popAlbum.album.key}") }
   val next = { updateId(id + 1) }
   val prev = { updateId(id - 1) }
 

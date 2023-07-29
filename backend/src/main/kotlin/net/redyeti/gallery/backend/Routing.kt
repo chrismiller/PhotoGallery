@@ -29,16 +29,17 @@ private fun Route.api() {
     call.respond(appData.getAlbums())
   }
 
-  get("/album/{id}") {
-    val id = call.parameters.getOrFail<Int>("id").toInt()
-    val result = appData.getAlbum(id) ?: throw RequestValidationException(id, listOf("Invalid album ID"))
+  get("/album/{key}") {
+    val key = call.parameters.getOrFail<String>("key")
+    val result = appData.getAlbum(key) ?: throw RequestValidationException(key, listOf("Invalid album ID"))
     call.respond(result)
   }
 
-  get("/photo/{albumId}/{photoId}") {
-    val albumId = call.parameters.getOrFail<Int>("albumId").toInt()
+  get("/photo/{albumKey}/{photoId}") {
+    val albumKey = call.parameters.getOrFail<String>("albumKey")
     val photoId = call.parameters.getOrFail<Int>("photoId").toInt()
-    val result = appData.getPhoto(albumId, photoId) ?: throw RequestValidationException(photoId, listOf("Invalid photo ID"))
+    val result =
+      appData.getPhoto(albumKey, photoId) ?: throw RequestValidationException(photoId, listOf("Invalid photo ID"))
     call.respond(result)
   }
 }

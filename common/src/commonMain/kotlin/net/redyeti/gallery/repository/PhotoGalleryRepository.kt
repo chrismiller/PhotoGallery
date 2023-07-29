@@ -3,23 +3,17 @@ package net.redyeti.gallery.repository
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
 import net.redyeti.gallery.remote.Album
-import net.redyeti.gallery.remote.GpsCoordinates
 import net.redyeti.gallery.remote.PhotoGalleryApi
 import net.redyeti.gallery.remote.PopulatedAlbum
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
 interface PhotoGalleryInterface {
-  fun pollISSPosition(): Flow<GpsCoordinates>
-
   suspend fun fetchAlbums(): List<Album>
 
-  suspend fun fetchAlbum(id: Int): PopulatedAlbum
+  suspend fun fetchAlbum(key: String): PopulatedAlbum
 }
 
 class PhotoGalleryRepository : KoinComponent, PhotoGalleryInterface {
@@ -45,18 +39,7 @@ class PhotoGalleryRepository : KoinComponent, PhotoGalleryInterface {
   }
 
   // Used by web client
-  override suspend fun fetchAlbum(id: Int): PopulatedAlbum = photoGalleryApi.fetchAlbum(id)
-
-  override fun pollISSPosition(): Flow<GpsCoordinates> {
-    return flow {
-      while (true) {
-        val position = photoGalleryApi.fetchAlbum(1)
-        emit(GpsCoordinates(0.0, 0.0, 0.0))
-        logger.d { position.toString() }
-        delay(POLL_INTERVAL)
-      }
-    }
-  }
+  override suspend fun fetchAlbum(key: String): PopulatedAlbum = photoGalleryApi.fetchAlbum(key)
 
   companion object {
     private const val POLL_INTERVAL = 1_000L

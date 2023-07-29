@@ -9,7 +9,7 @@ import org.jetbrains.compose.web.dom.Img
 enum class SideMenuItem { album, map }
 
 @Composable
-fun SideMenu(albumID: Int, selectedItem: SideMenuItem) {
+fun SideMenu(albumKey: String, selectedItem: SideMenuItem) {
   Div(attrs = { classes(AppStyle.sideMenu) }) {
     NavLink(to = "/") {
       Img(
@@ -18,7 +18,7 @@ fun SideMenu(albumID: Int, selectedItem: SideMenuItem) {
       )
     }
 
-    NavLink(to = "/album/$albumID") {
+    NavLink(to = "/album/$albumKey") {
       Img(
         attrs = {
           classes(
@@ -32,7 +32,7 @@ fun SideMenu(albumID: Int, selectedItem: SideMenuItem) {
       )
     }
 
-    NavLink(to = "/map/$albumID") {
+    NavLink(to = "/map/$albumKey") {
       Img(
         attrs = {
           classes(
