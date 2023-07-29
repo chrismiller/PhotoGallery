@@ -79,8 +79,14 @@ object LightboxStyle : StyleSheet() {
 
     // opacity(0)
     transitions {
-      "opacity" { duration(0.3.s) }
-      defaultTimingFunction(AnimationTimingFunction.Ease)
+      "opacity" {
+        duration(0.3.s)
+        timingFunction(AnimationTimingFunction.Ease)
+      }
+      "color" {
+        duration(0.1.s)
+        timingFunction(AnimationTimingFunction.EaseIn)
+      }
     }
 
     self + before style {
@@ -92,6 +98,10 @@ object LightboxStyle : StyleSheet() {
       property("-webkit-mask-size", "cover")
       property("mask-size", "cover")
       property("vertical-align", "middle")
+    }
+
+    self + hover style {
+      color(rgb(200, 200, 200))
     }
   }
 
@@ -105,11 +115,6 @@ object LightboxStyle : StyleSheet() {
 
   val arrowNext by style {
     right(24.px)
-    // opacity(0)
-    transitions {
-      "opacity" { duration(0.3.s) }
-      defaultTimingFunction(AnimationTimingFunction.Ease)
-    }
     self + before style {
       property("-webkit-mask-image", "url(/right.svg)")
       property("mask-image", "url(/right.svg)")
@@ -456,6 +461,7 @@ object LightboxStyle : StyleSheet() {
         lineHeight(22.px)
         display(DisplayStyle.InlineBlock)
       }
+
       self + before style {
         backgroundColor(Color.currentColor)
         property("content", "\"\"")
@@ -468,6 +474,10 @@ object LightboxStyle : StyleSheet() {
         property("mask-size", "cover")
         property("vertical-align", "middle")
       }
+
+      self + hover style {
+        color(rgb(200, 200, 200))
+      }
     }
 
     className(options) style {
@@ -475,19 +485,16 @@ object LightboxStyle : StyleSheet() {
       flexGrow(1)
       textAlign("right")
 
-      // Don't show the buttons
-      desc(type("button"), type("span")) style {
-        marginLeft(8.px)
-        display(DisplayStyle.None)
-      }
-
       type("button") style {
         color(Color.white)
+        property("transition", "color 100ms ease-in")
         property("text-shadow", "0 1px 5px rgba(16, 16, 16, 0.5)")
 
-      }
+        type("span") style {
+          marginLeft(8.px)
+          display(DisplayStyle.None)
+        }
 
-      type("button") style {
         self + before style {
           backgroundColor(Color.currentColor)
           property("content", "\"\"")
@@ -497,6 +504,10 @@ object LightboxStyle : StyleSheet() {
           property("-webkit-mask-size", "cover")
           property("mask-size", "cover")
           property("vertical-align", "middle")
+        }
+
+        self + hover style {
+          color(rgb(200, 200, 200))
         }
       }
 
