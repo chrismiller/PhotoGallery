@@ -22,6 +22,7 @@ data class Count(val current: Int, val total: Int)
 fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   var id by remember { mutableStateOf(photoID) }
   var imageUrl: String? by remember { mutableStateOf(null) }
+  var infoPanelVisible by remember { mutableStateOf(false) }
 
   val urlToLoad = popAlbum.imageUrl(id)
   Preloader.imgPreload(urlToLoad) { imageUrl = urlToLoad }
@@ -52,6 +53,10 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
         "ArrowRight" -> {
           next()
         }
+
+        "i" -> {
+          infoPanelVisible = !infoPanelVisible
+        }
       }
     }
     onDispose {
@@ -64,15 +69,18 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 
   val url = imageUrl
   if (url != null) {
-    // TODO: Add support for showing/hiding the info panel
-    val styles = if (true) {
-      listOf(LightboxStyle.gallery)
+    val styles = if (infoPanelVisible) {
+      listOf(LightboxStyle.gallery, LightboxStyle.showControls, LightboxStyle.showInfoPanel)
     } else {
-      listOf(LightboxStyle.gallery, LightboxStyle.showInfoPanel)
+      listOf(LightboxStyle.gallery, LightboxStyle.showControls)
     }
 
     Section(attrs = { classes(styles) }) {
       val photo = popAlbum.photos[id]
+      Header(attrs = { classes(LightboxStyle.galleryHeader) }) {
+        Back(close)
+        Options(photo, toggleInfoPanel = { infoPanelVisible = !infoPanelVisible })
+      }
       Div(attrs = {
         id("fs")
         classes(LightboxStyle.lightbox)
@@ -104,7 +112,56 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 }
 
 @Composable
-fun InfoItem(style: String, content: @Composable () -> Unit) {
+private fun Back(close: () -> Unit) {
+  A(attrs = {
+    classes(LightboxStyle.back)
+    onClick { e ->
+      close()
+    }
+  }) { Span { Text("Back") } }
+}
+
+@Composable
+private fun Options(photo: Photo, toggleInfoPanel: () -> Unit) {
+  Ul(attrs = { classes(LightboxStyle.options) }) {
+    Li {
+      InfoOption {
+        toggleInfoPanel()
+      }
+    }
+    val location = photo.location
+    if (location != null) {
+      Li {
+        LocationOption {
+          window.location.href = location.googleMapsUrl
+        }
+      }
+    }
+  }
+}
+
+@Composable
+private fun InfoOption(click: () -> Unit) {
+  Button(attrs = {
+    classes(LightboxStyle.infoOption)
+    onClick { click() }
+  }) {
+    Span(attrs = { classes(LightboxStyle.label) }) { Text("Info") }
+  }
+}
+
+@Composable
+private fun LocationOption(click: () -> Unit) {
+  Button(attrs = {
+    classes(LightboxStyle.locationOption)
+    onClick { click() }
+  }) {
+    Span(attrs = { classes(LightboxStyle.label) }) { Text("Location") }
+  }
+}
+
+@Composable
+private fun InfoItem(style: String, content: @Composable () -> Unit) {
   Div(attrs = { classes(LightboxStyle.infoItem) }) {
     Div(attrs = { classes(LightboxStyle.detailItem, style) }) {
       content()
@@ -113,7 +170,7 @@ fun InfoItem(style: String, content: @Composable () -> Unit) {
 }
 
 @Composable
-fun FileInfoPanel(photo: Photo) {
+private fun FileInfoPanel(photo: Photo) {
   InfoItem(LightboxStyle.fileInfo) {
     H4 { Text("File info") }
     Span(attrs = { classes(LightboxStyle.label) }) { Text(photo.filename) }
@@ -141,7 +198,7 @@ private fun Double.toStringOneDp(): String {
 }
 
 @Composable
-fun DateInfoPanel(epochSeconds: Long, timeOffset: String) {
+private fun DateInfoPanel(epochSeconds: Long, timeOffset: String) {
   InfoItem(LightboxStyle.dateInfo) {
     H4 { Text("Date taken") }
     val instant = Instant.fromEpochSeconds(epochSeconds)
@@ -166,7 +223,7 @@ private fun Int.twoChars(): String {
 private fun String.firstUpper() = this.lowercase().replaceFirstChar { c -> c.uppercaseChar() }
 
 @Composable
-fun CameraInfoPanel(details: CameraDetails) {
+private fun CameraInfoPanel(details: CameraDetails) {
   InfoItem(LightboxStyle.cameraInfo) {
     H4 { Text("Camera") }
     Span(attrs = { classes(LightboxStyle.label) }) { Text(details.camera) }
@@ -188,7 +245,7 @@ fun CameraInfoPanel(details: CameraDetails) {
 }
 
 @Composable
-fun LocationInfoPanel(location: GpsCoordinates?) {
+private fun LocationInfoPanel(location: GpsCoordinates?) {
   if (location == null) {
     return
   }
@@ -215,7 +272,7 @@ fun LocationInfoPanel(location: GpsCoordinates?) {
 }
 
 @Composable
-fun PopupImage(imageUrl: String, close: () -> Unit) {
+private fun PopupImage(imageUrl: String, close: () -> Unit) {
   Div(attrs = {
     classes(LightboxStyle.imageWrapper)
     onClick { e ->
@@ -235,7 +292,7 @@ fun PopupImage(imageUrl: String, close: () -> Unit) {
 }
 
 @Composable
-fun NavButton(text: String, style: String, update: () -> Unit) {
+private fun NavButton(text: String, style: String, update: () -> Unit) {
   A(attrs = {
     title(text)
     classes(LightboxStyle.arrow, style)

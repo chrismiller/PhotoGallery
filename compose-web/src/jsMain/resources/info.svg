@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>LightMode Primary/common/information</title>
+    <defs>
+        <path d="M12,1 C5.925,1 1,5.925 1,12 C1,18.075 5.925,23 12,23 C18.075,23 23,18.075 23,12 C23,5.925 18.075,1 12,1 Z M13,17.9979185 C13,19.1022614 12.5525,18.9973238 12,18.9973238 C11.4475,18.9973238 11,19.1022614 11,17.9979185 L11,11.0020815 C11,9.89773864 11.4475,10.0026762 12,10.0026762 C12.5525,10.0026762 13,9.89773864 13,11.0020815 L13,17.9979185 Z M12,8 C11.17125,8 10.5,7.32875 10.5,6.5 C10.5,5.67125 11.17125,5 12,5 C12.82875,5 13.5,5.67125 13.5,6.5 C13.5,7.32875 12.82875,8 12,8 Z" id="path-1"/>
+    </defs>
+    <g id="LightMode-Primary/common/information" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <mask id="mask-2" fill="white">
+            <use xlink:href="#path-1"/>
+        </mask>
+        <g id="Shape" fill-rule="nonzero"/>
+        <rect id="↳-icon-tint" fill="#111111" mask="url(#mask-2)" x="0" y="0" width="24" height="24"/>
+    </g>
+</svg>

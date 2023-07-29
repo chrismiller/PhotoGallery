@@ -3,8 +3,6 @@ package net.redyeti.gallery.web.style
 import net.redyeti.gallery.web.style.LightboxVars.CAPTION_ICON_SIZE
 import org.jetbrains.compose.web.ExperimentalComposeWebApi
 import org.jetbrains.compose.web.css.*
-import org.jetbrains.compose.web.css.Color.currentColor
-import org.jetbrains.compose.web.css.Color.transparent
 import org.jetbrains.compose.web.css.keywords.auto
 
 object LightboxVars {
@@ -43,7 +41,7 @@ object LightboxStyle : StyleSheet() {
       LightboxVars.controlsBorderColour(Color("#3F3F3F"))
       LightboxVars.controlsTextColour(Color("#CCCCCC"))
 
-      LightboxVars.imageBackgroundColour(transparent)
+      LightboxVars.imageBackgroundColour(Color.transparent)
       LightboxVars.imageCaptionTextColour(Color("#E0E0E0"))
       LightboxVars.imageCaptionSubtextColour(Color("#BBBBBB"))
       LightboxVars.imageCaptionLinkColour(Color("#E0E0E0"))
@@ -73,7 +71,7 @@ object LightboxStyle : StyleSheet() {
     lineHeight(52.px)
     textAlign("center")
     borderRadius(50.percent)  // This makes a circle
-    backgroundColor(rgba(17, 17, 17, 0.5))
+    backgroundColor(rgba(16, 16, 16, 0.5))
     top(50.percent)
     transform { translateY((-50).percent) }
     property("z-index", LightboxVars.zIndexBase + 10)
@@ -86,7 +84,7 @@ object LightboxStyle : StyleSheet() {
     }
 
     self + before style {
-      backgroundColor(currentColor)
+      backgroundColor(Color.currentColor)
       property("content", "\"\"")
       display(DisplayStyle.InlineBlock)
       width(35.px)
@@ -123,11 +121,11 @@ object LightboxStyle : StyleSheet() {
 
   init {
     "button" style {
-      val self = selector("button")
+      val self = type("button")
       self + className(arrow) style {
         overflow("visible")
         cursor("pointer")
-        backgroundColor(transparent)
+        backgroundColor(Color.transparent)
         border(0.px)
         display(DisplayStyle.Block)
         outline("none")
@@ -140,7 +138,7 @@ object LightboxStyle : StyleSheet() {
 
     "img" style {
       // img.image { ... }
-      selector("img") + className(image) style {
+      type("img") + className(image) style {
         width(auto)
         maxWidth(100.percent)
         height(auto)
@@ -150,6 +148,11 @@ object LightboxStyle : StyleSheet() {
         padding(34.px, 0.px, 40.px)
         property("margin", "0 auto")
       }
+    }
+
+    group(type("figure"), type("section"), type("header")) style {
+      margin(0.px)
+      padding(0.px)
     }
   }
 
@@ -245,7 +248,7 @@ object LightboxStyle : StyleSheet() {
         paddingRight(10.px)
         whiteSpace("nowrap")
         cursor("pointer")
-        child(self, selector("div")) style {
+        child(self, type("div")) style {
           display(DisplayStyle.InlineBlock)
           width(CAPTION_ICON_SIZE.px)
           height(CAPTION_ICON_SIZE.px)
@@ -305,20 +308,16 @@ object LightboxStyle : StyleSheet() {
     property("z-index", LightboxVars.zIndexBase + 1)  // Lift it above the shaded background
     property("transition", "right 0.3s ease")
 
-    // Set the text style for the info panel
-    group(selector("h2"), selector("h4"), selector("p"), selector("span")) style {
-      color(rgb(16, 16, 16))
-    }
-
-    selector("h4") style {
+    "h4" style {
       marginBottom(10.px)
     }
 
-    selector("a") style {
+    "a" style {
       color(rgb(16, 130, 150))
     }
 
-    group(className(label), className(subs)) style {
+    // .infoPanel .label, .infoPanel .subs { ... }
+    group(desc(self, className(label)), desc(self, className(subs))) style {
       display(DisplayStyle.Block)
       fontSize(14.px)
     }
@@ -347,7 +346,7 @@ object LightboxStyle : StyleSheet() {
       // Positions the 'close' button for the info panel
       className(closeDetails) style {
         self + before style {
-          backgroundColor(currentColor)
+          backgroundColor(Color.currentColor)
           property("content", "\"\"")
           display(DisplayStyle.InlineBlock)
           height(20.px)
@@ -367,6 +366,12 @@ object LightboxStyle : StyleSheet() {
       }
     }
 
+    // Set the text style for the info panel
+    // .infoPanel h2, .infoPanel h4, .infoPanel p, .infoPanel span
+    group(desc(self, "h2"), desc(self, "h4"), desc(self, "p"), desc(self, "span")) style {
+      color(rgb(16, 16, 16))
+    }
+
     className(infoSection) style {
       className(infoItem) style {
         margin(0.px, 25.px)
@@ -376,25 +381,25 @@ object LightboxStyle : StyleSheet() {
         textAlign("left")
 
         // .infoPanel .infoSection .infoItem div.cameraInfo::before
-        combine(selector("div"), className(cameraInfo)) + before style {
+        "div" + className(cameraInfo) + before style {
           property("-webkit-mask-image", "url(/cameraInfo.svg)")
           property("mask-image", "url(/cameraInfo.svg)")
         }
-        combine(selector("div"), className(dateInfo)) + before style {
+        "div" + className(dateInfo) + before style {
           property("-webkit-mask-image", "url(/dateInfo.svg)")
           property("mask-image", "url(/dateInfo.svg)")
         }
-        combine(selector("div"), className(fileInfo)) + before style {
+        "div" + className(fileInfo) + before style {
           property("-webkit-mask-image", "url(/fileInfo.svg)")
           property("mask-image", "url(/fileInfo.svg)")
         }
-        combine(selector("div"), className(locationInfo)) + before style {
+        "div" + className(locationInfo) + before style {
           property("-webkit-mask-image", "url(/location.svg)")
           property("mask-image", "url(/location.svg)")
         }
 
-        combine(selector("div"), className(detailItem)) + before style {
-          backgroundColor(currentColor)
+        "div" + className(detailItem) + before style {
+          backgroundColor(Color.currentColor)
           property("content", "\"\"")
           display(DisplayStyle.InlineBlock)
           height(22.px)
@@ -408,7 +413,7 @@ object LightboxStyle : StyleSheet() {
           color(rgb(16, 16, 16))
         }
 
-        combine(selector("div"), className(detailItem)) style {
+        "div" + className(detailItem) style {
           display(DisplayStyle.Block)
           textAlign("left")
           position(Position.Relative)
@@ -417,16 +422,122 @@ object LightboxStyle : StyleSheet() {
         }
       }
     }
+  }
 
-    "button" style {
-      property("border", "none")
-      background("none")
-      margin(0.px)
-      padding(0.px)
-      font("inherit")
+  val showControls by style {
+  }
+
+  val back by style {}
+  val options by style {}
+  val infoOption by style {}
+  val locationOption by style {}
+
+  val galleryHeader by style {
+    // Animate when the controls appear/disappear
+    className(lightbox) style {
+      property("transition", "opacity 250ms ease, width 250ms ease")
+    }
+
+    // Style the 'Back' link shown at the top left of an image
+    className(back) style {
+      color(Color.white)
+      property("transition", "color 100ms ease-in")
+      property("text-shadow", "0 1px 5px rgba(16, 16, 16, 0.5)")
+      fontSize(16.px)
+      lineHeight(20.px)
+      whiteSpace("nowrap")
+      textAlign("left")
+      display(DisplayStyle.Flex)
+      alignItems(AlignItems.Center)
       cursor("pointer")
-      textAlign("inherit")
-      property("color", "inherit")
+      "span" style {
+        marginLeft(12.px)
+        height(22.px)
+        lineHeight(22.px)
+        display(DisplayStyle.InlineBlock)
+      }
+      self + before style {
+        backgroundColor(Color.currentColor)
+        property("content", "\"\"")
+        display(DisplayStyle.InlineBlock)
+        width(20.px)
+        height(20.px)
+        property("-webkit-mask-image", "url(/back.svg)")
+        property("mask-image", "url(/back.svg)")
+        property("-webkit-mask-size", "cover")
+        property("mask-size", "cover")
+        property("vertical-align", "middle")
+      }
+    }
+
+    className(options) style {
+      display(DisplayStyle.Inline)
+      flexGrow(1)
+      textAlign("right")
+
+      // Don't show the buttons
+      desc(type("button"), type("span")) style {
+        marginLeft(8.px)
+        display(DisplayStyle.None)
+      }
+
+      type("button") style {
+        color(Color.white)
+        property("text-shadow", "0 1px 5px rgba(16, 16, 16, 0.5)")
+
+      }
+
+      type("button") style {
+        self + before style {
+          backgroundColor(Color.currentColor)
+          property("content", "\"\"")
+          display(DisplayStyle.InlineBlock)
+          width(22.px)
+          height(22.px)
+          property("-webkit-mask-size", "cover")
+          property("mask-size", "cover")
+          property("vertical-align", "middle")
+        }
+      }
+
+      type("button") + className(infoOption) style {
+        self + before style {
+          property("-webkit-mask-image", "url(/info.svg)")
+          property("mask-image", "url(/info.svg)")
+        }
+      }
+
+      type("button") + className(locationOption) style {
+        self + before style {
+          property("-webkit-mask-image", "url(/location.svg)")
+          property("mask-image", "url(/location.svg)")
+        }
+      }
+
+      // .galleryHeader .options button, .infoPanel button
+      group(desc(self, type("button")), className(infoPanel)) style {
+        type("button") style {
+          property("border", "none")
+          background("none")
+          margin(0.px)
+          padding(0.px)
+          font("inherit")
+          cursor("pointer")
+          textAlign("inherit")
+        }
+      }
+
+      type("li") style {
+        display(DisplayStyle.InlineBlock)
+        marginLeft(24.px)
+        fontSize(15.px)
+        lineHeight(18.px)
+        color(rgb(16, 16, 16))
+      }
+      group(desc(self, type("ul")), desc(self, type("li"))) style {
+        padding(0.px)
+        listStyle("none")
+      }
     }
   }
 
@@ -436,8 +547,32 @@ object LightboxStyle : StyleSheet() {
       property("transition", "right 250ms ease, bottom 250ms ease")
     }
 
-    combine(self, className(showInfoPanel)) style {
+    className(galleryHeader) style {
+      // TODO - this should be zero to hide the controls when there's no mouseover
+      opacity(1)
+
+      width(100.percent)
+      maxWidth(100.percent)
+      display(DisplayStyle.Flex)
+      alignItems("center")
+      position(Position.Fixed)
+      top(0.px)
+      left(0.px)
+      height(88.px)
+      background("linear-gradient(180deg, rgba(16, 16, 16, 0.75), rgba(16, 16, 16, 0))")
+      backgroundColor(Color.transparent)
+      property("margin", "0 auto")
+      padding(0.px, 24.px)
+      boxSizing("border-box")
+      property("transition", "opacity 250ms ease, width 250ms ease")
+      property("z-index", LightboxVars.zIndexBase + 5)  // Lift the header above the image
+    }
+
+    // .gallery.showInfoPanel
+    self + className(showInfoPanel) style {
+      // .gallery.showInfoPanel .infoPanel
       className(infoPanel) style {
+        // Move the info panel so it is visible on screen
         right(0.px)
         property("box-shadow", "0 0 10px 1px rgba(0,0,0,.1)")
       }
@@ -445,6 +580,10 @@ object LightboxStyle : StyleSheet() {
       className(lightbox) style {
         right(350.px)
         bottom(0.px)
+      }
+      className(galleryHeader) style {
+        // Reduce the size of the control area when the info panel is visible
+        property("width", "calc(100% - 350px)")
       }
     }
   }

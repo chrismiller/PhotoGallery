@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink">
+    <defs>
+        <path d="M14,0 C14.53,0 15.039,0.211 15.415,0.586 L15.415,0.586 L17.243,3 L17.25,3 L17.4,3.2 C17.778,3.704 18.37,4 19,4 L19,4 L20,4 C21.105,4 22,4.895 22,6 L22,6 L22,16 C22,17.105 21.105,18 20,18 L20,18 L2,18 C0.895,18 0,17.105 0,16 L0,16 L0,6 C0,4.895 0.895,4 2,4 L2,4 L3,4 C3.63,4 4.222,3.704 4.6,3.2 L4.6,3.2 L4.75,3 L4.757,3 L6.586,0.586 C6.961,0.211 7.47,0 8,0 L8,0 Z M11,5 C8.239,5 6,7.239 6,10 C6,12.761 8.239,15 11,15 C13.761,15 16,12.761 16,10 C16,7.239 13.761,5 11,5 Z M11,7 C12.6568542,7 14,8.34314575 14,10 C14,11.6568542 12.6568542,13 11,13 C9.34314575,13 8,11.6568542 8,10 C8,8.34314575 9.34314575,7 11,7 Z"
+              id="path-1"/>
+    </defs>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g transform="translate(1.000000, 3.000000)">
+            <mask id="mask-2" fill="white">
+                <use xlink:href="#path-1"/>
+            </mask>
+            <g fill-rule="nonzero"/>
+            <rect id="↳-icon-tint" fill="#111111" mask="url(#mask-2)" x="-1" y="-3" width="24" height="24"/>
+        </g>
+    </g>
+</svg>
