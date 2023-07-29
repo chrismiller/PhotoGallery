@@ -127,17 +127,17 @@ private fun Back(close: () -> Unit) {
 @Composable
 private fun Options(photo: Photo, toggleInfoPanel: () -> Unit) {
   Ul(attrs = { classes(LightboxStyle.options) }) {
-    Li {
-      InfoOption {
-        toggleInfoPanel()
-      }
-    }
     val location = photo.location
     if (location != null) {
       Li {
         LocationOption {
           window.location.href = location.googleMapsUrl
         }
+      }
+    }
+    Li {
+      InfoOption {
+        toggleInfoPanel()
       }
     }
   }
