@@ -93,7 +93,10 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
       Aside(attrs = { classes(LightboxStyle.infoPanel) }) {
         H2(attrs = { classes(LightboxStyle.infoPanelHeader) }) {
           Text("Info")
-          Button(attrs = { classes(LightboxStyle.closeDetails) }) {}
+          Button(attrs = {
+            classes(LightboxStyle.closeInfoPanel)
+            onClick { infoPanelVisible = false }
+          }) {}
         }
         Div(attrs = { classes(LightboxStyle.infoSection) }) {
           FileInfoPanel(photo)

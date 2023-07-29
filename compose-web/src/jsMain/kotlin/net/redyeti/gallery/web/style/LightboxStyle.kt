@@ -286,7 +286,7 @@ object LightboxStyle : StyleSheet() {
   val infoSection by style {}
   val infoItem by style {}
   val detailItem by style {}
-  val closeDetails by style {}
+  val closeInfoPanel by style {}
   val cameraInfo by style {}
   val dateInfo by style {}
   val fileInfo by style {}
@@ -344,7 +344,7 @@ object LightboxStyle : StyleSheet() {
       padding(25.px, 25.px, 0.px)
 
       // Positions the 'close' button for the info panel
-      className(closeDetails) style {
+      className(closeInfoPanel) style {
         self + before style {
           backgroundColor(Color.currentColor)
           property("content", "\"\"")
