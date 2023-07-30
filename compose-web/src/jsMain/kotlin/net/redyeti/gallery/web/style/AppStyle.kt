@@ -207,8 +207,13 @@ object AppStyle : StyleSheet() {
     }
   }
 
+  val header by style {
+    display(DisplayStyle.Flex)
+    justifyContent(JustifyContent.SpaceBetween)
+    alignItems(AlignItems.Center)
+  }
+
   val headerText by style {
-    property("float", "left")
     "h1" style {
       fontSize(2.em)
     }
@@ -219,7 +224,6 @@ object AppStyle : StyleSheet() {
   }
 
   val headerLogo by style {
-    property("float", "right")
   }
 
   init {

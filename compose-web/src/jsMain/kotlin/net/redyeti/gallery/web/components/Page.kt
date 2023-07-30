@@ -21,7 +21,7 @@ fun Page(
     classes(AppStyle.pageWrapper)
     attrs?.invoke(this)
   }) {
-    Header {
+    Header(attrs = { classes(AppStyle.header) }) {
       header()
     }
     Main {
