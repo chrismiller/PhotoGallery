@@ -4,32 +4,50 @@
 
 ```kotlin
 // --------------------------------------------
-// .a { ... }
+// .x { ... }
 // --------------------------------------------
-val a by style { ... }
+val x by style { ... }
 
+// --------------------------------------------
+// https://www.w3.org/TR/selectors/#compound
+// .x.y { ... }
+// --------------------------------------------
+val y by style {}
+val x by style {
+  self + className(y) style { ... }
+}
 
 // --------------------------------------------
-// .a .b { ... }
+// https://www.w3.org/TR/selectors/#descendant-combinators
+// .x .y { ... }
 // --------------------------------------------
-val b by style {}
-val a by style {
-  className(b) style { ... }
+val y by style {}
+val x by style {
+  className(y) style { ... }
 }
 // or
-val a by style {
-  ".b" style { ... }
+val x by style {
+  ".y" style { ... }
 }
 
-
 // --------------------------------------------
-// .a, .b { ... }
+// https://www.w3.org/TR/selectors/#grouping
+// .x, .y { ... }
 // --------------------------------------------
-val b by style {}
-val a by style {
-  group(self, b) style { ... }
+val y by style {}
+val x by style {
+  group(self, y) style { ... }
 }
 
+// --------------------------------------------
+// https://www.w3.org/TR/selectors/#grouping
+// .x .y, .x .z { ... }
+// --------------------------------------------
+val y by style {}
+val z by style {}
+val x by style {
+  group(desc(self, className(y)), desc(self, className(z))) style { ... }
+}
 
 // --------------------------------------------
 // img { ... }
@@ -40,67 +58,76 @@ init {
 
 
 // --------------------------------------------
-// img .a { ... }
+// img .x { ... }
 // --------------------------------------------
-val a by style {}
+val x by style {}
 init {
-  desc("img", className(a)) style { ... }
-}
-
-
-// --------------------------------------------
-// img.a { ... }
-// --------------------------------------------
-val a by style {}
-init {
+  desc("img", className(x)) style { ... }
+  // or
   "img" style {
-    combine(selector("img"), className(a)) style { ... }
+    className(x) style { ... }
   }
 }
 
 
 // --------------------------------------------
-// .a::after { ... }
+// img.x { ... }
 // --------------------------------------------
-val a by style {
-  self + after style { ... }
+val x by style {}
+init {
+  "img" style {
+    self + className(x) style { ... }
+    // or
+    combine(selector("img"), className(x)) style { ... }
+  }
 }
 
 
 // --------------------------------------------
-// .a::before, .a::after { ... }
+// .x::before { ... }
 // --------------------------------------------
-val a by style {
+val x by style {
+  self + before style { ... }
+}
+
+
+// --------------------------------------------
+// .x::before, .x::after { ... }
+// --------------------------------------------
+val x by style {
   group(self + before, self + after) style { ... }
 }
 
 
 // --------------------------------------------
 // @media "screen and ..." {
-//   .a { ... }
+//   .x { ... }
 // }
 // --------------------------------------------
-val a by style {
+val x by style {
   media("screen and ...") {
     self style { ... }
   }
 }
 // --------------------------------------------
-// a > b { ... }
+// https://www.w3.org/TR/selectors/#child-combinators
+// x > y { ... }
 // --------------------------------------------
-child(a, b) style { ... }
+child(x, y) style { ... }
 
 
 // --------------------------------------------
-// a ~ b { ... }
+// https://www.w3.org/TR/selectors/#general-sibling-combinators
+// x ~ y { ... }
 // --------------------------------------------
-sibling(a, b) style { ... }
+sibling(x, y) style { ... }
 
 
 // --------------------------------------------
-// a + b { ... }
+// https://www.w3.org/TR/selectors/#adjacent-sibling-combinators
+// x + y { ... }
 // --------------------------------------------
-adjacent(a, b) style { ... }
+adjacent(x, y) style { ... }
 
 
 // --------------------------------------------
