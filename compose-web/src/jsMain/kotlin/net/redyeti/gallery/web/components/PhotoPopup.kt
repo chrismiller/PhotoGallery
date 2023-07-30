@@ -22,6 +22,7 @@ data class Count(val current: Int, val total: Int)
 fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   var id by remember { mutableStateOf(photoID) }
   var imageUrl: String? by remember { mutableStateOf(null) }
+  var controlsVisible by remember { mutableStateOf(false) }
   var infoPanelVisible by remember { mutableStateOf(false) }
 
   val urlToLoad = popAlbum.imageUrl(id)
@@ -38,6 +39,32 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
   val close = { router.navigate("$base/${popAlbum.album.key}") }
   val next = { updateId(id + 1) }
   val prev = { updateId(id - 1) }
+
+  DisposableEffect(true) {
+    var timerHandle = -1
+
+    fun resetTimer() {
+      window.clearTimeout(timerHandle)
+      timerHandle = window.setTimeout({
+        controlsVisible = false
+      }, 2500)
+    }
+
+    fun setControlsVisible() {
+      resetTimer()
+      controlsVisible = true
+    }
+
+    document.onpointermove = { setControlsVisible() }
+    document.onclick = { setControlsVisible() }
+    document.onfocus = { setControlsVisible() }
+    onDispose {
+      window.clearTimeout(timerHandle)
+      document.onpointermove = null
+      document.onclick = null
+      document.onfocus = null
+    }
+  }
 
   DisposableEffect(id) {
     document.onkeydown = { e ->
@@ -69,10 +96,12 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 
   val url = imageUrl
   if (url != null) {
-    val styles = if (infoPanelVisible) {
-      listOf(LightboxStyle.gallery, LightboxStyle.showControls, LightboxStyle.showInfoPanel)
-    } else {
-      listOf(LightboxStyle.gallery, LightboxStyle.showControls)
+    val styles = mutableListOf(LightboxStyle.gallery)
+    if (controlsVisible) {
+      styles += LightboxStyle.showControls
+    }
+    if (infoPanelVisible) {
+      styles += LightboxStyle.showInfoPanel
     }
 
     Section(attrs = { classes(styles) }) {
@@ -118,9 +147,7 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 private fun Back(close: () -> Unit) {
   A(attrs = {
     classes(LightboxStyle.back)
-    onClick { e ->
-      close()
-    }
+    onClick { close() }
   }) { Span { Text("Back") } }
 }
 
@@ -130,15 +157,11 @@ private fun Options(photo: Photo, toggleInfoPanel: () -> Unit) {
     val location = photo.location
     if (location != null) {
       Li {
-        LocationOption {
-          window.location.href = location.googleMapsUrl
-        }
+        LocationOption { window.location.href = location.googleMapsUrl }
       }
     }
     Li {
-      InfoOption {
-        toggleInfoPanel()
-      }
+      InfoOption { toggleInfoPanel() }
     }
   }
 }
@@ -299,9 +322,7 @@ private fun NavButton(text: String, style: String, update: () -> Unit) {
   A(attrs = {
     title(text)
     classes(LightboxStyle.arrow, style)
-    onClick {
-      update()
-    }
+    onClick { update() }
   }
   ) {}
 }

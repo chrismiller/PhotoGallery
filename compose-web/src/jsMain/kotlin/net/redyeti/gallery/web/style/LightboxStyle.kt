@@ -77,7 +77,8 @@ object LightboxStyle : StyleSheet() {
     property("z-index", LightboxVars.zIndexBase + 10)
     cursor("pointer")
 
-    // opacity(0)
+    opacity(0)
+    // property("pointer-events", "none")
     transitions {
       "opacity" {
         duration(0.3.s)
@@ -89,6 +90,7 @@ object LightboxStyle : StyleSheet() {
       }
     }
 
+    // .arrow::before
     self + before style {
       backgroundColor(Color.currentColor)
       property("content", "\"\"")
@@ -100,6 +102,7 @@ object LightboxStyle : StyleSheet() {
       property("vertical-align", "middle")
     }
 
+    // .arrow::hover
     self + hover style {
       color(rgb(200, 200, 200))
     }
@@ -239,6 +242,9 @@ object LightboxStyle : StyleSheet() {
             }
           }
         }
+
+        // TODO: Fix this?
+        // .lightbox .lightboxCaption .textArea .copyrightText, .captionCounter
         group(className(copyrightText), className(captionCounter)) style {
           flex(0)
           color(LightboxVars.imageCaptionSubtextColour.value())
@@ -253,6 +259,8 @@ object LightboxStyle : StyleSheet() {
         paddingRight(10.px)
         whiteSpace("nowrap")
         cursor("pointer")
+
+        // .lightbox .lightboxCaption .captionIcons > div
         child(self, type("div")) style {
           display(DisplayStyle.InlineBlock)
           width(CAPTION_ICON_SIZE.px)
@@ -403,6 +411,7 @@ object LightboxStyle : StyleSheet() {
           property("mask-image", "url(/location.svg)")
         }
 
+        // .infoPanel .infoSection .infoItem div.detailItem::before
         "div" + className(detailItem) + before style {
           backgroundColor(Color.currentColor)
           property("content", "\"\"")
@@ -418,6 +427,7 @@ object LightboxStyle : StyleSheet() {
           color(rgb(16, 16, 16))
         }
 
+        // .infoPanel .infoSection .infoItem div.detailItem
         "div" + className(detailItem) style {
           display(DisplayStyle.Block)
           textAlign("left")
@@ -429,21 +439,14 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
-  val showControls by style {
-  }
-
   val back by style {}
   val options by style {}
   val infoOption by style {}
   val locationOption by style {}
 
   val galleryHeader by style {
-    // Animate when the controls appear/disappear
-    className(lightbox) style {
-      property("transition", "opacity 250ms ease, width 250ms ease")
-    }
-
     // Style the 'Back' link shown at the top left of an image
+    // .galleryHeader .back
     className(back) style {
       color(Color.white)
       property("transition", "color 100ms ease-in")
@@ -462,6 +465,7 @@ object LightboxStyle : StyleSheet() {
         display(DisplayStyle.InlineBlock)
       }
 
+      // .galleryHeader .back::before
       self + before style {
         backgroundColor(Color.currentColor)
         property("content", "\"\"")
@@ -475,6 +479,7 @@ object LightboxStyle : StyleSheet() {
         property("vertical-align", "middle")
       }
 
+      // .galleryHeader .back::hover
       self + hover style {
         color(rgb(200, 200, 200))
       }
@@ -552,16 +557,31 @@ object LightboxStyle : StyleSheet() {
     }
   }
 
+  val showControls by style {}
+
   val gallery by style {
-    // Animate when the infoPanel appears/disappears
-    className(lightbox) style {
+    // Makes the prev/next and top controls visible
+    self + className(showControls) style {
+      // .gallery.showControls .arrow
+      className(arrow) style {
+        opacity(1)
+        // property("pointer-events", "all")
+      }
+      // .gallery.showControls .galleryHeader
+      className(galleryHeader) style {
+        opacity(1)
+        // property("pointer-events", "all")
+      }
+    }
+
+    // Animate when the lightbox appears/disappears
+    className(infoPanel) style {
       property("transition", "right 250ms ease, bottom 250ms ease")
     }
 
     className(galleryHeader) style {
-      // TODO - this should be zero to hide the controls when there's no mouseover
-      opacity(1)
-
+      opacity(0)
+      // property("pointer-events", "none")
       width(100.percent)
       maxWidth(100.percent)
       display(DisplayStyle.Flex)
