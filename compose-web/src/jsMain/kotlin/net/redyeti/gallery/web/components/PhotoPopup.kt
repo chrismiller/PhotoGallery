@@ -109,7 +109,7 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
       val photo = popAlbum.photos[id]
       Header(attrs = { classes(LightboxStyle.galleryHeader) }) {
         Back(close)
-        Options(photo, toggleInfoPanel = { infoPanelVisible = !infoPanelVisible })
+        Options(photo, infoClicked = { infoPanelVisible = !infoPanelVisible })
       }
       Div(attrs = {
         id("fs")
@@ -153,13 +153,15 @@ private fun Back(close: () -> Unit) {
 }
 
 @Composable
-private fun Options(photo: Photo, toggleInfoPanel: () -> Unit) {
+private fun Options(photo: Photo, infoClicked: () -> Unit) {
   Ul(attrs = { classes(LightboxStyle.options) }) {
     val location = photo.location
     if (location != null) {
-      OptionIcon("Location", LightboxStyle.locationOption) { window.location.href = location.googleMapsUrl }
+      OptionIcon("Show location on Google Maps", LightboxStyle.locationOption) {
+        window.location.href = location.googleMapsUrl
+      }
     }
-    OptionIcon("Info", LightboxStyle.infoOption) { toggleInfoPanel() }
+    OptionIcon("Show photo information", LightboxStyle.infoOption) { infoClicked() }
   }
 }
 
@@ -168,10 +170,9 @@ fun OptionIcon(text: String, style: String, action: () -> Unit) {
   Li {
     Button(attrs = {
       classes(style)
+      title(text)
       onClick { action() }
-    }) {
-      Span(attrs = { classes(LightboxStyle.label) }) { Text(text) }
-    }
+    }) {}
   }
 }
 
