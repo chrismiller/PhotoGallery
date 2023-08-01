@@ -156,33 +156,21 @@ private fun Options(photo: Photo, toggleInfoPanel: () -> Unit) {
   Ul(attrs = { classes(LightboxStyle.options) }) {
     val location = photo.location
     if (location != null) {
-      Li {
-        LocationOption { window.location.href = location.googleMapsUrl }
-      }
+      OptionIcon("Location", LightboxStyle.locationOption) { window.location.href = location.googleMapsUrl }
     }
-    Li {
-      InfoOption { toggleInfoPanel() }
-    }
+    OptionIcon("Info", LightboxStyle.infoOption) { toggleInfoPanel() }
   }
 }
 
 @Composable
-private fun InfoOption(click: () -> Unit) {
-  Button(attrs = {
-    classes(LightboxStyle.infoOption)
-    onClick { click() }
-  }) {
-    Span(attrs = { classes(LightboxStyle.label) }) { Text("Info") }
-  }
-}
-
-@Composable
-private fun LocationOption(click: () -> Unit) {
-  Button(attrs = {
-    classes(LightboxStyle.locationOption)
-    onClick { click() }
-  }) {
-    Span(attrs = { classes(LightboxStyle.label) }) { Text("Location") }
+fun OptionIcon(text: String, style: String, action: () -> Unit) {
+  Li {
+    Button(attrs = {
+      classes(style)
+      onClick { action() }
+    }) {
+      Span(attrs = { classes(LightboxStyle.label) }) { Text(text) }
+    }
   }
 }
 
