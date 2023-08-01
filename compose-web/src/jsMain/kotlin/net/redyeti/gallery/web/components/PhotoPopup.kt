@@ -83,6 +83,7 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 
         "i" -> {
           infoPanelVisible = !infoPanelVisible
+          e.stopPropagation()
         }
       }
     }
