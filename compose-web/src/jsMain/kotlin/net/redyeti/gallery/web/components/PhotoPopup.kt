@@ -114,7 +114,9 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
         PopupImage(url, close)
         PhotoCaption(photo, Count(id, popAlbum.photos.size))
       }
-      InfoPanel(photo) { infoPanelVisible = false }
+      if (infoPanelVisible) {
+        InfoPanel(photo) { infoPanelVisible = false }
+      }
     }
   }
 
