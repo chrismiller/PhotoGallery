@@ -22,7 +22,7 @@ object Versions {
     const val log4j2 = "2.20.0"
     const val kermit = "2.0.0-RC4"
 
-    const val kspGradlePlugin = "1.8.20-1.0.10"
+    const val kspGradlePlugin = "1.9.0-1.0.13"
     const val gradleVersionsPlugin = "0.47.0"
 }
 

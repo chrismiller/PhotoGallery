@@ -23,6 +23,7 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(Deps.Web.routingCompose)
                 implementation(Deps.Web.googleMaps)
+                implementation(Deps.Kotlinx.dateTime)
                 implementation(project(":common"))
             }
         }

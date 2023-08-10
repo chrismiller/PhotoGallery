@@ -1,6 +1,6 @@
 # Photo Gallery
 
-![kotlin-version](https://img.shields.io/badge/kotlin-1.8.20-orange)
+![kotlin-version](https://img.shields.io/badge/kotlin-1.9.0-orange)
 
 **Kotlin Multiplatform** project with Compose for Web UI, and Ktor backend.
 * Web (Compose for Web)
