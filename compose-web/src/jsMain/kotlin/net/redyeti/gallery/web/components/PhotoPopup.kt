@@ -101,7 +101,14 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
 
     Section(attrs = { classes(styles) }) {
       val photo = popAlbum.photos[id]
-      Header(attrs = { classes(LightboxStyle.galleryHeader) }) {
+      Header(attrs = {
+        classes(LightboxStyle.galleryHeader)
+        onClick { e ->
+          if (e.target == e.currentTarget) {
+            close()
+          }
+        }
+      }) {
         Back(close)
         Options(photo, infoClicked = { infoPanelVisible = !infoPanelVisible })
       }
