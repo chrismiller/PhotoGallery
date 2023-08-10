@@ -1,9 +1,9 @@
 object Versions {
-    const val kotlinCoroutines = "1.7.2"
+    const val kotlinCoroutines = "1.7.3"
     const val kotlinxSerialization = "1.5.1"
     const val kotlinxDateTime = "0.4.0"
 
-    const val ktor = "2.3.2"
+    const val ktor = "2.3.3"
     const val koinCore = "3.4.1"
     const val koinAndroidCompose = "3.4.1"
 
