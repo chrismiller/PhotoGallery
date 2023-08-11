@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    id("kotlin-platform-jvm")
+    id("org.jetbrains.kotlin.jvm")
     application
     kotlin("plugin.serialization")
 }
