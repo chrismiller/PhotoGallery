@@ -4,8 +4,8 @@ object Versions {
     const val kotlinxDateTime = "0.4.0"
 
     const val ktor = "2.3.3"
-    const val koinCore = "3.4.1"
-    const val koinAndroidCompose = "3.4.1"
+    const val koinCore = "3.4.3"
+    const val koinAndroidCompose = "3.4.6"
 
     const val composeDesktopWeb = "1.4.3"
 
