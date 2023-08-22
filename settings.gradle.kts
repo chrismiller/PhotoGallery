@@ -11,3 +11,5 @@ rootProject.name = "PhotoGallery"
 include(":common")
 include(":compose-web")
 include(":backend")
+
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")

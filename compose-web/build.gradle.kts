@@ -19,12 +19,12 @@ kotlin {
     sourceSets {
         val jsMain by getting {
             dependencies {
+                implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
                 implementation(compose.html.core)
                 implementation(compose.runtime)
                 implementation(Deps.Web.routingCompose)
                 implementation(Deps.Web.googleMaps)
                 implementation(Deps.Kotlinx.dateTime)
-                implementation(project(":common"))
             }
         }
     }
