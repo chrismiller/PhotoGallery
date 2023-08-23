@@ -1,12 +1,16 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    id("org.jetbrains.kotlin.jvm")
+    kotlin("jvm")
     application
     kotlin("plugin.serialization")
 }
 
+private val staticFiles by configurations.creating {
+    isCanBeConsumed = false
+}
+
 dependencies {
+    implementation(projects.common)
+
     with(Deps.Kotlinx) {
         implementation(serializationCore) // JVM dependency
         implementation(coroutinesCore)
@@ -26,33 +30,25 @@ dependencies {
         implementation(json)
     }
 
-    with(Deps.Test) {
-        testImplementation(mockito)
-        testImplementation(junit)
-    }
-
     with(Deps.Log) {
         implementation(log4jslf4j)
         implementation(log4j2api)
         implementation(log4j2)
     }
 
-    implementation(project(":common"))
+    staticFiles(project(path = ":compose-web", configuration = "frontendDistribution"))
+
+    with(Deps.Test) {
+        testImplementation(mockito)
+        testImplementation(junit)
+    }
 }
 
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = "19"
-}
-
-tasks.named<ProcessResources>("processResources") {
-    dependsOn(":compose-web:jsBrowserDevelopmentExecutableDistribution")
-    from(File(rootProject.project("compose-web").buildDir, "developmentExecutable/")) {
+tasks.processResources {
+    from(staticFiles) {
+        include("**/*")
         into("app")
     }
-//    dependsOn(":compose-web:assemble")
-//    from(File(rootProject.project("compose-web").buildDir, "distributions/")) {
-//        into("app")
-//    }
 }
 
 application {

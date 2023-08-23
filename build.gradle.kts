@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.github.johnrengelman.shadow") version Versions.shadow
     id("com.github.ben-manes.versions") version Versions.gradleVersionsPlugin
@@ -29,4 +31,8 @@ allprojects {
         maven(url = "https://jitpack.io")
         maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven")
     }
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions.jvmTarget = "19"
 }
