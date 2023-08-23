@@ -32,6 +32,7 @@ fun execute(
   }
 
   stdoutThread.join()
+  stderrThread.join()
   val returnCode = process.waitFor()
 
   if (returnCode != 0) {
