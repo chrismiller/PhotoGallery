@@ -1,9 +1,9 @@
+import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+
 plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose") version Versions.composeDesktopWeb
 }
-
-version = "1.0"
 
 repositories {
     mavenCentral()
@@ -11,9 +11,10 @@ repositories {
 }
 
 kotlin {
-    js(IR) {
-        browser()
+    js {
         binaries.executable()
+        browser()
+        useCommonJs()
     }
 
     sourceSets {
@@ -29,4 +30,25 @@ kotlin {
         }
     }
     jvmToolchain(19)
+}
+
+// Substitude params into index.html
+tasks.named<ProcessResources>("jsProcessResources") {
+    val webpack = project.tasks.withType(KotlinWebpack::class).first()
+
+    val bundleFile = webpack.mainOutputFileName
+    val publicPath = "./" // TODO get public path from webpack config
+
+    filesMatching("*.html") {
+        expand("bundle" to bundleFile.get(), "publicPath" to publicPath)
+    }
+}
+
+private val frontendDistribution by configurations.creating {
+    isCanBeConsumed = true
+    isCanBeResolved = false
+}
+
+artifacts {
+    add(frontendDistribution.name, tasks.named("jsBrowserDistribution"))
 }
