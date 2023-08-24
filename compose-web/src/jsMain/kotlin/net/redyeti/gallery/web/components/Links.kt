@@ -35,7 +35,7 @@ fun GpsLink(location: GpsCoordinates?) {
 
 @Composable
 fun MapLink(album: Album) {
-  NavOnlyLink(to = "/map/${album.directory}") {
+  NavOnlyLink(to = "/map/${album.key}") {
     Img(src = "/map.svg", attrs = {
       attr("width", "24px")
       attr("height", "24px")

@@ -59,12 +59,14 @@ class AlbumScanner(val config: AppConfig) {
       if (title != null && subtitle != null && directory != null && coverImage != null) {
         // Take note of the restrictions on KML files here: https://developers.google.com/maps/documentation/javascript/kmllayer#restrictions
         val hasGpsTrack = config.gpsTrackDir(directory).exists()
-        val album = Album(title, subtitle, directory, coverImage, hasGpsTrack)
         try {
-          albums += loadAlbum(album)
+          val photos = loadAlbum(directory)
+          val coverPhoto = photos.first { photo -> photo.filename == coverImage }
+          val album = Album(title, subtitle, directory, coverPhoto, hasGpsTrack)
+          albums += PopulatedAlbum(album, photos)
           logger.i("Loaded ${album.title}")
         } catch (e: Exception) {
-          logger.e("Error loading album '${album.directory}', skipping this album. Reason: ${e.message}", e)
+          logger.e("Error loading album '${directory}', skipping this album. Reason: ${e.message}", e)
         }
       }
     }
@@ -73,13 +75,13 @@ class AlbumScanner(val config: AppConfig) {
     return albums
   }
 
-  fun loadAlbum(album: Album): PopulatedAlbum {
+  fun loadAlbum(albumKey: String): List<Photo> {
     // If a metadata file exists we just use that, otherwise scan and resize+thumbnail the whole album
-    return loadAlbumMetadata(album) ?: scanAndProcessAlbum(album)
+    return loadAlbumMetadata(albumKey) ?: scanAndProcessAlbum(albumKey)
   }
 
-  fun scanAndProcessAlbum(album: Album): PopulatedAlbum {
-    val originalsDir = config.originalsDir(album.directory)
+  fun scanAndProcessAlbum(albumKey: String): List<Photo> {
+    val originalsDir = config.originalsDir(albumKey)
 
     // Run exiftool to get all the photo metadata
     val params = listOf(config.exiftool.toString()) + EXIFTOOL_METADATA_SCAN
@@ -153,7 +155,7 @@ class AlbumScanner(val config: AppConfig) {
           val w = max(config.minLargeDimension, fullWidth * config.minLargeDimension / fullHeight)
           val h = max(config.minLargeDimension, fullHeight * config.minLargeDimension / fullWidth)
           val photo = Photo(
-            -1, filename, description, w, h, fullWidth, fullHeight, fileSize,
+            -1, albumKey, filename, description, w, h, fullWidth, fullHeight, fileSize,
             epochSeconds, timeOffset, location, CameraDetails(camera, lens, aperture, shutterSpeed, focalLength, iso)
           )
           photos += photo
@@ -168,13 +170,12 @@ class AlbumScanner(val config: AppConfig) {
     photos.sortBy { it.epochSeconds }
     val photosWithIDs = photos.mapIndexed { id, photo -> photo.copy(id = id) }
 
-    val populatedAlbum = PopulatedAlbum(album, photosWithIDs)
-    resizeAndStripExif(populatedAlbum)
-    savePhotoMetadata(album.directory, populatedAlbum.photos)
-    return populatedAlbum
+    resizeAndStripExif(albumKey, photosWithIDs)
+    savePhotoMetadata(albumKey, photosWithIDs)
+    return photosWithIDs
   }
 
-  private fun metadataFile(albumDir: String) = config.metadataDir.resolve("$albumDir.json")
+  private fun metadataFile(filename: String) = config.metadataDir.resolve("$filename.json")
 
   @OptIn(ExperimentalSerializationApi::class)
   private fun savePhotoMetadata(albumDir: String, photos: List<Photo>) {
@@ -184,19 +185,19 @@ class AlbumScanner(val config: AppConfig) {
   }
 
   @OptIn(ExperimentalSerializationApi::class)
-  private fun loadAlbumMetadata(album: Album): PopulatedAlbum? {
-    val metadataFile = metadataFile(album.directory)
+  private fun loadAlbumMetadata(albumKey: String): List<Photo>? {
+    val metadataFile = metadataFile(albumKey)
     if (metadataFile.notExists()) {
       return null
     }
     metadataFile.inputStream().use {
-      return PopulatedAlbum(album, Json.decodeFromStream<List<Photo>>(it))
+      return Json.decodeFromStream<List<Photo>>(it)
     }
   }
 
-  private fun resizeAndStripExif(album: PopulatedAlbum) {
+  private fun resizeAndStripExif(albumKey: String, photos: List<Photo>) {
     val resizer = Resizer(config.imageMagick)
-    val dirName = album.album.directory
+    val dirName = albumKey
     val originalsDir = config.originalsDir(dirName)
     val largeDir = config.largeDir(dirName)
     val thumbnailDir = config.thumbnailDir(dirName)
@@ -207,7 +208,7 @@ class AlbumScanner(val config: AppConfig) {
     runBlocking {
       val createLarge = launch(Dispatchers.Default) {
         // Create large versions of the images if they don't already exist
-        album.photos.forEach {
+        photos.forEach {
           val source = originalsDir.resolve(it.filename)
           val large = largeDir.resolve(it.filename)
           if (large.notExists()) {
@@ -225,7 +226,7 @@ class AlbumScanner(val config: AppConfig) {
 
       val createThumbnails = launch(Dispatchers.Default) {
         // Now create thumbnails from the large versions
-        album.photos.forEach {
+        photos.forEach {
           val large = largeDir.resolve(it.filename)
           val thumbnail = thumbnailDir.resolve(it.filename)
           if (thumbnail.notExists()) {

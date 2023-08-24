@@ -73,7 +73,7 @@ object AlbumLayout {
 
         if (!itemWasAdded) {
           // The item didn't fit in the previous row so add it to the new one
-          itemWasAdded = current.addItem(ratio)
+          current.addItem(ratio)
           if (current.isLayoutComplete()) {
             // If the rejected item fills the whole row, add it and start a new row
             laidOutItems += addRow(config, data, current)
@@ -176,7 +176,7 @@ class Row(
       widthSum -= spacing + left
       val errorWidthPerItem = (widthSum - width).toDouble() / itemAspectRatios.size
       val roundedCumulativeErrors =
-        itemAspectRatios.mapIndexed { i, item -> ((i + 1).toDouble() * errorWidthPerItem).roundToInt() }
+        List(itemAspectRatios.size) { i -> ((i + 1).toDouble() * errorWidthPerItem).roundToInt() }
       if (boxes.size == 1) {
         boxes.first().width -= errorWidthPerItem.roundToInt()
       } else {
