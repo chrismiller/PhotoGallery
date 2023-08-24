@@ -36,7 +36,7 @@ fun AlbumGrid(album: PopulatedAlbum, albumWidth: Int) {
         }
       }) {
         NavOnlyLink(to = "/album/${album.album.key}/${photo.id}") {
-          PhotoThumbnail(imageUrl = album.album.thumbnailUrl(photo)) {
+          PhotoThumbnail(imageUrl = photo.thumbnailUrl) {
             Div(attrs = { classes(AppStyle.thumbText) }) {
               Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
                 Text(photo.description)

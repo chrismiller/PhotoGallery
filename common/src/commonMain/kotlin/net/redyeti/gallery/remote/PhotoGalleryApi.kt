@@ -16,8 +16,6 @@ data class Album(
   val coverImage: Photo,
   val hasGpsTrack: Boolean
 ) {
-  fun imageUrl(photo: Photo) = "/image/${photo.directory}/large/${photo.filename}"
-  fun thumbnailUrl(photo: Photo) = "/image/${photo.directory}/thumb/${photo.filename}"
   fun kmlUrl() = "/gps/${key}.kmz"
 }
 
@@ -28,6 +26,10 @@ data class Photo(
   val epochSeconds: Long, val timeOffset: String, val location: GpsCoordinates?,
   val cameraDetails: CameraDetails
 ) {
+  val imageUrl get() = "/image/$directory/large/$filename"
+
+  val thumbnailUrl get() = "/image/$directory/thumb/$filename"
+
   fun scaledWidth(minDimension: Int): Int {
     return max(minDimension, width * minDimension / height)
   }
@@ -50,12 +52,12 @@ data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
 
   fun imageUrl(photoID: Int): String {
     val photo = photos[wrappedID(photoID)]
-    return album.imageUrl(photo)
+    return photo.imageUrl
   }
 
   fun thumbnailUrl(photoID: Int): String {
     val photo = photos[wrappedID(photoID)]
-    return album.thumbnailUrl(photo)
+    return photo.thumbnailUrl
   }
 }
 

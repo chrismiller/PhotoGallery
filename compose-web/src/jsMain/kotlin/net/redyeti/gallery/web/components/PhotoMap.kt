@@ -121,7 +121,7 @@ fun MapInfoWindow(album: Album, photo: Photo) {
           height(100.percent)
         }
       },
-      src = album.thumbnailUrl(photo),
+      src = photo.thumbnailUrl,
       alt = photo.description
     )
     Span({

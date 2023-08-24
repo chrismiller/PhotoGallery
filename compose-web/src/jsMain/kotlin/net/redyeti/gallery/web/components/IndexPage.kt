@@ -23,7 +23,7 @@ fun IndexPage(repo: PhotoGalleryInterface) {
       albums.forEach { album ->
         Div(attrs = { classes(AppStyle.albumCover) }) {
           NavOnlyLink(to = "/album/${album.key}") {
-            PhotoThumbnail(imageUrl = album.thumbnailUrl(album.coverImage)) {
+            PhotoThumbnail(imageUrl = album.coverImage.thumbnailUrl) {
               Div(attrs = { classes(AppStyle.thumbText) }) {
                 Div(attrs = { classes(AppStyle.truncatedText, AppStyle.thumbSubTitle) }) {
                   // TODO: show photo count etc?
