@@ -62,7 +62,7 @@ class AlbumScanner(val config: AppConfig) {
         try {
           val photos = loadAlbum(directory)
           val coverPhoto = photos.first { photo -> photo.filename == coverImage }
-          val album = Album(title, subtitle, directory, coverPhoto, hasGpsTrack)
+          val album = Album(directory, title, subtitle, coverPhoto, hasGpsTrack)
           albums += PopulatedAlbum(album, photos)
           logger.i("Loaded ${album.title}")
         } catch (e: Exception) {
