@@ -1,56 +1,58 @@
 plugins {
-    kotlin("jvm")
-    application
-    kotlin("plugin.serialization")
+  kotlin("jvm")
+  application
+  kotlin("plugin.serialization")
 }
 
+kotlin.jvmToolchain(19)
+
 private val staticFiles by configurations.creating {
-    isCanBeConsumed = false
+  isCanBeConsumed = false
 }
 
 dependencies {
-    implementation(projects.common)
+  implementation(projects.common)
 
-    with(Deps.Kotlinx) {
-        implementation(serializationCore) // JVM dependency
-        implementation(coroutinesCore)
-    }
+  with(Deps.Kotlinx) {
+    implementation(serializationCore) // JVM dependency
+    implementation(coroutinesCore)
+  }
 
-    with(Deps.Ktor) {
-        implementation(serverCore)
-        implementation(serverNetty)
-        implementation(serverCors)
-        implementation(serverCompression)
-        implementation(serverValidation)
-        implementation(serverStatusPages)
-        implementation(serverCallLogging)
-        implementation(serverDefaultHeaders)
-        implementation(serverCachingHeaders)
-        implementation(serverContentNegotiation)
-        implementation(json)
-    }
+  with(Deps.Ktor) {
+    implementation(serverCore)
+    implementation(serverNetty)
+    implementation(serverCors)
+    implementation(serverCompression)
+    implementation(serverValidation)
+    implementation(serverStatusPages)
+    implementation(serverCallLogging)
+    implementation(serverDefaultHeaders)
+    implementation(serverCachingHeaders)
+    implementation(serverContentNegotiation)
+    implementation(json)
+  }
 
-    with(Deps.Log) {
-        implementation(log4jslf4j)
-        implementation(log4j2api)
-        implementation(log4j2)
-    }
+  with(Deps.Log) {
+    implementation(log4jslf4j)
+    implementation(log4j2api)
+    implementation(log4j2)
+  }
 
-    staticFiles(project(path = ":compose-web", configuration = "frontendDistribution"))
+  staticFiles(project(path = ":compose-web", configuration = "frontendDistribution"))
 
-    with(Deps.Test) {
-        testImplementation(mockito)
-        testImplementation(junit)
-    }
+  with(Deps.Test) {
+    testImplementation(mockito)
+    testImplementation(junit)
+  }
 }
 
 tasks.processResources {
-    from(staticFiles) {
-        include("**/*")
-        into("app")
-    }
+  from(staticFiles) {
+    include("**/*")
+    into("app")
+  }
 }
 
 application {
-    mainClass.set("net.redyeti.gallery.backend.ServerKt")
+  mainClass.set("net.redyeti.gallery.backend.ServerKt")
 }
