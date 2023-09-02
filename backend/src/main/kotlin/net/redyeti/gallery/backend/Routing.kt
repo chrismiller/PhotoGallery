@@ -7,14 +7,15 @@ import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
-import java.nio.file.Path
 
-fun Application.configureRouting(imageBase: Path, gpsBase: Path) = routing {
+fun Application.configureRouting(appConfig: AppConfig) = routing {
   route("/api") {
     api()
   }
-  staticFiles("/image", imageBase.toFile())
-  staticFiles("/gps", gpsBase.toFile())
+  staticFiles("/image", appConfig.staticImageDir.toFile())
+  staticFiles("/gps", appConfig.staticGpsTrackDir.toFile())
+  appConfig.otherStatic.forEach { (name, path) -> staticFiles(name, path.toFile()) }
+
   singlePageApplication {
     useResources = true
     filesPath = "app"

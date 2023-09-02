@@ -20,7 +20,7 @@ fun main() {
 
 fun Application.photoGalleryAppModule() {
   features()
-  configureRouting(appConfig.staticImageDir, appConfig.staticGpsTrackDir)
+  configureRouting(appConfig)
 }
 
 fun initGallery(config: AppConfig): AppData {
