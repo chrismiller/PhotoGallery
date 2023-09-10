@@ -23,7 +23,9 @@ object Versions {
     const val kermit = "2.0.0-RC4"
 
     const val kspGradlePlugin = "1.9.0-1.0.13"
-    const val gradleVersionsPlugin = "0.47.0"
+
+    // https://github.com/ben-manes/gradle-versions-plugin/releases
+    const val gradleVersionsPlugin = "0.48.0"
 }
 
 
