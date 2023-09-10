@@ -16,7 +16,9 @@ object Versions {
     const val mockito = "5.2.0"
 
     const val shadow = "8.1.1"
-    const val kotlinterGradle = "3.15.0"
+
+    // https://github.com/jeremymailen/kotlinter-gradle/releases
+    const val kotlinterGradle = "3.16.0"
 
     const val slf4j = "2.0.7"
     const val log4j2 = "2.20.0"
