@@ -2,11 +2,10 @@ package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.Composable
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
-import net.redyeti.gallery.remote.CameraDetails
-import net.redyeti.gallery.remote.GpsCoordinates
-import net.redyeti.gallery.remote.Photo
+import net.redyeti.gallery.remote.*
 import net.redyeti.gallery.web.style.LightboxStyle
 import org.jetbrains.compose.web.dom.*
 import kotlin.math.roundToInt
@@ -26,6 +25,7 @@ fun InfoPanel(photo: Photo, close: () -> Unit) {
       DateInfoPanel(photo.epochSeconds, photo.timeOffset)
       CameraInfoPanel(photo.cameraDetails)
       LocationInfoPanel(photo.location)
+      SunInfoPanel(photo.sunDetails, photo.timeOffset)
     }
   }
 }
@@ -67,18 +67,28 @@ private fun Double.toStringOneDp(): String {
   return "${rounded / 10}.${rounded % 10}"
 }
 
+private fun Long.epochToLocalDateTime(timeOffset: String): LocalDateTime {
+  val instant = Instant.fromEpochSeconds(this)
+  val timezone = TimeZone.of(timeOffset)
+  return instant.toLocalDateTime(timezone)
+}
+
+private fun String.toTZ() = if (this == "UTC" || lowercase() == "z") "UTC" else "UTC$this"
+
+private fun Long.epochToString(timeOffset: String): String {
+  val ldt = epochToLocalDateTime(timeOffset)
+  val amPm = if (ldt.hour < 12) "AM" else "PM"
+  val hour = if (ldt.hour < 13) ldt.hour else if (ldt.hour == 24) 0 else ldt.hour - 12
+  return "$hour:${ldt.minute.twoChars()} $amPm ${timeOffset.toTZ()}"
+}
+
 @Composable
 private fun DateInfoPanel(epochSeconds: Long, timeOffset: String) {
   InfoItem(LightboxStyle.dateInfo) {
     H4 { Text("Date taken") }
-    val instant = Instant.fromEpochSeconds(epochSeconds)
-    val timezone = TimeZone.of(timeOffset)
-    val ldt = instant.toLocalDateTime(timezone)
+    val ldt = epochSeconds.epochToLocalDateTime(timeOffset)
     val dateStr = "${ldt.month.name.firstUpper()} ${ldt.dayOfMonth}, ${ldt.year}"
-    val amPm = if (ldt.hour < 12) "AM" else "PM"
-    val hour = if (ldt.hour < 13) ldt.hour else if (ldt.hour == 24) 0 else ldt.hour - 12
-    val tz = if (timeOffset == "UTC" || timeOffset.lowercase() == "z") "UTC" else "UTC${timeOffset}"
-    val timeStr = "${ldt.dayOfWeek.name.firstUpper()}, $hour:${ldt.minute.twoChars()} $amPm $tz"
+    val timeStr = "${ldt.dayOfWeek.name.firstUpper()}, ${epochSeconds.epochToString(timeOffset)}"
     Span(attrs = { classes(LightboxStyle.label) }) { Text(dateStr) }
     Span(attrs = { classes(LightboxStyle.subs) }) {
       Span { Text(timeStr) }
@@ -137,6 +147,36 @@ private fun LocationInfoPanel(location: GpsCoordinates?) {
       }
     } else {
       Span(attrs = { classes(LightboxStyle.label) }) { Text("Altitude: ${location.altitude.toInt()} m") }
+    }
+  }
+}
+
+@Composable
+private fun SunInfoPanel(sunDetails: SunDetails?, timeOffset: String) {
+  if (sunDetails == null) {
+    return
+  }
+  InfoItem(LightboxStyle.sunInfo) {
+    H4 { Text("Sun") }
+
+    when (sunDetails.type) {
+      DayType.Normal -> {
+        val sunriseTime = sunDetails.sunriseEpoch.epochToString(timeOffset)
+        Span(attrs = { classes(LightboxStyle.label) }) { Text("Sunrise: $sunriseTime") }
+        val sunsetTime = sunDetails.sunsetEpoch.epochToString(timeOffset)
+        Span(attrs = { classes(LightboxStyle.label) }) { Text("Sunset: $sunsetTime") }
+
+        Span(attrs = { classes(LightboxStyle.subs) }) {
+          Span { Text("Azimuth: ${sunDetails.azimuth.toStringOneDp()}°") }
+          Span { Text("Zenith: ${sunDetails.zenithAngle.toStringOneDp()}°") }
+        }
+      }
+      DayType.NoSunset -> {
+        Span(attrs = { classes(LightboxStyle.label) }) { Text("24 hour daylight") }
+      }
+      DayType.NoSunrise -> {
+        Span(attrs = { classes(LightboxStyle.label) }) { Text("24 hour darkness") }
+      }
     }
   }
 }

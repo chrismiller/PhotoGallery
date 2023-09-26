@@ -32,6 +32,8 @@ dependencies {
     implementation(json)
   }
 
+  implementation(Deps.solarPositioning)
+
   with(Deps.Log) {
     implementation(log4jslf4j)
     implementation(log4j2api)

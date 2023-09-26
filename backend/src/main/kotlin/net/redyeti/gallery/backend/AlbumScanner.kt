@@ -8,6 +8,9 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
+import net.e175.klaus.solarpositioning.DeltaT
+import net.e175.klaus.solarpositioning.SPA
+import net.e175.klaus.solarpositioning.SunriseTransitSet
 import net.redyeti.gallery.remote.*
 import net.redyeti.util.CsvParser
 import java.time.ZonedDateTime
@@ -120,15 +123,15 @@ class AlbumScanner(val config: AppConfig) {
           val row = parser.parseLine(csvRow.reader(), headers)
           val filename = row["FileName"]!!
           val fileSize = row["FileSize#"].asInt()
-          val timeTaken = row["DateTimeOriginal"]!!
+          val timeTakenStr = row["DateTimeOriginal"]!!
           var timeOffset = row["OffsetTimeOriginal"]
           if (timeOffset.isNullOrEmpty()) {
             timeOffset = prevTimeOffset
             logger.w("No timezone found for $originalsDir\\$filename - using $timeOffset")
           }
           prevTimeOffset = timeOffset
-          val epochSeconds = try {
-            ZonedDateTime.parse("$timeTaken $timeOffset", pattern).toEpochSecond()
+          val timeTaken = try {
+            ZonedDateTime.parse("$timeTakenStr $timeOffset", pattern)
           } catch (e: Exception) {
             throw IllegalArgumentException("Could not parse time for $originalsDir/$filename (${e.message})")
           }
@@ -149,14 +152,30 @@ class AlbumScanner(val config: AppConfig) {
           } else {
             null
           }
+          val sunDetails = if (latitude != 0.0 || longitude != 0.0) {
+            val deltaT = DeltaT.estimate(timeTaken.toLocalDate())
+            val res = SPA.calculateSunriseTransitSet(timeTaken, latitude, longitude, deltaT)
+            val position = SPA.calculateSolarPosition(timeTaken, latitude, longitude, altitude, deltaT, 1010.0, 20.0)
+            @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
+            val type = when (res.type) {
+              SunriseTransitSet.Type.NORMAL -> DayType.Normal
+              SunriseTransitSet.Type.ALL_DAY -> DayType.NoSunset
+              SunriseTransitSet.Type.ALL_NIGHT -> DayType.NoSunrise
+            }
+            SunDetails(type, res.sunrise?.toEpochSecond() ?: 0, res.sunset?.toEpochSecond() ?: 0, res.transit?.toEpochSecond() ?: 0, position.azimuth, position.zenithAngle)
+          } else {
+            null
+          }
 
           // TODO: it's possible this suffers from off-by-one rounding issues compared to the actual sizes.
           //  Not sure if that matters or not, but if so we might have to scan the resized photo metadata instead.
           val w = max(config.minLargeDimension, fullWidth * config.minLargeDimension / fullHeight)
           val h = max(config.minLargeDimension, fullHeight * config.minLargeDimension / fullWidth)
+
+          val cameraDetails = CameraDetails(camera, lens, aperture, shutterSpeed, focalLength, iso)
           val photo = Photo(
             -1, albumKey, filename, description, w, h, fullWidth, fullHeight, fileSize,
-            epochSeconds, timeOffset, location, CameraDetails(camera, lens, aperture, shutterSpeed, focalLength, iso)
+            timeTaken.toEpochSecond(), timeOffset, location, sunDetails, cameraDetails
           )
           photos += photo
         }

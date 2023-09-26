@@ -7,6 +7,8 @@ object Versions {
     const val koinCore = "3.4.3"
     const val koinAndroidCompose = "3.4.6"
 
+    const val solarPositioning = "0.1.10"
+
     const val composeDesktopWeb = "1.4.3"
 
     const val routingCompose = "0.2.12"
@@ -71,6 +73,8 @@ object Deps {
         const val clientJava = "io.ktor:ktor-client-java:${Versions.ktor}"
         const val clientJs = "io.ktor:ktor-client-js:${Versions.ktor}"
     }
+
+    const val solarPositioning = "net.e175.klaus:solarpositioning:${Versions.solarPositioning}"
 
     object Web {
         const val routingCompose = "app.softwork:routing-compose:${Versions.routingCompose}"

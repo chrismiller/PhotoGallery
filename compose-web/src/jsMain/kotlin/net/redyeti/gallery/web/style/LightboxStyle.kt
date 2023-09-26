@@ -304,6 +304,7 @@ object LightboxStyle : StyleSheet() {
   val dateInfo by style {}
   val fileInfo by style {}
   val locationInfo by style {}
+  val sunInfo by style {}
   val label by style {}
   val subs by style {}
 
@@ -409,6 +410,10 @@ object LightboxStyle : StyleSheet() {
         "div" + className(locationInfo) + before style {
           property("-webkit-mask-image", "url(/location.svg)")
           property("mask-image", "url(/location.svg)")
+        }
+        "div" + className(sunInfo) + before style {
+          property("-webkit-mask-image", "url(/sun.svg)")
+          property("mask-image", "url(/sun.svg)")
         }
 
         // .infoPanel .infoSection .infoItem div.detailItem::before

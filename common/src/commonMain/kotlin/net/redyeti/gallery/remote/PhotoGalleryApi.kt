@@ -24,7 +24,7 @@ data class Photo(
   val id: Int, val directory: String, val filename: String, val description: String, val width: Int, val height: Int,
   val originalWidth: Int, val originalHeight: Int, val originalSize: Int,
   val epochSeconds: Long, val timeOffset: String, val location: GpsCoordinates?,
-  val cameraDetails: CameraDetails
+  val sunDetails: SunDetails?, val cameraDetails: CameraDetails
 ) {
   val imageUrl get() = "/image/$directory/large/$filename"
 
@@ -38,6 +38,14 @@ data class Photo(
     return max(minDimension, height * minDimension / width)
   }
 }
+
+@Serializable
+enum class DayType { Normal, NoSunset, NoSunrise }
+
+@Serializable
+data class SunDetails(
+  val type: DayType, val sunriseEpoch: Long, val sunsetEpoch: Long, val transitEpoch: Long, val azimuth: Double, val zenithAngle: Double
+)
 
 @Serializable
 data class CameraDetails(
