@@ -25,6 +25,7 @@ object Versions {
     const val slf4j = "2.0.7"
     const val log4j2 = "2.20.0"
     const val kermit = "2.0.0-RC4"
+    const val jansi = "2.4.0"
 
     const val kspGradlePlugin = "1.9.0-1.0.13"
 
@@ -75,6 +76,7 @@ object Deps {
     }
 
     const val solarPositioning = "net.e175.klaus:solarpositioning:${Versions.solarPositioning}"
+    const val jansi = "org.fusesource.jansi:jansi:${Versions.jansi}"
 
     object Web {
         const val routingCompose = "app.softwork:routing-compose:${Versions.routingCompose}"

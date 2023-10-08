@@ -33,6 +33,7 @@ dependencies {
   }
 
   implementation(Deps.solarPositioning)
+  implementation(Deps.jansi)
 
   with(Deps.Log) {
     implementation(log4jslf4j)
