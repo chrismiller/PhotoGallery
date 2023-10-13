@@ -4,7 +4,7 @@ object Versions {
     const val kotlinxDateTime = "0.4.1"
 
     const val ktor = "2.3.5"
-    const val koinCore = "3.5.1"
+    const val koinCore = "3.5.0"
     const val koinAndroidCompose = "3.5.0"
 
     const val solarPositioning = "0.1.10"
