@@ -24,11 +24,18 @@ class LogFormatter {
   }
 
   internal fun ApplicationRequest.toLogStringWithColors(): String {
-    val ip = call.request.origin.remoteAddress
-    val domain = call.request.local.remoteHost
+    val ip = call.request.headers["cf-connecting-ip"] ?: call.request.origin.remoteAddress
+    val city = call.request.headers["cf-ipcity"] ?: "?"
+    val country = call.request.headers["cf-ipcountry"] ?: "?"
+    val timezone = call.request.headers["cf-timezone"] ?: "?"
     val userAgent = call.request.headers["User-Agent"] ?: ""
     return "${colored(httpMethod.value, Ansi.Color.CYAN)} - ${path()} in ${call.processingTimeMillis(clock)}ms" +
-        " ${colored(ip, Ansi.Color.YELLOW)} ${colored(domain, Ansi.Color.BLUE)} ${colored(userAgent, Ansi.Color.WHITE)}"
+        " ${colored(ip, Ansi.Color.YELLOW)} ${colored("$city $country $timezone", Ansi.Color.BLUE)} ${
+          colored(
+            userAgent,
+            Ansi.Color.WHITE
+          )
+        }"
   }
 
   private fun colored(status: HttpStatusCode): String {
