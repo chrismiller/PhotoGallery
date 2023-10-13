@@ -30,7 +30,7 @@ class LogFormatter {
     val timezone = call.request.headers["cf-timezone"] ?: "?"
     val userAgent = call.request.headers["User-Agent"] ?: ""
     return "${colored(httpMethod.value, Ansi.Color.CYAN)} - ${path()} in ${call.processingTimeMillis(clock)}ms" +
-        " ${colored(ip, Ansi.Color.YELLOW)} ${colored("$city $country $timezone", Ansi.Color.BLUE)} ${
+        " ${colored(ip, Ansi.Color.YELLOW)} ${colored("$city, $country ($timezone TZ)", Ansi.Color.BLUE)} ${
           colored(
             userAgent,
             Ansi.Color.WHITE
