@@ -2,11 +2,12 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
   kotlin("multiplatform")
-  id("org.jetbrains.compose") version Versions.composeDesktopWeb
+  id("org.jetbrains.compose") version Versions.composeVersion
 }
 
 repositories {
   mavenCentral()
+  maven("https://maven.google.com")
   maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
 }
 
@@ -18,6 +19,12 @@ kotlin {
   }
 
   sourceSets {
+    all {
+      languageSettings {
+        languageVersion = "2.0"
+      }
+    }
+
     val jsMain by getting {
       dependencies {
         implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview

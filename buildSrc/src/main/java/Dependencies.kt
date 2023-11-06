@@ -9,7 +9,9 @@ object Versions {
 
     const val solarPositioning = "0.1.10"
 
-    const val composeDesktopWeb = "1.4.3"
+    // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+    const val composeCompilerVersion = "1.5.4-dev-k1.9.20-50f08dfa4b4"
+    const val composeVersion = "1.5.10"
 
     const val routingCompose = "0.2.12"
     const val googleMaps = "0.3.3-alpha"
@@ -27,8 +29,8 @@ object Versions {
     const val kermit = "2.0.0-RC4"
     const val jansi = "2.4.0"
 
-    const val kspGradlePlugin = "1.9.0-1.0.13"
-
+    // https://github.com/google/ksp/releases
+    const val kspGradlePlugin = "1.9.20-1.0.14"
     // https://github.com/ben-manes/gradle-versions-plugin/releases
     const val gradleVersionsPlugin = "0.48.0"
 }
