@@ -1,38 +1,38 @@
 object Versions {
-    const val kotlinCoroutines = "1.7.3"
-    const val kotlinxSerialization = "1.6.0"
-    const val kotlinxDateTime = "0.4.1"
+    const val kotlinCoroutines = "1.8.0-RC2"
+    const val kotlinxSerialization = "1.6.2"
+    const val kotlinxDateTime = "0.5.0"
 
-    const val ktor = "2.3.5"
-    const val koinCore = "3.5.0"
-    const val koinAndroidCompose = "3.5.0"
+    const val ktor = "2.3.8"
+    const val koinCore = "3.5.3"
+    const val koinAndroidCompose = "3.5.3"
 
-    const val solarPositioning = "0.1.10"
+    const val solarPositioning = "2.0.2"
 
     // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    const val composeCompilerVersion = "1.5.4-dev-k1.9.20-50f08dfa4b4"
-    const val composeVersion = "1.5.10"
+    // const val composeCompilerVersion = "1.5.4-dev-k1.9.20-50f08dfa4b4"
+    const val composeVersion = "1.6.0-beta02"
 
-    const val routingCompose = "0.2.12"
+    const val routingCompose = "0.2.13"
     const val googleMaps = "0.3.3-alpha"
 
-    const val junit = "4.13.2"
+    const val junit = "5.10.2"
     const val mockito = "5.2.0"
 
     const val shadow = "8.1.1"
 
     // https://github.com/jeremymailen/kotlinter-gradle/releases
-    const val kotlinterGradle = "3.16.0"
+    const val kotlinterGradle = "4.2.0"
 
-    const val slf4j = "2.0.7"
-    const val log4j2 = "2.20.0"
-    const val kermit = "2.0.0-RC4"
-    const val jansi = "2.4.0"
+    const val slf4j = "2.0.12"
+    const val log4j2 = "2.22.1"
+    const val kermit = "2.0.3"
+    const val jansi = "2.4.1"
 
     // https://github.com/google/ksp/releases
-    const val kspGradlePlugin = "1.9.20-1.0.14"
+    const val kspGradlePlugin = "1.9.22-1.0.17"
     // https://github.com/ben-manes/gradle-versions-plugin/releases
-    const val gradleVersionsPlugin = "0.48.0"
+    const val gradleVersionsPlugin = "0.51.0"
 }
 
 
@@ -45,7 +45,7 @@ object Deps {
     }
 
     object Test {
-        const val junit = "junit:junit:${Versions.junit}"
+        const val junit = "org.junit.jupiter:junit-jupiter-api:${Versions.junit}"
         const val mockito = "org.mockito:mockito-inline:${Versions.mockito}"
     }
 

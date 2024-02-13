@@ -10,7 +10,7 @@ import kotlinx.serialization.json.decodeFromStream
 import kotlinx.serialization.json.encodeToStream
 import net.e175.klaus.solarpositioning.DeltaT
 import net.e175.klaus.solarpositioning.SPA
-import net.e175.klaus.solarpositioning.SunriseTransitSet
+import net.e175.klaus.solarpositioning.SunriseResult
 import net.redyeti.gallery.remote.*
 import net.redyeti.util.CsvParser
 import java.time.ZonedDateTime
@@ -156,13 +156,26 @@ class AlbumScanner(val config: AppConfig) {
             val deltaT = DeltaT.estimate(timeTaken.toLocalDate())
             val res = SPA.calculateSunriseTransitSet(timeTaken, latitude, longitude, deltaT)
             val position = SPA.calculateSolarPosition(timeTaken, latitude, longitude, altitude, deltaT, 1010.0, 20.0)
-            @Suppress("WHEN_ENUM_CAN_BE_NULL_IN_JAVA")
-            val type = when (res.type) {
-              SunriseTransitSet.Type.NORMAL -> DayType.Normal
-              SunriseTransitSet.Type.ALL_DAY -> DayType.NoSunset
-              SunriseTransitSet.Type.ALL_NIGHT -> DayType.NoSunrise
+            when (res) {
+              is SunriseResult.AllDay -> {
+                SunDetails(DayType.NoSunset, 0, 0, 0, position.azimuth, position.zenithAngle)
+              }
+
+              is SunriseResult.AllNight -> {
+                SunDetails(DayType.NoSunrise, 0, 0, 0, position.azimuth, position.zenithAngle)
+              }
+
+              is SunriseResult.RegularDay -> {
+                SunDetails(
+                  DayType.Normal,
+                  res.sunrise.toEpochSecond(),
+                  res.sunset.toEpochSecond(),
+                  res.transit.toEpochSecond(),
+                  position.azimuth,
+                  position.zenithAngle
+                )
+              }
             }
-            SunDetails(type, res.sunrise?.toEpochSecond() ?: 0, res.sunset?.toEpochSecond() ?: 0, res.transit?.toEpochSecond() ?: 0, position.azimuth, position.zenithAngle)
           } else {
             null
           }
