@@ -26,7 +26,8 @@ class ConfigLoader {
     val otherStatic = mutableMapOf<String, Path>()
     props.forEach { k, v ->
       if (k.toString().startsWith("STATIC_DIR.")) {
-        otherStatic[k.toString().substring("STATIC_DIR.".length)] = Path.of(v.toString())
+        val route = k.toString().substring("STATIC_DIR.".length)
+        otherStatic["/$route"] = Path.of(v.toString())
       }
     }
 
