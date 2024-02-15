@@ -11,9 +11,12 @@ object Versions {
 
     // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
     // const val composeCompilerVersion = "1.5.4-dev-k1.9.20-50f08dfa4b4"
-    const val composeVersion = "1.6.0-beta02"
+    // Note that the compose version must match the one expected by the routingCompose version,
+    // otherwise we risk getting a javascript error and blank screen!
+    // See the routing compose release notes for dependency details: https://github.com/hfhbd/routing-compose/releases
+    const val composeVersion = "1.6.0-beta01"
 
-    const val routingCompose = "0.2.13"
+    const val routingCompose = "0.2.14-1.6.0-beta01"
     const val googleMaps = "0.3.3-alpha"
 
     const val junit = "5.10.2"
