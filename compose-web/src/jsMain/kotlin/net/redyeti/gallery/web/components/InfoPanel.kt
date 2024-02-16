@@ -14,7 +14,7 @@ import kotlin.math.roundToInt
 fun InfoPanel(photo: Photo, close: () -> Unit) {
   Aside(attrs = { classes(LightboxStyle.infoPanel) }) {
     H2(attrs = { classes(LightboxStyle.infoPanelHeader) }) {
-      Text("Info")
+      Text("Photo Details")
       Button(attrs = {
         classes(LightboxStyle.closeInfoPanel)
         onClick { close() }
