@@ -22,10 +22,10 @@ fun SideMenu(albumKey: String, selectedItem: SideMenuItem) {
       Img(
         attrs = {
           classes(
-            if (selectedItem == SideMenuItem.map)
-              AppStyle.sideImg
-            else
+            if (selectedItem == SideMenuItem.album)
               AppStyle.sideImageSelected
+            else
+              AppStyle.sideImg
           )
         },
         src = "/gallery.svg", alt = "Photo Album View"
@@ -36,10 +36,10 @@ fun SideMenu(albumKey: String, selectedItem: SideMenuItem) {
       Img(
         attrs = {
           classes(
-            if (selectedItem == SideMenuItem.album)
-              AppStyle.sideImg
-            else
+            if (selectedItem == SideMenuItem.map)
               AppStyle.sideImageSelected
+            else
+              AppStyle.sideImg
           )
         },
         src = "/map.svg", alt = "Map View"
