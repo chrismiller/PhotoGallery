@@ -2,13 +2,17 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
   kotlin("multiplatform")
-  id("org.jetbrains.compose") version Versions.composeVersion
+  id("org.jetbrains.compose")
 }
 
 repositories {
   mavenCentral()
   maven("https://maven.google.com")
-  maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+}
+
+compose {
+  // https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html
+  kotlinCompilerPlugin.set(Versions.composeCompilerVersion)
 }
 
 kotlin {
@@ -36,7 +40,6 @@ kotlin {
       }
     }
   }
-  jvmToolchain(19)
 }
 
 // Substitute params into index.html

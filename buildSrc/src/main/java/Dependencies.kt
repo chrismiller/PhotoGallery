@@ -10,13 +10,14 @@ object Versions {
     const val solarPositioning = "2.0.2"
 
     // https://developer.android.com/jetpack/androidx/releases/compose-kotlin
-    // const val composeCompilerVersion = "1.5.4-dev-k1.9.20-50f08dfa4b4"
+    const val composeCompilerVersion = "1.5.4-dev1-kt2.0.0-Beta1"
+
     // Note that the compose version must match the one expected by the routingCompose version,
     // otherwise we risk getting a javascript error and blank screen!
     // See the routing compose release notes for dependency details: https://github.com/hfhbd/routing-compose/releases
     const val composeVersion = "1.6.0-beta01"
-
     const val routingCompose = "0.2.14-1.6.0-beta01"
+
     const val googleMaps = "0.3.3-alpha"
 
     const val junit = "5.10.2"
@@ -33,9 +34,11 @@ object Versions {
     const val jansi = "2.4.1"
 
     // https://github.com/google/ksp/releases
-    const val kspGradlePlugin = "1.9.22-1.0.17"
+    const val kspGradlePlugin = "2.0.0-Beta1-1.0.15"
     // https://github.com/ben-manes/gradle-versions-plugin/releases
     const val gradleVersionsPlugin = "0.51.0"
+
+    const val kotlinWrappers = "1.0.0-pre.697"
 }
 
 

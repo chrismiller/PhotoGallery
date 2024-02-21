@@ -4,7 +4,7 @@ plugins {
   kotlin("plugin.serialization")
 }
 
-kotlin.jvmToolchain(19)
+kotlin.jvmToolchain(21)
 
 private val staticFiles by configurations.creating {
   isCanBeConsumed = false

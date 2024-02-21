@@ -4,6 +4,8 @@ plugins {
   id("com.github.johnrengelman.shadow") version Versions.shadow
   id("com.github.ben-manes.versions") version Versions.gradleVersionsPlugin
   id("org.jmailen.kotlinter") version Versions.kotlinterGradle
+  // https://docs.gradle.org/current/userguide/plugins.html#sec:subprojects_plugins_dsl
+  id("org.jetbrains.compose") version Versions.composeVersion apply false
 }
 
 buildscript {
@@ -30,9 +32,10 @@ allprojects {
     maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
     maven(url = "https://jitpack.io")
     maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven")
+    maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
   }
 }
 
 tasks.withType<KotlinCompile> {
-  kotlinOptions.jvmTarget = "19"
+  kotlinOptions.jvmTarget = "21"
 }

@@ -2,16 +2,17 @@
 
 ![kotlin-version](https://img.shields.io/badge/kotlin-1.9.0-orange)
 
-**Kotlin Multiplatform** project with Compose for Web UI, and Ktor backend.
-* Web (Compose for Web)
+**Kotlin Multiplatform** project with Compose HTML for the web UI, and Ktor backend.
+
+* Web (Compose HTML)
 * JVM (small Ktor back end service + `Main.kt` in `common` module)
 
 ### Building
 To run backend you can either run `./gradlew :backend:run` or run `Server.kt` directly. After doing that you should then for example be able to open http://localhost:8080/albums in a browser.
 
-### Compose for Web client
+### Compose HTML client
 
-The Compose for Web client resides in the `compose-web` module and can be run by
+The Compose HTML client resides in the `compose-web` module and can be run by
 invoking `./gradlew :compose-web:jsBrowserDevelopmentRun`
 
 ### Backend code
