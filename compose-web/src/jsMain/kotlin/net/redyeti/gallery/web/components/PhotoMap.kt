@@ -90,7 +90,7 @@ fun PhotoMap(album: PopulatedAlbum) {
         },
         infoContent = {
           NavOnlyLink(to = "/map/${album.album.key}/${photo.id}", router = router) {
-            MapInfoWindow(album.album, photo)
+            MapInfoWindow(photo)
           }
         })
     }
@@ -98,7 +98,7 @@ fun PhotoMap(album: PopulatedAlbum) {
 }
 
 @Composable
-fun MapInfoWindow(album: Album, photo: Photo) {
+fun MapInfoWindow(photo: Photo) {
   Div(
     attrs = {
       style {

@@ -40,6 +40,12 @@ fun main() {
         }
         MapPage(repo)
       }
+      route("maplibre") {
+        string { albumID ->
+          SideMenu(albumID, SideMenuItem.maplibre)
+        }
+        MapLibrePage(repo)
+      }
       noMatch {
         IndexPage(repo)
       }

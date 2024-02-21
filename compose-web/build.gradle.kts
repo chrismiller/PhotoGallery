@@ -28,6 +28,7 @@ kotlin {
     val jsMain by getting {
       dependencies {
         implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
+        implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
         implementation(compose.html.core)
         implementation(compose.runtime)
         implementation(libs.routing.compose)

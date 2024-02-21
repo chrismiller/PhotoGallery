@@ -10,6 +10,7 @@ rootProject.name = "PhotoGallery"
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
+include("mapLibre")
 include("common")
 include("compose-web")
 include("backend")
