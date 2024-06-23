@@ -14,7 +14,8 @@ data class Album(
   val title: String,
   val subtitle: String,
   val coverImage: Photo,
-  val hasGpsTrack: Boolean
+  val hasGpsTrack: Boolean,
+  val hidden: Boolean,
 ) {
   fun kmlUrl() = "/gps/${key}.kmz"
 }

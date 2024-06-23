@@ -21,6 +21,9 @@ fun IndexPage(repo: PhotoGalleryInterface) {
   Page("Travel Photos", header = { AppHeader("Travel Photos", "Chris Miller") }) {
     Div(attrs = { classes(AppStyle.coverWrapper) }) {
       albums.forEach { album ->
+        if (album.hidden) {
+          return@forEach
+        }
         Div(attrs = { classes(AppStyle.albumCover) }) {
           NavOnlyLink(to = "/album/${album.key}") {
             PhotoThumbnail(imageUrl = album.coverImage.thumbnailUrl) {
