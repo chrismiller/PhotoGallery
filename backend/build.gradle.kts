@@ -1,10 +1,9 @@
 plugins {
-  kotlin("jvm")
+  alias(libs.plugins.kotlin.jvm)
+  alias(libs.plugins.kotlinx.serialization)
   application
-  kotlin("plugin.serialization")
+  alias(libs.plugins.johnrengelman.shadow)
 }
-
-kotlin.jvmToolchain(21)
 
 private val staticFiles by configurations.creating {
   isCanBeConsumed = false
@@ -13,40 +12,38 @@ private val staticFiles by configurations.creating {
 dependencies {
   implementation(projects.common)
 
-  with(Deps.Kotlinx) {
-    implementation(serializationCore) // JVM dependency
-    implementation(coroutinesCore)
-  }
+  implementation(libs.kotlinx.serialisation.core) // JVM dependency
+  implementation(libs.kotlinx.coroutines.core)
 
-  with(Deps.Ktor) {
-    implementation(serverCore)
-    implementation(serverNetty)
-    implementation(serverCors)
-    implementation(serverCompression)
-    implementation(serverValidation)
-    implementation(serverStatusPages)
-    implementation(serverCallLogging)
-    implementation(serverDefaultHeaders)
-    implementation(serverCachingHeaders)
-    implementation(serverContentNegotiation)
-    implementation(json)
-  }
+  implementation(libs.ktor.server.core)
+  implementation(libs.ktor.server.netty)
+  implementation(libs.ktor.server.cors)
+  implementation(libs.ktor.server.compression)
+  implementation(libs.ktor.server.request.validation)
+  implementation(libs.ktor.server.status.pages)
+  implementation(libs.ktor.server.call.logging)
+  implementation(libs.ktor.server.default.headers)
+  implementation(libs.ktor.server.caching.headers)
+  implementation(libs.ktor.server.content.negotiation)
+  implementation(libs.ktor.server.request.validation)
+  implementation(libs.ktor.server.status.pages)
+  implementation(libs.ktor.server.call.logging)
+  implementation(libs.ktor.server.default.headers)
+  implementation(libs.ktor.server.caching.headers)
+  implementation(libs.ktor.server.content.negotiation)
+  implementation(libs.ktor.serialization.kotlinx.json)
 
-  implementation(Deps.solarPositioning)
-  implementation(Deps.jansi)
+  implementation(libs.solar.positioning)
+  implementation(libs.jansi)
 
-  with(Deps.Log) {
-    implementation(log4jslf4j)
-    implementation(log4j2api)
-    implementation(log4j2)
-  }
+  implementation(libs.log4j.slf4j2.impl)
+  implementation(libs.log4j.api)
+  implementation(libs.log4j.core)
 
   staticFiles(project(path = ":compose-web", configuration = "frontendDistribution"))
 
-  with(Deps.Test) {
-    testImplementation(mockito)
-    testImplementation(junit)
-  }
+  testImplementation(libs.mockito)
+  testImplementation(libs.junit)
 }
 
 tasks.processResources {

@@ -1,7 +1,6 @@
 plugins {
-  kotlin("multiplatform")
-  kotlin("plugin.serialization")
-  id("com.google.devtools.ksp")
+  alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.kotlinx.serialization)
 }
 
 kotlin {
@@ -20,33 +19,24 @@ kotlin {
 
     commonMain {
       dependencies {
-        with(Deps.Ktor) {
-          implementation(clientCore)
-          implementation(clientJson)
-          implementation(clientLogging)
-          implementation(contentNegotiation)
-          implementation(json)
-        }
+        implementation(libs.ktor.client.core)
+        implementation(libs.ktor.client.logging)
+        implementation(libs.ktor.client.json)
+        implementation(libs.ktor.client.content.negotiation)
+        implementation(libs.ktor.serialization.kotlinx.json)
+        implementation(libs.kotlinx.coroutines.core)
+        implementation(libs.kotlinx.serialisation.core)
 
-        with(Deps.Kotlinx) {
-          implementation(coroutinesCore)
-          implementation(serializationCore)
-        }
+        api(libs.koin.core)
+        // api(libs.koin.test)
 
-        with(Deps.Koin) {
-          api(core)
-          api(test)
-        }
-
-        with(Deps.Log) {
-          api(kermit)
-        }
+        api(libs.kermit)
       }
     }
     commonTest {
       dependencies {
-        implementation(Deps.Koin.test)
-        implementation(Deps.Kotlinx.coroutinesTest)
+        implementation(libs.koin.test)
+        implementation(libs.kotlinx.coroutines.test)
         implementation(kotlin("test-common"))
         implementation(kotlin("test-annotations-common"))
       }
@@ -54,14 +44,14 @@ kotlin {
 
     val jvmMain by getting {
       dependencies {
-        implementation(Deps.Ktor.clientJava)
-        implementation(Deps.Log.slf4j)
+        implementation(libs.ktor.client.java)
+        implementation(libs.slf4j.api)
       }
     }
 
     val jsMain by getting {
       dependencies {
-        implementation(Deps.Ktor.clientJs)
+        implementation(libs.ktor.client.js)
       }
     }
   }

@@ -1,18 +1,14 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
-  kotlin("multiplatform")
-  id("org.jetbrains.compose")
+  alias(libs.plugins.kotlin.multiplatform)
+  alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.compose)
 }
 
 repositories {
   mavenCentral()
   maven("https://maven.google.com")
-}
-
-compose {
-  // https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-compatibility-and-versioning.html
-  kotlinCompilerPlugin.set(Versions.composeCompilerVersion)
 }
 
 kotlin {
@@ -34,9 +30,9 @@ kotlin {
         implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
         implementation(compose.html.core)
         implementation(compose.runtime)
-        implementation(Deps.Web.routingCompose)
-        implementation(Deps.Web.googleMaps)
-        implementation(Deps.Kotlinx.dateTime)
+        implementation(libs.routing.compose)
+        implementation(libs.google.maps)
+        implementation(libs.kotlinx.datetime)
       }
     }
   }

@@ -3,14 +3,13 @@ pluginManagement {
     gradlePluginPortal()
     mavenCentral()
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
-    maven("https://androidx.dev/storage/compose-compiler/repository/")
   }
 }
 
 rootProject.name = "PhotoGallery"
 
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 include("common")
 include("compose-web")
 include("backend")
-
-enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
