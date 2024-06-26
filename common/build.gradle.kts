@@ -26,19 +26,15 @@ kotlin {
         implementation(libs.ktor.serialization.kotlinx.json)
         implementation(libs.kotlinx.coroutines.core)
         implementation(libs.kotlinx.serialisation.core)
-
         api(libs.koin.core)
-        // api(libs.koin.test)
-
         api(libs.kermit)
       }
     }
     commonTest {
       dependencies {
+        implementation(kotlin("test"))
         implementation(libs.koin.test)
         implementation(libs.kotlinx.coroutines.test)
-        implementation(kotlin("test-common"))
-        implementation(kotlin("test-annotations-common"))
       }
     }
 

@@ -81,10 +81,14 @@ class CsvParser(val delimiter: Char = ',', val quoteChar: Char = '"', val escape
         }
         '\n' -> {
           // If we're within a quoted field, treat this as a multiline string
-          if (state != State.QuotedField) {
-            endField()
-            state = State.Start
+          if (state == State.QuotedField) {
+            field.append(ch)
+            lineNumber++
+            columnNumber = 0
             continue
+          } else {
+            endField()
+            break
           }
         }
         else -> {

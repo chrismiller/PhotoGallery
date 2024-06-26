@@ -13,15 +13,19 @@ class TestCsvParser {
   @Test
   fun testNewlines() {
     val parser = CsvParser()
-    assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\n".reader()))
     assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\r\n".reader()))
     assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\n\r".reader()))
+    assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\n".reader()))
 
     var reader = "abc,123,def\nxyz".reader()
     assertEquals(listOf("abc", "123", "def"), parser.parseLine(reader))
     assertEquals(listOf("xyz"), parser.parseLine(reader))
 
-    reader = "abc,123,def\nxyz\n".reader()
+    reader = "abc,123,def\r\nxyz\n".reader()
+    assertEquals(listOf("abc", "123", "def"), parser.parseLine(reader))
+    assertEquals(listOf("xyz"), parser.parseLine(reader))
+
+    reader = "abc,123,def\n\rxyz\r\n".reader()
     assertEquals(listOf("abc", "123", "def"), parser.parseLine(reader))
     assertEquals(listOf("xyz"), parser.parseLine(reader))
   }

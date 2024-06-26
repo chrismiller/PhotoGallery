@@ -42,6 +42,7 @@ dependencies {
 
   staticFiles(project(path = ":compose-web", configuration = "frontendDistribution"))
 
+  testImplementation(kotlin("test"))
   testImplementation(libs.mockito)
   testImplementation(libs.junit)
 }
