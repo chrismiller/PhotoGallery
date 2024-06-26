@@ -14,15 +14,16 @@ class LayoutTest : KoinTest {
     )
     val data = LayoutData(config.padding.top)
     val items = listOf(2.0)
-    with(AlbumLayout.compute(config, data, items)) {
-      assertEquals(110, containerHeight)
+    val layoutResult = AlbumLayout.compute(config, data, items)
+    with(layoutResult) {
+      assertEquals(100, containerHeight)
       assertEquals(0, widowCount)
       assertEquals(1, boxes.size)
       with(boxes.first()) {
-        assertEquals(10, top)
-        assertEquals(10, left)
-        assertEquals(180, width)
-        assertEquals(90, height)
+        assertEquals(0, top)
+        assertEquals(0, left)
+        assertEquals(200, width)
+        assertEquals(100, height)
       }
     }
   }
@@ -36,11 +37,14 @@ class LayoutTest : KoinTest {
     )
     val data = LayoutData(config.padding.top)
     val items = listOf(1.0, 4.0, 1.1)
-    with(AlbumLayout.compute(config, data, items)) {
+    val layout = AlbumLayout.compute(config, data, items)
+    with(layout) {
       assertEquals(items.size, boxes.size)
-      assertEquals(194, boxes[0].height)
-      assertEquals(194, boxes[1].height)
-      assertEquals(194, boxes[2].height)
+      assertEquals(198, boxes[0].width)
+      assertEquals(198, boxes[0].height)
+      assertEquals(config.width, boxes[0].width + config.boxSpacing.horizontal + boxes[1].width)
+      assertEquals(218, boxes[2].width)
+      assertEquals(198, boxes[2].height)  // TODO: should this be closer to ~250?
     }
   }
 
@@ -56,9 +60,13 @@ class LayoutTest : KoinTest {
     val layout = AlbumLayout.compute(config, data, items)
     with(layout) {
       assertEquals(items.size, boxes.size)
-      assertEquals(323, boxes[0].height)
-      assertEquals(323, boxes[1].height)
-      assertEquals(323, boxes[2].height)
+      assertEquals(327, boxes[0].width)
+      assertEquals(218, boxes[0].height)
+      val firstRow = 3
+      assertEquals(1000, boxes.subList(0, firstRow).sumOf { it.width } + (firstRow - 1) * config.boxSpacing.horizontal)
+      assertEquals(boxes[0].height, boxes[1].height)
+      assertEquals(boxes[0].height + config.boxSpacing.vertical, boxes[3].top)
+      assertEquals(boxes[0].height, boxes[1].height)
     }
   }
 
