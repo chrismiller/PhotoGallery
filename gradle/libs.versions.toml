@@ -11,7 +11,7 @@ kotlinxSerialization = "1.7.2"
 # Note that the compose version must match the one expected by the routingCompose version, otherwise we risk
 # getting a javascript error and blank screen.
 # See the routing compose release notes for dependency details: https://github.com/hfhbd/routing-compose/releases
-compose = "1.6.11"
+compose = "1.7.0-alpha03"
 routingCompose = "0.3.0"
 
 googleMaps = "0.3.3-alpha"
