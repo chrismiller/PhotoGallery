@@ -1,32 +1,47 @@
 [versions]
-kotlin = "2.0.0"
-kotlinxCoroutines = "1.8.0"
-kotlinxDatetime = "0.6.0"
-kotlinxSerialization = "1.6.2"
+# https://kotlinlang.org/docs/releases.html#release-details
+kotlin = "2.0.20"
+# https://github.com/Kotlin/kotlinx.coroutines/releases
+kotlinxCoroutines = "1.8.1"
+# https://github.com/Kotlin/kotlinx-datetime/releases
+kotlinxDatetime = "0.6.1"
+# https://github.com/Kotlin/kotlinx.serialization/releases
+kotlinxSerialization = "1.7.2"
 
 # Note that the compose version must match the one expected by the routingCompose version, otherwise we risk
 # getting a javascript error and blank screen.
 # See the routing compose release notes for dependency details: https://github.com/hfhbd/routing-compose/releases
 compose = "1.6.11"
-routingCompose = "0.2.14"
+routingCompose = "0.3.0"
 
 googleMaps = "0.3.3-alpha"
 
-ksp = "2.0.0-1.0.22"
-ktor = "2.3.11"
+# https://github.com/google/ksp/releases
+ksp = "2.0.20-1.0.24"
+# https://github.com/ktorio/ktor/releases
+ktor = "2.3.12"
+# https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
 shadow = "8.1.1"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
-kotlinterGradle = "4.4.0"
+kotlinterGradle = "4.4.1"
 
-koin = "3.5.3"
-slf4j = "2.0.12"
-log4j2 = "2.22.1"
-kermit = "2.0.3"
+# https://github.com/InsertKoinIO/koin/releases
+koin = "3.5.6"
+# https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+slf4j = "2.0.16"
+# https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
+log4j2 = "2.23.1"
+# https://github.com/touchlab/Kermit/releases
+kermit = "2.0.4"
+# https://github.com/fusesource/jansi/releases
 jansi = "2.4.1"
-solarPositioning = "2.0.2"
-junit = "5.10.2"
-mockito = "5.2.0"
+# https://github.com/klausbrunner/solarpositioning/tags
+solarPositioning = "2.0.3"
+# https://junit.org/junit5/docs/current/release-notes/index.html#release-notes
+junit = "5.11.0"
+# https://github.com/mockito/mockito/releases
+mockito = "5.13.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
