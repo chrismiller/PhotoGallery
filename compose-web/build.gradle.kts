@@ -1,9 +1,9 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
 
 plugins {
-  alias(libs.plugins.kotlin.multiplatform)
-  alias(libs.plugins.compose.compiler)
   alias(libs.plugins.compose)
+  alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.kotlin.multiplatform)
 }
 
 repositories {
@@ -12,7 +12,7 @@ repositories {
 }
 
 kotlin {
-  js {
+  js(IR) {
     binaries.executable()
     browser()
     useCommonJs()
@@ -29,8 +29,8 @@ kotlin {
       dependencies {
         implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
         implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
-        implementation(compose.html.core)
         implementation(compose.runtime)
+        implementation(compose.html.core)
         implementation(libs.routing.compose)
         implementation(libs.google.maps)
         implementation(libs.kotlinx.datetime)

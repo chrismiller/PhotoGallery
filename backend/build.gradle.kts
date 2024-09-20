@@ -1,4 +1,7 @@
 plugins {
+  alias(libs.plugins.compose)
+  alias(libs.plugins.compose.compiler)
+
   alias(libs.plugins.kotlin.jvm)
   alias(libs.plugins.kotlinx.serialization)
   application

@@ -1,6 +1,7 @@
 plugins {
-  kotlin("multiplatform")
-  id("org.jetbrains.compose")
+  alias(libs.plugins.compose)
+  alias(libs.plugins.compose.compiler)
+  alias(libs.plugins.kotlin.multiplatform)
   // id("io.github.turansky.seskar") version Versions.seskar
   id("maven-publish")
 }
@@ -27,14 +28,14 @@ kotlin {
   sourceSets {
     val jsMain by getting {
       dependencies {
-        implementation(project.dependencies.enforcedPlatform(kotlinw("wrappers-bom:${Versions.kotlinWrappers}")))
+        implementation(project.dependencies.enforcedPlatform(kotlinw("wrappers-bom:1.0.0-pre.810")))
         implementation(kotlinw("js"))
         implementation(kotlin("stdlib-js"))
 
         implementation(compose.html.core)
         implementation(compose.runtime)
-        implementation(npm("pmtiles", Deps.Npm.pmTiles))
-        implementation(npm("maplibre-gl", Deps.Npm.mapLibreGl))
+        implementation(npm("pmtiles", "3.1.0"))
+        implementation(npm("maplibre-gl", "4.7.0"))
 
         // implementation(Deps.seskar)
       }
