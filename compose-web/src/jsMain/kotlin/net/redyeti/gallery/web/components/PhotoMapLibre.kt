@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import kotlinx.browser.window
 import net.redyeti.gallery.remote.Photo
 import net.redyeti.gallery.remote.PopulatedAlbum
+import net.redyeti.maplibre.LibreMap
 import net.redyeti.maplibre.jsobject.LngLatBounds
 import net.redyeti.maplibre.jsobject.MapOptions
 import org.jetbrains.compose.web.dom.Div
@@ -48,6 +49,8 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
       }
     )
   }
+
+  LibreMap("mymap", mapOptions)
 
   val map = net.redyeti.maplibre.jsobject.Map(mapOptions).apply { }
 }

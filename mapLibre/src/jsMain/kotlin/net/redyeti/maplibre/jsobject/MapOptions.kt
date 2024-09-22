@@ -1,3 +1,5 @@
+@file:JsModule("maplibre-gl")
+
 package net.redyeti.maplibre.jsobject
 
 /**

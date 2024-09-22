@@ -36,8 +36,6 @@ kotlin {
         implementation(compose.runtime)
         implementation(npm("pmtiles", "3.1.0"))
         implementation(npm("maplibre-gl", "4.7.0"))
-
-        // implementation(Deps.seskar)
       }
     }
     val jsTest by getting {
