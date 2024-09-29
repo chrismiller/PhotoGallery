@@ -1,4 +1,5 @@
 @file:JsModule("maplibre-gl")
+@file:JsNonModule
 
 package net.redyeti.maplibre.jsobject
 
@@ -132,8 +133,6 @@ external class LngLatBounds {
    * ```
    */
   constructor (sw: LngLat, ne: LngLat)
-
-  constructor (west: Double, south: Double, east: Double, north: Double)
 
   var _ne: LngLat
   var _sw: LngLat

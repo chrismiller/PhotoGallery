@@ -1,8 +1,12 @@
+import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
+
 plugins {
   alias(libs.plugins.compose)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.kotlin.multiplatform)
-  // id("io.github.turansky.seskar") version Versions.seskar
+  // https://github.com/JetBrains/kotlin/tree/master/plugins/js-plain-objects
+  alias(libs.plugins.js.plain.objects)
+  alias(libs.plugins.turansky.seskar)
   id("maven-publish")
 }
 
@@ -50,4 +54,10 @@ tasks.withType<GenerateModuleMetadata> {
   // The value 'enforced-platform' is provided in the validation
   // error message you got
   suppressedValidationErrors.add("enforced-platform")
+}
+
+tasks.withType<Kotlin2JsCompile>().configureEach {
+  compilerOptions {
+    target = "es2015"
+  }
 }

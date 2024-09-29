@@ -1,3 +1,6 @@
+@file:JsModule("maplibre-gl")
+@file:JsNonModule
+
 package net.redyeti.maplibre.jsobject
 
 import net.redyeti.maplibre.*
@@ -28,7 +31,7 @@ open external class Evented {
    * extended with `target` and `type` properties.
    * @returns `this`
    */
-  fun on(type: String, listener: Listener): Unit /* this */
+  fun on(type: String, listener: (a: Any?) -> Any?): Unit /* this */
 
   /**
    * Removes a previously registered event listener.
@@ -37,7 +40,7 @@ open external class Evented {
    * @param listener - The listener function to remove.
    * @returns `this`
    */
-  fun off(type: String, listener: Listener): Unit /* this */
+  fun off(type: String, listener: (a: Any?) -> Any?): Unit /* this */
 
   /**
    * Adds a listener that will be called only once to a specified event type.
@@ -48,7 +51,7 @@ open external class Evented {
    * @param listener - The function to be called when the event is fired the first time.
    * @returns `this` or a promise if a listener is not provided
    */
-  fun once(type: String, listener: Listener = definedExternally): Any /* this | Promise<any> */
+  fun once(type: String, listener: (a: Any?) -> Any? = definedExternally): Any /* this | Promise<any> */
   fun fire(event: Event, properties: Any? = definedExternally): Unit /* this */
 
   fun fire(event: String, properties: Any? = definedExternally): Unit /* this */
@@ -89,6 +92,7 @@ open external class Camera : Evented {
   var _onEaseFrame: (_: Double) -> Unit
   var _onEaseEnd: (easeId: String? /* use undefined for default */) -> Unit
   // var _easeFrameId: TaskID
+  var _easeFrameId: Double
   /**
    * @internal
    * holds the geographical coordinate of the target
@@ -126,9 +130,11 @@ open external class Camera : Evented {
    * A callback used to defer camera updates or apply arbitrary constraints.
    * If specified, this Camera instance can be used as a stateless component in React etc.
    */
-  var transformCameraUpdate: CameraUpdateTransformFunction?
-  fun _requestRenderFrame(a: () -> Unit): TaskID
-  fun _cancelRenderFrame(t: TaskID): Unit
+  var transformCameraUpdate: (next: CameraUpdateTransformFunctionNext) -> CameraUpdateTransformFunctionNext?
+  // fun _requestRenderFrame(a: () -> Unit): TaskID
+  // fun _cancelRenderFrame(t: TaskID): Unit
+  fun _requestRenderFrame(a: () -> Unit): Double
+  fun _cancelRenderFrame(t: Double)
 
   /**
    * Returns the map's geographical centerpoint.
@@ -823,7 +829,8 @@ external class Map(options: MapOptions) {
    * ```
    * @see [Display map navigation controls](https://maplibre.org/maplibre-gl-js/docs/examples/navigation/)
    */
-  fun addControl(control: IControl, position: ControlPosition = definedExternally): Map
+  // fun addControl(control: IControl, position: ControlPosition = definedExternally): Map
+  fun addControl(control: IControl, position: String = definedExternally): Map
 
   /**
    * Removes the control from the map.
@@ -1157,7 +1164,7 @@ external class Map(options: MapOptions) {
   fun isRotating(): Boolean
   // fun _createDelegatedListener(type: /* keyof MapEventType */, layerId: String, listener: Listener): DelegatedListenerResult
 
-  fun _createDelegatedListener(type: String, layerId: String, listener: Listener): DelegatedListenerResult
+  fun _createDelegatedListener(type: String, layerId: String, listener: (a: Any?) -> Any?): DelegatedListenerResult
   /**
    * @event
    * Adds a listener for events of a specified type, optionally limited to features in a specified style layer.
@@ -1282,7 +1289,7 @@ external class Map(options: MapOptions) {
    */
   // fun on(type: /* keyof MapEventType */, listener: Listener): Unit /* this */
 
-  fun on(type: String, listener: Listener): Unit /* this */
+  fun on(type: String, listener: (a: Any?) -> Any?): Unit /* this */
   /**
    * Adds a listener that will be called only once to a specified event type, optionally limited to features in a specified style layer.
    *
@@ -1317,7 +1324,7 @@ external class Map(options: MapOptions) {
    */
   // fun once(type: /* keyof MapEventType */, listener: Listener = definedExternally): Map
 
-  fun once(type: String, listener: Listener = definedExternally): Map
+  fun once(type: String, listener: (a: Any?) -> Any? = definedExternally): Map
   /**
    * Removes an event listener for events previously added with `Map#on`.
    *
@@ -1345,7 +1352,7 @@ external class Map(options: MapOptions) {
    */
   // fun off(type: /* keyof MapEventType */, listener: Listener): Map
 
-  fun off(type: String, listener: Listener): Map
+  fun off(type: String, listener: (a: Any?) -> Any?): Map
   /**
    * Returns an array of MapGeoJSONFeature objects
    * representing visible features that satisfy the query parameters.
@@ -1525,7 +1532,7 @@ external class Map(options: MapOptions) {
    * map.setTransformRequest((url: string, resourceType: string) => {});
    * ```
    */
-  fun setTransformRequest(transformRequest: RequestTransformFunction): Unit /* this */
+  fun setTransformRequest(transformRequest: (url: String, resourceType: ResourceType?) -> RequestParameters?): Unit /* this */
   // fun _getUIString(key: /* keyof typeof defaultLocale */): String
   // fun _updateStyle(style: StyleSpecification?, options: Map$1_updateStyleOptions = definedExternally): Unit /* this */
 
@@ -1916,7 +1923,17 @@ external class Map(options: MapOptions) {
    * @see [Add a vector tile source](https://maplibre.org/maplibre-gl-js/docs/examples/vector-source/)
    * @see [Add a WMS source](https://maplibre.org/maplibre-gl-js/docs/examples/wms/)
    */
-  fun addLayer(layer: AddLayerObject, beforeId: String = definedExternally): Unit /* this */
+  fun addLayer(layer: Any, beforeId: String = definedExternally): Unit /* this */
+
+  /**
+   * Specifies a layer to be added to a {@link Style}. In addition to a standard {@link LayerSpecification}
+   * or a {@link CustomLayerInterface}, a {@link LayerSpecification} with an embedded {@link SourceSpecification} can also be provided.
+   */
+//  typealias AddLayerObject = Any /* LayerSpecification
+//    | (Omit<LayerSpecification, "source"> & { source: SourceSpecification; })
+//    | CustomLayerInterface */
+
+
 
   /**
    * Moves a layer to a different z-position.
@@ -2369,8 +2386,10 @@ external class Map(options: MapOptions) {
    *
    * @returns An id that can be used to cancel the callback
    */
-  fun _requestRenderFrame(callback: () -> Unit): TaskID
-  fun _cancelRenderFrame(id: TaskID): Unit
+//  fun _requestRenderFrame(callback: () -> Unit): TaskID
+//  fun _cancelRenderFrame(id: TaskID): Unit
+  fun _requestRenderFrame(callback: () -> Unit): Double
+  fun _cancelRenderFrame(id: Double): Unit
 
   /**
    * @internal
@@ -2492,23 +2511,23 @@ external class Map(options: MapOptions) {
 
 
 /**
- * This function is used to tranform a request.
+ * This function is used to transform a request.
  * It is used just before executing the relevant request.
  */
-typealias RequestTransformFunction = (url: String, resourceType: ResourceType? /* use undefined for default */) -> RequestParameters?
+// typealias RequestTransformFunction = (url: String, resourceType: ResourceType? /* use undefined for default */) -> RequestParameters?
 
 
-external class RequestManager(transformRequestFn: RequestTransformFunction = definedExternally) {
-  var _transformRequestFn: RequestTransformFunction
+external class RequestManager(transformRequestFn: (url: String, resourceType: ResourceType?) -> RequestParameters? = definedExternally) {
+  var _transformRequestFn: (url: String, resourceType: ResourceType?) -> RequestParameters?
   fun transformRequest(url: String, type: ResourceType): RequestParameters
   fun normalizeSpriteURL(url: String, format: String, extension: String): String
-  fun setTransformRequest(transformRequest: RequestTransformFunction): Unit
+  fun setTransformRequest(transformRequest: (url: String, resourceType: ResourceType?) -> RequestParameters?): Unit
 }
 
 /**
  * A callback hook that allows manipulating the camera and being notified about camera updates before they happen
  */
-typealias CameraUpdateTransformFunction = (next: CameraUpdateTransformFunctionNext) -> CameraUpdateTransformFunctionNext
+//typealias CameraUpdateTransformFunction = (next: CameraUpdateTransformFunctionNext) -> CameraUpdateTransformFunctionNext
 
 external interface CameraUpdateTransformFunctionNext {
   var center: LngLat
@@ -2523,7 +2542,7 @@ external interface CameraUpdateTransformFunctionNext {
  * When two or more controls are places in the same location they are stacked toward the center of the map.
  */
 
-typealias ControlPosition = String
+// typealias ControlPosition = String
 //@Suppress("NESTED_CLASS_IN_EXTERNAL_INTERFACE")
 //@seskar.js.JsVirtual
 //sealed external interface ControlPosition {
@@ -2558,7 +2577,7 @@ external interface AttributionControlOptions {
 
 external interface DelegatedListenerResult {
   var layer: String
-  var listener: Listener
+  var listener: (a: Any?) -> Any?
   // var delegates: Temp41
 }
 
@@ -2607,15 +2626,15 @@ external interface AnimationOptions {
 /**
  * A listener method used as a callback to events
  */
-typealias Listener = (a: Any?) -> Any?
+// typealias Listener = (a: Any?) -> Any?
 
 external interface Listeners {
 
   // @seskar.js.JsNative
-  operator fun get(key: String): Array<Listener>?
+  operator fun get(key: String): Array<(a: Any?) -> Any?>?
 
   // @seskar.js.JsNative
-  operator fun set(key: String, value: Array<Listener>?)
+  operator fun set(key: String, value: Array<(a: Any?) -> Any?>?)
 
 }
 
@@ -2984,7 +3003,7 @@ external interface CenterZoomBearing {
   var bearing: Double?
 }
 
-typealias TaskID = Double
+// typealias TaskID = Double
 
 /**
  * Options for setting padding on calls to methods such as {@link Map#fitBounds}, {@link Map#fitScreenCoordinates}, and {@link Map#setPadding}. Adjust these options to set the amount of padding in pixels added to the edges of the canvas. Set a uniform padding on all edges or individual values for each edge. All properties of this object must be
@@ -3153,7 +3172,8 @@ external interface Camera_easeOptions {
 
 external interface Task {
   var callback: (timeStamp: Double) -> Unit
-  var id: TaskID
+  // var id: TaskID
+  var id: Double
   var cancelled: Boolean
 }
 
@@ -3161,11 +3181,14 @@ external class TaskQueue {
   constructor ()
 
   var _queue: Array<Task>
-  var _id: TaskID
+  // var _id: TaskID
+  var _id: Double
   var _cleared: Boolean
   var _currentlyRunning: Any /* Array<Task> | false */
-  fun add(callback: (timeStamp: Double) -> Unit): TaskID
-  fun remove(id: TaskID): Unit
+  // fun add(callback: (timeStamp: Double) -> Unit): TaskID
+  fun add(callback: (timeStamp: Double) -> Unit): Double
+  // fun remove(id: TaskID): Unit
+  fun remove(id: Double): Unit
   fun run(timeStamp: Double = definedExternally): Unit
   fun clear(): Unit
 }
@@ -3247,7 +3270,8 @@ external interface IControl {
    *
    * @returns a control position, one of the values valid in addControl.
    */
-  val getDefaultPosition: (() -> ControlPosition)?
+  // val getDefaultPosition: (() -> ControlPosition)?
+  val getDefaultPosition: (() -> String)?
 }
 
 /**
@@ -3497,14 +3521,6 @@ external interface StyleImageInterface {
    */
   var onRemove: (() -> Unit)?
 }
-
-/**
- * Specifies a layer to be added to a {@link Style}. In addition to a standard {@link LayerSpecification}
- * or a {@link CustomLayerInterface}, a {@link LayerSpecification} with an embedded {@link SourceSpecification} can also be provided.
- */
-typealias AddLayerObject = Any /* LayerSpecification | (Omit<LayerSpecification, "source"> & {
-    source: SourceSpecification;
-}) | CustomLayerInterface */
 
 /**
  * Supporting type to add validation to another style related type

@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
   alias(libs.plugins.compose)
@@ -12,7 +13,7 @@ repositories {
 }
 
 kotlin {
-  js(IR) {
+  js {
     binaries.executable()
     browser()
     useCommonJs()
@@ -58,4 +59,10 @@ private val frontendDistribution by configurations.creating {
 
 artifacts {
   add(frontendDistribution.name, tasks.named("jsBrowserDistribution"))
+}
+
+tasks.withType<Kotlin2JsCompile>().configureEach {
+  compilerOptions {
+    target = "es2015"
+  }
 }

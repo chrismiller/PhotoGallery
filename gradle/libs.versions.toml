@@ -14,6 +14,7 @@ kotlinxSerialization = "1.7.3"
 compose = "1.7.0-beta02"
 routingCompose = "0.4.0"
 
+# https://github.com/chihsuanwu/google-maps-compose-web/releases
 googleMaps = "0.3.3-alpha"
 
 # https://github.com/google/ksp/releases
@@ -22,6 +23,8 @@ ksp = "2.0.20-1.0.25"
 ktor = "2.3.12"
 # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
 shadow = "8.1.1"
+# https://github.com/turansky/seskar
+seskar = "3.41.0"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
 kotlinterGradle = "4.4.1"
@@ -90,6 +93,9 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+js-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", version.ref = "kotlin" }
+turansky-seskar = { id = "io.github.turansky.seskar", version.ref = "seskar" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 johnrengelman-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinterGradle" }
+
