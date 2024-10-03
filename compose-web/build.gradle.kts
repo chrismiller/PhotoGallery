@@ -5,18 +5,23 @@ plugins {
   alias(libs.plugins.compose)
   alias(libs.plugins.compose.compiler)
   alias(libs.plugins.kotlin.multiplatform)
-}
-
-repositories {
-  mavenCentral()
-  maven("https://maven.google.com")
+  // https://github.com/JetBrains/kotlin/tree/master/plugins/js-plain-objects
+  alias(libs.plugins.js.plain.objects)
+  alias(libs.plugins.turansky.seskar)
 }
 
 kotlin {
   js {
     binaries.executable()
-    browser()
-    useCommonJs()
+    browser {
+      testTask {
+        testLogging.showStandardStreams = true
+        useKarma {
+          useChromeHeadless()
+          useFirefox()
+        }
+      }
+    }
   }
 
   sourceSets {
@@ -26,16 +31,21 @@ kotlin {
       }
     }
 
-    val jsMain by getting {
-      dependencies {
-        implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
-        implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
-        implementation(compose.runtime)
-        implementation(compose.html.core)
-        implementation(libs.routing.compose)
-        implementation(libs.google.maps)
-        implementation(libs.kotlinx.datetime)
-      }
+    jsMain.dependencies {
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.815"))
+      implementation(kotlinWrappers.js)
+      implementation(kotlin("stdlib-js"))
+      implementation(compose.runtime)
+      implementation(compose.html.core)
+      implementation(libs.routing.compose)
+      implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
+      implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
+      implementation(libs.google.maps)
+      implementation(libs.kotlinx.datetime)
+    }
+
+    jsTest.dependencies {
+      implementation(kotlin("test-js"))
     }
   }
 }

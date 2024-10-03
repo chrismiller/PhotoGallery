@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.withType
 import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
@@ -12,11 +13,7 @@ plugins {
 
 group = "net.redyeti.maplibre"
 
-fun kotlinw(target: String): String = "org.jetbrains.kotlin-wrappers:kotlin-$target"
-
 kotlin {
-  jvmToolchain(21)
-
   js {
     binaries.executable()
     browser {
@@ -29,23 +26,20 @@ kotlin {
       }
     }
   }
-  sourceSets {
-    val jsMain by getting {
-      dependencies {
-        implementation(project.dependencies.enforcedPlatform(kotlinw("wrappers-bom:1.0.0-pre.810")))
-        implementation(kotlinw("js"))
-        implementation(kotlin("stdlib-js"))
 
-        implementation(compose.html.core)
-        implementation(compose.runtime)
-        implementation(npm("pmtiles", "3.1.0"))
-        implementation(npm("maplibre-gl", "4.7.0"))
-      }
+  sourceSets {
+    jsMain.dependencies {
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.815"))
+      implementation(kotlinWrappers.js)
+      implementation(kotlin("stdlib-js"))
+      implementation(compose.runtime)
+      implementation(compose.html.core)
+      implementation(npm("pmtiles", "3.1.0"))
+      implementation(npm("maplibre-gl", "4.7.1"))
     }
-    val jsTest by getting {
-      dependencies {
-        implementation(kotlin("test-js"))
-      }
+
+    jsTest.dependencies {
+      implementation(kotlin("test-js"))
     }
   }
 }

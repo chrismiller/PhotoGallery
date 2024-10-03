@@ -6,7 +6,7 @@ import net.redyeti.gallery.web.style.AppStyle
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Img
 
-enum class SideMenuItem { album, map, maplibre }
+enum class SideMenuItem { album, map }
 
 @Composable
 fun SideMenu(albumKey: String, selectedItem: SideMenuItem) {
@@ -43,20 +43,6 @@ fun SideMenu(albumKey: String, selectedItem: SideMenuItem) {
           )
         },
         src = "/map.svg", alt = "Map View"
-      )
-    }
-
-    NavLink(to = "/maplibre/$albumKey") {
-      Img(
-        attrs = {
-          classes(
-            if (selectedItem == SideMenuItem.maplibre)
-              AppStyle.sideImageSelected
-            else
-              AppStyle.sideImg
-          )
-        },
-        src = "/map.svg", alt = "Map Libre View"
       )
     }
   }
