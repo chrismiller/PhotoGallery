@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import app.softwork.routingcompose.Router
 import js.objects.jso
 import kotlinx.browser.document
 import net.redyeti.gallery.remote.Photo
@@ -16,7 +17,6 @@ import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Img
 import org.jetbrains.compose.web.renderComposable
-import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.HTMLElement
 import kotlin.math.max
 import kotlin.math.min
@@ -71,10 +71,8 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
     album.photos.forEach { photo ->
       val l = photo.location
       if (l != null) {
-        val popup = Popup(null).setText("${photo.filename} Lat: ${l.latitude}, Long: ${l.longitude}")
-
-        val el = document.createElement("div") as HTMLElement
-        renderComposable(el) {
+        val markerThumb = document.createElement("div") as HTMLElement
+        renderComposable(markerThumb) {
           val width = min(markerPhotoSize, photo.width * markerPhotoSize / photo.height)
           val height = min(markerPhotoSize, photo.height * markerPhotoSize / photo.width)
           Img(
@@ -89,9 +87,12 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
             alt = photo.description
           )
         }
-        val marker = Marker(jso { element = el })
+        val router = Router.current
+        markerThumb.addEventListener("click", { event ->
+          router.navigate("/map/${album.album.key}/${photo.id}")
+        })
+        Marker(jso { element = markerThumb })
           .setLngLat(LngLat(l.longitude, l.latitude))
-          .setPopup(popup)
           .addTo(this)
       }
     }
