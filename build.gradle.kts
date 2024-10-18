@@ -1,8 +1,9 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+// https://docs.gradle.org/current/userguide/plugins.html#sec:subprojects_plugins_dsl
 plugins {
-  // https://docs.gradle.org/current/userguide/plugins.html#sec:subprojects_plugins_dsl
   alias(libs.plugins.kotlin.multiplatform) apply false
   alias(libs.plugins.kotlin.jvm) apply false
   alias(libs.plugins.compose) apply false
@@ -14,9 +15,6 @@ plugins {
 }
 
 buildscript {
-  val kotlinVersion: String by project
-  println(kotlinVersion)
-
   repositories {
     google()
     mavenCentral()
@@ -31,7 +29,9 @@ subprojects {
     maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers")
     maven(url = "https://jitpack.io")
     maven(url = "https://maven.pkg.jetbrains.space/public/p/kotlinx-coroutines/maven")
-    maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    // maven(url = "https://maven.pkg.jetbrains.space/public/p/compose/dev")
+    // For dev Kotlin builds
+    maven(url = "https://maven.pkg.jetbrains.space/kotlin/p/kotlin/dev")
   }
 
   val jvmTarget = JvmTarget.JVM_21
@@ -42,5 +42,21 @@ subprojects {
 
   tasks.withType<KotlinCompile>().configureEach {
     compilerOptions.jvmTarget.set(jvmTarget)
+    compilerOptions {
+      apiVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
+      languageVersion.set(org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_2)
+    }
+  }
+
+  tasks.withType<Kotlin2JsCompile>().configureEach {
+    compilerOptions {
+      target = "es2015"
+      freeCompilerArgs.addAll(
+        "-Xdont-warn-on-error-suppression",
+        "-Xir-generate-inline-anonymous-functions",
+        // TODO: remove after migration on Kotlin `2.1.0`
+        "-XXLanguage:+JsAllowInvalidCharsIdentifiersEscaping",
+      )
+    }
   }
 }

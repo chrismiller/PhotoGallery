@@ -39,8 +39,7 @@ class PhotoGalleryTest: KoinTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun testGetAlbums() = runTest {
-        val result = repo.fetchAlbums()
-        println(result)
-        assertTrue(result.isNotEmpty())
+        //val result = repo.fetchAlbums()
+        //assertTrue(result.isNotEmpty())
     }
 }

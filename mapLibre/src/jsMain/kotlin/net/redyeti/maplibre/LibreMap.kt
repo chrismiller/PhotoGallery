@@ -18,8 +18,9 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
 
     val jsOptions = options.toJsMapOptions()
     val script = document.createElement("script").apply {
-      map = Map(jsOptions)
-      map!!.addControl(NavigationControl())
+      map = Map(jsOptions).apply {
+        addControl(NavigationControl())
+      }
     }
     document.head?.appendChild(script)
   }
@@ -28,10 +29,8 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
   val currentContent by rememberUpdatedState(mapContent)
   LaunchedEffect(map) {
     val currentMap = map
-    if (currentMap != null) {
-      currentMap.newComposition(parentComposition) {
-        currentContent?.invoke(currentMap)
-      }
+    currentMap?.newComposition(parentComposition) {
+      currentContent?.invoke(currentMap)
     }
   }
 }

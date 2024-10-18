@@ -1,5 +1,4 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
 
 plugins {
   alias(libs.plugins.compose)
@@ -25,14 +24,8 @@ kotlin {
   }
 
   sourceSets {
-    all {
-      languageSettings {
-        languageVersion = "2.0"
-      }
-    }
-
     jsMain.dependencies {
-      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.815"))
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.818"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
       implementation(compose.runtime)
@@ -69,10 +62,4 @@ private val frontendDistribution by configurations.creating {
 
 artifacts {
   add(frontendDistribution.name, tasks.named("jsBrowserDistribution"))
-}
-
-tasks.withType<Kotlin2JsCompile>().configureEach {
-  compilerOptions {
-    target = "es2015"
-  }
 }

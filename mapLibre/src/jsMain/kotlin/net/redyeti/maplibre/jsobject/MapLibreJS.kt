@@ -4,6 +4,8 @@
 package net.redyeti.maplibre.jsobject
 
 import net.redyeti.maplibre.*
+import net.redyeti.maplibre.jsobject.stylespec.SourceSpecification
+import net.redyeti.maplibre.jsobject.stylespec.CanvasSourceSpecification
 import org.w3c.dom.*
 import org.w3c.fetch.RequestCache
 
@@ -31,7 +33,7 @@ open external class Evented {
    * extended with `target` and `type` properties.
    * @returns `this`
    */
-  fun on(type: String, listener: (a: Any?) -> Any?): Unit /* this */
+  fun on(type: String, listener: (a: Any?) -> Any?): Evented
 
   /**
    * Removes a previously registered event listener.
@@ -40,7 +42,7 @@ open external class Evented {
    * @param listener - The listener function to remove.
    * @returns `this`
    */
-  fun off(type: String, listener: (a: Any?) -> Any?): Unit /* this */
+  fun off(type: String, listener: (a: Any?) -> Any?): Evented
 
   /**
    * Adds a listener that will be called only once to a specified event type.
@@ -51,10 +53,11 @@ open external class Evented {
    * @param listener - The function to be called when the event is fired the first time.
    * @returns `this` or a promise if a listener is not provided
    */
-  fun once(type: String, listener: (a: Any?) -> Any? = definedExternally): Any /* this | Promise<any> */
-  fun fire(event: Event, properties: Any? = definedExternally): Unit /* this */
+  //fun once(type: String): Promise<Any>
+  fun once(type: String, listener: (a: Any) -> Any = definedExternally): Evented
+  fun fire(event: Event, properties: Any? = definedExternally): Evented
 
-  fun fire(event: String, properties: Any? = definedExternally): Unit /* this */
+  fun fire(event: String, properties: Any? = definedExternally): Evented
 
   /**
    * Returns a true if this instance of Evented or any forwardeed instances of Evented have a listener for the specified type.
@@ -68,9 +71,9 @@ open external class Evented {
    * Bubble all events fired by this instance of Evented to this parent instance of Evented.
    * @returns `this`
    */
-  fun setEventedParent(parent: Evented? = definedExternally, data: Any? = definedExternally): Unit /* this */
+  fun setEventedParent(parent: Evented? = definedExternally, data: Any? = definedExternally): Evented
 
-  fun setEventedParent(parent: Evented? = definedExternally, data: () -> Any? = definedExternally): Unit /* this */
+  fun setEventedParent(parent: Evented? = definedExternally, data: () -> Any? = definedExternally): Evented
 }
 
 open external class Camera : Evented {
@@ -163,7 +166,7 @@ open external class Camera : Evented {
    * map.setCenter([-74, 38]);
    * ```
    */
-  fun setCenter(center: LngLat, eventData: Any? = definedExternally): Unit /* this */
+  fun setCenter(center: LngLat, eventData: Any? = definedExternally): Camera
 
   /**
    * Pans the map by the specified offset.
@@ -180,7 +183,7 @@ open external class Camera : Evented {
     offset: Point,
     options: AnimationOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Pans the map to the specified location with an animated transition.
@@ -203,7 +206,7 @@ open external class Camera : Evented {
     lnglat: LngLat,
     options: AnimationOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Returns the map's current zoom level.
@@ -230,7 +233,7 @@ open external class Camera : Evented {
    * map.setZoom(5);
    * ```
    */
-  fun setZoom(zoom: Double, eventData: Any? = definedExternally): Unit /* this */
+  fun setZoom(zoom: Double, eventData: Any? = definedExternally): Camera
 
   /**
    * Zooms the map to the specified zoom level, with an animated transition.
@@ -256,7 +259,7 @@ open external class Camera : Evented {
     zoom: Double,
     options: AnimationOptions? = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Increases the map's zoom level by 1.
@@ -272,7 +275,7 @@ open external class Camera : Evented {
    * map.zoomIn({duration: 1000});
    * ```
    */
-  fun zoomIn(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Unit /* this */
+  fun zoomIn(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Camera
 
   /**
    * Decreases the map's zoom level by 1.
@@ -288,7 +291,7 @@ open external class Camera : Evented {
    * map.zoomOut({offset: [80, 60]});
    * ```
    */
-  fun zoomOut(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Unit /* this */
+  fun zoomOut(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Camera
 
   /**
    * Returns the map's current bearing. The bearing is the compass direction that is "up"; for example, a bearing
@@ -316,7 +319,7 @@ open external class Camera : Evented {
    * map.setBearing(90);
    * ```
    */
-  fun setBearing(bearing: Double, eventData: Any? = definedExternally): Unit /* this */
+  fun setBearing(bearing: Double, eventData: Any? = definedExternally): Camera
 
   /**
    * Returns the current padding applied around the map viewport.
@@ -341,7 +344,7 @@ open external class Camera : Evented {
    * map.setPadding({ left: 300, top: 50 });
    * ```
    */
-  fun setPadding(padding: PaddingOptions, eventData: Any? = definedExternally): Unit /* this */
+  fun setPadding(padding: PaddingOptions, eventData: Any? = definedExternally): Camera
 
   /**
    * Rotates the map to the specified bearing, with an animated transition. The bearing is the compass direction
@@ -358,7 +361,7 @@ open external class Camera : Evented {
     bearing: Double,
     options: AnimationOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Rotates the map so that north is up (0° bearing), with an animated transition.
@@ -369,7 +372,7 @@ open external class Camera : Evented {
    * @param eventData - Additional properties to be added to event objects of events triggered by this method.
    * @returns `this`
    */
-  fun resetNorth(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Unit /* this */
+  fun resetNorth(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Camera
 
   /**
    * Rotates and pitches the map so that north is up (0° bearing) and pitch is 0°, with an animated transition.
@@ -383,7 +386,7 @@ open external class Camera : Evented {
   fun resetNorthPitch(
     options: AnimationOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Snaps the map so that north is up (0° bearing), if the current bearing is close enough to it (i.e. within the
@@ -395,7 +398,7 @@ open external class Camera : Evented {
    * @param eventData - Additional properties to be added to event objects of events triggered by this method.
    * @returns `this`
    */
-  fun snapToNorth(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Unit /* this */
+  fun snapToNorth(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Camera
 
   /**
    * Returns the map's current pitch (tilt).
@@ -413,7 +416,7 @@ open external class Camera : Evented {
    * @param eventData - Additional properties to be added to event objects of events triggered by this method.
    * @returns `this`
    */
-  fun setPitch(pitch: Double, eventData: Any? = definedExternally): Unit /* this */
+  fun setPitch(pitch: Double, eventData: Any? = definedExternally): Camera
 
   /**
    * @param bounds - Calculate the center for these bounds in the viewport and use
@@ -484,7 +487,7 @@ open external class Camera : Evented {
     bounds: LngLatBounds,
     options: FitBoundsOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Pans, rotates and zooms the map to to fit the box made by points p0 and p1
@@ -515,13 +518,13 @@ open external class Camera : Evented {
     bearing: Double,
     options: FitBoundsOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   fun _fitInternal(
     calculatedOptions: CenterZoomBearing = definedExternally,
     options: FitBoundsOptions = definedExternally,
     eventData: Any? = definedExternally
-  ): Unit /* this */
+  ): Camera
 
   /**
    * Changes any combination of center, zoom, bearing, and pitch, without
@@ -549,7 +552,7 @@ open external class Camera : Evented {
    * @see [Jump to a series of locations](https://maplibre.org/maplibre-gl-js/docs/examples/jump-to/)
    * @see [Update a feature in realtime](https://maplibre.org/maplibre-gl-js/docs/examples/live-update-feature/)
    */
-  fun jumpTo(options: JumpToOptions, eventData: Any? = definedExternally): Unit /* this */
+  fun jumpTo(options: JumpToOptions, eventData: Any? = definedExternally): Camera
 
   /**
    * Calculates pitch, zoom and bearing for looking at `newCenter` with the camera position being `newCenter`
@@ -585,7 +588,7 @@ open external class Camera : Evented {
    * @returns `this`
    * @see [Navigate the map with game-like controls](https://maplibre.org/maplibre-gl-js/docs/examples/game-controls/)
    */
-  fun easeTo(options: CameraEaseToOptions, eventData: Any? = definedExternally): Unit /* this */
+  fun easeTo(options: CameraEaseToOptions, eventData: Any? = definedExternally): Camera
   fun _prepareEase(eventData: Any?, noMoveStart: Boolean, currently: Any? = definedExternally): Unit
   fun _prepareElevation(center: LngLat): Unit
   fun _updateElevation(k: Double): Unit
@@ -647,7 +650,7 @@ open external class Camera : Evented {
    * @see [Slowly fly to a location](https://maplibre.org/maplibre-gl-js/docs/examples/flyto-options/)
    * @see [Fly to a location based on scroll position](https://maplibre.org/maplibre-gl-js/docs/examples/scroll-fly-to/)
    */
-  fun flyTo(options: FlyToOptions, eventData: Any? = definedExternally): Unit /* this */
+  fun flyTo(options: FlyToOptions, eventData: Any? = definedExternally): Camera
   fun isEasing(): Boolean
 
   /**
@@ -655,8 +658,8 @@ open external class Camera : Evented {
    *
    * @returns `this`
    */
-  fun stop(): Unit /* this */
-  fun _stop(allowGestures: Boolean = definedExternally, easeId: String = definedExternally): Unit /* this */
+  fun stop(): Camera
+  fun _stop(allowGestures: Boolean = definedExternally, easeId: String = definedExternally): Camera
   fun _ease(frame: (_: Double) -> Unit, finish: () -> Unit, options: Camera_easeOptions): Unit
   var _renderFrameCallback: () -> Unit
   fun _normalizeBearing(bearing: Double, currentBearing: Double): Double
@@ -919,7 +922,7 @@ external class Map(options: MapOptions) {
    * Note that the pixel ratio actually applied may be lower to respect maxCanvasSize.
    * @param pixelRatio - The pixel ratio.
    */
-  fun setPixelRatio(pixelRatio: Double): Unit
+  fun setPixelRatio(pixelRatio: Double): Map
 
   /**
    * Returns the map's geographical bounds. When the bearing or pitch is non-zero, the visible region is not
@@ -1271,7 +1274,7 @@ external class Map(options: MapOptions) {
    * @see [Create a hover effect](https://maplibre.org/maplibre-gl-js/docs/examples/hover-styles/)
    * @see [Create a draggable marker](https://maplibre.org/maplibre-gl-js/docs/examples/drag-a-point/)
    */
-  // fun <T : /* keyof MapLayerEventType */> on(type: T, layer: String, listener: (ev: Any /* MapLayerEventType[T] & Object */) -> Unit): Map
+  //fun<T: MapLayerEventType> on(type: T, layer: String, listener: (ev: Any /* MapLayerEventType[T] & Object */) -> Unit): Map
   /**
    * Overload of the `on` method that allows to listen to events without specifying a layer.
    * @event
@@ -1279,7 +1282,7 @@ external class Map(options: MapOptions) {
    * @param listener - The listener callback.
    * @returns `this`
    */
-  // fun <T : /* keyof MapEventType */> on(type: T, listener: (ev: Any /* MapEventType[T] & Object */) -> Unit): Unit /* this */
+  //fun<T: MapEventType> on(type: T, listener: (ev: Any /* MapEventType[T] & Object */) -> Unit): Map
   /**
    * Overload of the `on` method that allows to listen to events without specifying a layer.
    * @event
@@ -1287,9 +1290,9 @@ external class Map(options: MapOptions) {
    * @param listener - The listener callback.
    * @returns `this`
    */
-  // fun on(type: /* keyof MapEventType */, listener: Listener): Unit /* this */
+  //fun on(type: MapEventType, listener: Listener): Map
 
-  fun on(type: String, listener: (a: Any?) -> Any?): Unit /* this */
+  fun on(type: String, listener: (a: Any) -> Any): Map
   /**
    * Adds a listener that will be called only once to a specified event type, optionally limited to features in a specified style layer.
    *
@@ -1334,7 +1337,7 @@ external class Map(options: MapOptions) {
    * @param listener - The function previously installed as a listener.
    * @returns `this`
    */
-  // fun <T : /* keyof MapLayerEventType */> off(type: T, layer: String, listener: (ev: Any /* MapLayerEventType[T] & Object */) -> Unit): Unit /* this */
+  // fun <T : /* keyof MapLayerEventType */> off(type: T, layer: String, listener: (ev: Any /* MapLayerEventType[T] & Object */) -> Unit): Map
   /**
    * Overload of the `off` method that allows to listen to events without specifying a layer.
    * @event
@@ -1532,11 +1535,11 @@ external class Map(options: MapOptions) {
    * map.setTransformRequest((url: string, resourceType: string) => {});
    * ```
    */
-  fun setTransformRequest(transformRequest: (url: String, resourceType: ResourceType?) -> RequestParameters?): Unit /* this */
+  fun setTransformRequest(transformRequest: (url: String, resourceType: ResourceType?) -> RequestParameters?): Map
   // fun _getUIString(key: /* keyof typeof defaultLocale */): String
-  // fun _updateStyle(style: StyleSpecification?, options: Map$1_updateStyleOptions = definedExternally): Unit /* this */
+  // fun _updateStyle(style: StyleSpecification?, options: Map$1_updateStyleOptions = definedExternally): Map
 
-  // fun _updateStyle(style: String?, options: Map$1_updateStyleOptions = definedExternally): Unit /* this */
+  // fun _updateStyle(style: String?, options: Map$1_updateStyleOptions = definedExternally): Map
   fun _lazyInitEmptyStyle(): Unit
   // fun _diffStyle(style: StyleSpecification, options: Map$1_diffStyleOptions = definedExternally): Unit
 
@@ -1564,7 +1567,7 @@ external class Map(options: MapOptions) {
    * let styleLoadStatus = map.isStyleLoaded();
    * ```
    */
-  fun isStyleLoaded(): Any /* boolean | void */
+  fun isStyleLoaded(): Boolean
   /**
    * Adds a source to the map's style.
    *
@@ -1603,7 +1606,8 @@ external class Map(options: MapOptions) {
    * ```
    * @see GeoJSON source: [Add live realtime data](https://maplibre.org/maplibre-gl-js/docs/examples/live-geojson/)
    */
-  // fun addSource(id: String, source: SourceSpecification): Unit /* this */
+  fun addSource(id: String, source: SourceSpecification): Map
+  fun addSource(id: String, source: CanvasSourceSpecification): Map
   /**
    * Returns a Boolean indicating whether the source is loaded. Returns `true` if the source with
    * the given ID in the map's style has no outstanding network requests, otherwise `false`.
@@ -1630,7 +1634,7 @@ external class Map(options: MapOptions) {
    * map.setTerrain({ source: 'terrain' });
    * ```
    */
-  // fun setTerrain(options: TerrainSpecification?): Unit /* this */
+  // fun setTerrain(options: TerrainSpecification?): Map
   /**
    * Get the terrain-options if terrain is loaded
    * @returns the TerrainSpecification passed to setTerrain
@@ -1923,7 +1927,7 @@ external class Map(options: MapOptions) {
    * @see [Add a vector tile source](https://maplibre.org/maplibre-gl-js/docs/examples/vector-source/)
    * @see [Add a WMS source](https://maplibre.org/maplibre-gl-js/docs/examples/wms/)
    */
-  fun addLayer(layer: Any, beforeId: String = definedExternally): Unit /* this */
+  fun addLayer(layer: Any, beforeId: String = definedExternally): Map
 
   /**
    * Specifies a layer to be added to a {@link Style}. In addition to a standard {@link LayerSpecification}
@@ -1948,7 +1952,7 @@ external class Map(options: MapOptions) {
    * map.moveLayer('polygon', 'country-label');
    * ```
    */
-  fun moveLayer(id: String, beforeId: String = definedExternally): Unit /* this */
+  fun moveLayer(id: String, beforeId: String = definedExternally): Map
 
   /**
    * Removes the layer with the given ID from the map's style.
@@ -1964,7 +1968,7 @@ external class Map(options: MapOptions) {
    * if (map.getLayer('state-data')) map.removeLayer('state-data');
    * ```
    */
-  fun removeLayer(id: String): Unit /* this */
+  fun removeLayer(id: String): Map
   /**
    * Returns the layer with the specified ID in the map's style.
    *
@@ -2013,7 +2017,7 @@ external class Map(options: MapOptions) {
    * map.setLayerZoomRange('my-layer', 2, 5);
    * ```
    */
-  fun setLayerZoomRange(layerId: String, minzoom: Double, maxzoom: Double): Unit /* this */
+  fun setLayerZoomRange(layerId: String, minzoom: Double, maxzoom: Double): Map
   /**
    * Sets the filter for the specified style layer.
    *
@@ -2048,14 +2052,14 @@ external class Map(options: MapOptions) {
    * ```
    * @see [Create a timeline animation](https://maplibre.org/maplibre-gl-js/docs/examples/timeline-animation/)
    */
-  // fun setFilter(layerId: String, filter: FilterSpecification? = definedExternally, options: StyleSetterOptions = definedExternally): Unit /* this */
+  // fun setFilter(layerId: String, filter: FilterSpecification? = definedExternally, options: StyleSetterOptions = definedExternally): Map
   /**
    * Returns the filter applied to the specified style layer.
    *
    * @param layerId - The ID of the style layer whose filter to get.
    * @returns The layer's filter.
    */
-  fun getFilter(layerId: String): Any /* FilterSpecification | void */
+  // fun getFilter(layerId: String): FilterSpecification?
 
   /**
    * Sets the value of a paint property in the specified style layer.
@@ -2079,7 +2083,7 @@ external class Map(options: MapOptions) {
     name: String,
     value: Any?,
     options: StyleSetterOptions = definedExternally
-  ): Unit /* this */
+  ): Map
 
   /**
    * Returns the value of a paint property in the specified style layer.
@@ -2108,7 +2112,7 @@ external class Map(options: MapOptions) {
     name: String,
     value: Any?,
     options: StyleSetterOptions = definedExternally
-  ): Unit /* this */
+  ): Map
 
   /**
    * Returns the value of a layout property in the specified style layer.
@@ -2130,7 +2134,7 @@ external class Map(options: MapOptions) {
    * map.setGlyphs('https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf');
    * ```
    */
-  fun setGlyphs(glyphsUrl: String?, options: StyleSetterOptions = definedExternally): Unit /* this */
+  fun setGlyphs(glyphsUrl: String?, options: StyleSetterOptions = definedExternally): Map
 
   /**
    * Returns the value of the style's glyphs URL
@@ -2151,7 +2155,7 @@ external class Map(options: MapOptions) {
    * map.addSprite('sprite-two', 'http://example.com/sprite-two');
    * ```
    */
-  fun addSprite(id: String, url: String, options: StyleSetterOptions = definedExternally): Unit /* this */
+  fun addSprite(id: String, url: String, options: StyleSetterOptions = definedExternally): Map
 
   /**
    * Removes the sprite from the map's style. Fires the `style` event.
@@ -2164,7 +2168,7 @@ external class Map(options: MapOptions) {
    * map.removeSprite('default');
    * ```
    */
-  fun removeSprite(id: String): Unit /* this */
+  fun removeSprite(id: String): Map
 
   /**
    * Returns the as-is value of the style's sprite.
@@ -2184,7 +2188,7 @@ external class Map(options: MapOptions) {
    * map.setSprite('YOUR_SPRITE_URL');
    * ```
    */
-  fun setSprite(spriteUrl: String?, options: StyleSetterOptions = definedExternally): Unit /* this */
+  fun setSprite(spriteUrl: String?, options: StyleSetterOptions = definedExternally): Map
   /**
    * Sets the any combination of light values.
    *
@@ -2197,7 +2201,7 @@ external class Map(options: MapOptions) {
    * let layerVisibility = map.getLayoutProperty('my-layer', 'visibility');
    * ```
    */
-  // fun setLight(light: LightSpecification, options: StyleSetterOptions = definedExternally): Unit /* this */
+  // fun setLight(light: LightSpecification, options: StyleSetterOptions = definedExternally): Map
   /**
    * Returns the value of the light object.
    *
@@ -2241,7 +2245,7 @@ external class Map(options: MapOptions) {
    * ```
    * @see [Create a hover effect](https://maplibre.org/maplibre-gl-js/docs/examples/hover-styles/)
    */
-  fun setFeatureState(feature: FeatureIdentifier, state: Any?): Unit /* this */
+  fun setFeatureState(feature: FeatureIdentifier, state: Any?): Map
 
   /**
    * Removes the `state` of a feature, setting it back to the default behavior.
@@ -2290,7 +2294,7 @@ external class Map(options: MapOptions) {
    * });
    * ```
    */
-  fun removeFeatureState(target: FeatureIdentifier, key: String = definedExternally): Unit /* this */
+  fun removeFeatureState(target: FeatureIdentifier, key: String = definedExternally): Map
 
   /**
    * Gets the `state` of a feature.
@@ -2377,7 +2381,7 @@ external class Map(options: MapOptions) {
    * well as its sources
    * @returns `this`
    */
-  fun _update(updateStyle: Boolean = definedExternally): Unit /* this */
+  fun _update(updateStyle: Boolean = definedExternally): Map
 
   /**
    * @internal
@@ -2404,7 +2408,7 @@ external class Map(options: MapOptions) {
    *
    * @returns `this`
    */
-  fun _render(paintStartTimeStamp: Double): Unit /* this */
+  fun _render(paintStartTimeStamp: Double): Map
 
   /**
    * Force a synchronous redraw of the map.
@@ -2414,7 +2418,7 @@ external class Map(options: MapOptions) {
    * map.redraw();
    * ```
    */
-  fun redraw(): Unit /* this */
+  fun redraw(): Map
 
   /**
    * Clean up and release all internal resources associated with this map.
@@ -2425,7 +2429,7 @@ external class Map(options: MapOptions) {
    * longer consumes browser resources. Afterwards, you must not call any other
    * methods on the map.
    */
-  fun remove(): Unit
+  fun remove()
 
   /**
    * Trigger the rendering of a single frame. Use this method with custom layers to
@@ -3367,7 +3371,7 @@ external interface Source {
    * `false` if tiles can be drawn outside their boundaries, `true` if they cannot.
    */
   var isTileClipped: Boolean?
-  // var tileID: CanonicalTileID?
+  var tileID: CanonicalTileID?
 
   /**
    * `true` if tiles should be sent back to the worker for each overzoomed zoom level, `false` if not.
@@ -3428,7 +3432,7 @@ external interface Source {
    * Creating a source using the returned object as the `options` should result in a Source that is
    * equivalent to this one.
    */
-  fun serialize(): Any?
+  fun serialize(): Any
 
   /**
    * Allows to execute a prepare step before the source is used.
@@ -3710,34 +3714,10 @@ external interface TransformCoveringZoomLevelOptions {
 
 external interface TransformCoveringTilesOptions {
   var tileSize: Double
-  var minzoom: Double?
-  var maxzoom: Double?
-  var roundZoom: Boolean?
+  var minzoom: Double
+  var maxzoom: Double
+  var roundZoom: Boolean
   var reparseOverscaled: Boolean?
   var renderWorldCopies: Boolean?
   // var terrain: Terrain?
-}
-
-external class OverscaledTileID(overscaledZ: Double, wrap: Double, z: Double, x: Double, y: Double) {
-  var overscaledZ: Double
-  var wrap: Double
-
-  // var canonical: CanonicalTileID
-  var key: String
-
-  // var posMatrix: mat4
-  fun clone(): OverscaledTileID
-  fun equals(id: OverscaledTileID): Boolean
-  fun scaledTo(targetZ: Double): OverscaledTileID
-  fun calculateScaledKey(targetZ: Double, withWrap: Boolean): String
-  fun isChildOf(parent: OverscaledTileID): Boolean
-  fun children(sourceMaxZoom: Double): Array<OverscaledTileID>
-  fun isLessThan(rhs: OverscaledTileID): Boolean
-  fun wrapped(): OverscaledTileID
-  fun unwrapTo(wrap: Double): OverscaledTileID
-  fun overscaleFactor(): Double
-
-  // fun toUnwrapped(): UnwrappedTileID
-  override fun toString(): String
-  // fun getTilePoint(coord: MercatorCoordinate): Point
 }

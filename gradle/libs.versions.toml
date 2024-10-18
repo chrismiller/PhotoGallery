@@ -1,6 +1,8 @@
 [versions]
 # https://kotlinlang.org/docs/releases.html#release-details
-kotlin = "2.0.20"
+kotlin = "2.0.21"
+# kotlin = "2.1.0-Beta2"
+# kotlin = "2.1.0-RC-228"
 # https://github.com/Kotlin/kotlinx.coroutines/releases
 kotlinxCoroutines = "1.9.0"
 # https://github.com/Kotlin/kotlinx-datetime/releases
@@ -9,22 +11,24 @@ kotlinxDatetime = "0.6.1"
 kotlinxSerialization = "1.7.3"
 
 # Note that the compose version must match the one expected by the routingCompose version, otherwise we risk
-# getting a javascript error and blank screen.
-# See the routing compose release notes for dependency details: https://github.com/hfhbd/routing-compose/releases
-compose = "1.7.0-beta02"
+# getting a javascript error and blank screen. See the routing compose release notes for dependency details.
+# https://github.com/JetBrains/compose-multiplatform/releases
+compose = "1.7.0"
+# https://github.com/hfhbd/routing-compose/releases
 routingCompose = "0.4.0"
 
 # https://github.com/chihsuanwu/google-maps-compose-web/releases
 googleMaps = "0.3.3-alpha"
 
 # https://github.com/google/ksp/releases
-ksp = "2.0.20-1.0.25"
+ksp = "2.1.0-Beta1-1.0.25"
+# ksp = "2.0.21-1.0.25"
 # https://github.com/ktorio/ktor/releases
-ktor = "2.3.12"
+ktor = "3.0.0"
 # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
 shadow = "8.1.1"
 # https://github.com/turansky/seskar
-seskar = "3.41.0"
+seskar = "3.42.0"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
 kotlinterGradle = "4.4.1"
@@ -44,7 +48,7 @@ solarPositioning = "2.0.3"
 # https://junit.org/junit5/docs/current/release-notes/index.html#release-notes
 junit = "5.11.0"
 # https://github.com/mockito/mockito/releases
-mockito = "5.13.0"
+mockito = "5.14.1"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
@@ -57,7 +61,6 @@ ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "k
 ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktor" }
 ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
-ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
 routing-compose = { module = "app.softwork:routing-compose", version.ref = "routingCompose" }
 google-maps = { module = "com.github.chihsuanwu:google-maps-compose-web", version.ref = "googleMaps" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }

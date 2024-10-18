@@ -1,6 +1,3 @@
-import org.gradle.kotlin.dsl.withType
-import org.jetbrains.kotlin.gradle.tasks.Kotlin2JsCompile
-
 plugins {
   alias(libs.plugins.compose)
   alias(libs.plugins.compose.compiler)
@@ -36,6 +33,7 @@ kotlin {
       implementation(compose.html.core)
       implementation(npm("pmtiles", "3.1.0"))
       implementation(npm("maplibre-gl", "4.7.1"))
+      implementation(npm("geojson", "0.5.0"))
     }
 
     jsTest.dependencies {
@@ -45,13 +43,6 @@ kotlin {
 }
 
 tasks.withType<GenerateModuleMetadata> {
-  // The value 'enforced-platform' is provided in the validation
-  // error message you got
+  // The value 'enforced-platform' is provided in the validation error message you got
   suppressedValidationErrors.add("enforced-platform")
-}
-
-tasks.withType<Kotlin2JsCompile>().configureEach {
-  compilerOptions {
-    target = "es2015"
-  }
 }

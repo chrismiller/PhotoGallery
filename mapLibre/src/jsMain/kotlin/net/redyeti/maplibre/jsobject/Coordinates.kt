@@ -3,6 +3,8 @@
 
 package net.redyeti.maplibre.jsobject
 
+import net.redyeti.maplibre.jsobject.stylespec.ILngLat
+
 external class Point(x: Double, y: Double) {
   var x: Double
   var y: Double
@@ -25,16 +27,16 @@ external class Point(x: Double, y: Double) {
  * ll.lng; // = -123.9749
  * ```
  */
-external class LngLat(lng: Double, lat: Double) {
+external class LngLat(lng: Double, lat: Double): ILngLat {
   /**
    * Longitude, measured in degrees.
    */
-  var lat: Double
+  override var lat: Double
 
   /**
    * Latitude, measured in degrees.
    */
-  var lng: Double
+  override var lng: Double
 
   /**
    * Returns a new `LngLat` object whose longitude is wrapped to the range (-180, 180).
@@ -47,7 +49,7 @@ external class LngLat(lng: Double, lat: Double) {
    * wrapped.lng; // = -73.9749
    * ```
    */
-  fun wrap(): LngLat
+  override fun wrap(): ILngLat
 
   /**
    * Returns the coordinates represented as an array of two numbers.
@@ -59,7 +61,7 @@ external class LngLat(lng: Double, lat: Double) {
    * ll.toArray(); // = [-73.9749, 40.7736]
    * ```
    */
-  fun toArray(): Array<Double>
+  override fun toArray(): Array<Double>
 
   /**
    * Returns the coordinates represent as a string.
@@ -86,7 +88,7 @@ external class LngLat(lng: Double, lat: Double) {
    * new_york.distanceTo(los_angeles); // = 3935751.690893987, "true distance" using a non-spherical approximation is ~3966km
    * ```
    */
-  fun distanceTo(lngLat: LngLat): Double
+  override fun distanceTo(lngLat: ILngLat): Double
 
   companion object {
     /**

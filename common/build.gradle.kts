@@ -12,12 +12,6 @@ kotlin {
   }
 
   sourceSets {
-    all {
-      languageSettings {
-        languageVersion = "2.0"
-      }
-    }
-
     commonMain.dependencies {
       implementation(libs.ktor.client.core)
       implementation(libs.ktor.client.logging)
