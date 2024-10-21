@@ -11,7 +11,7 @@ plugins {
   alias(libs.plugins.kotlinx.serialization) apply false
   alias(libs.plugins.ksp) apply false
   alias(libs.plugins.johnrengelman.shadow) apply false
-  alias(libs.plugins.kotlinter) apply false
+  //alias(libs.plugins.kotlinter) apply false
 }
 
 buildscript {

@@ -31,7 +31,7 @@ shadow = "8.1.1"
 seskar = "3.42.0"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
-kotlinterGradle = "4.4.1"
+# kotlinterGradle = "4.4.1"
 
 # https://github.com/InsertKoinIO/koin/releases
 koin = "4.0.0"
@@ -100,5 +100,4 @@ js-plain-objects = { id = "org.jetbrains.kotlin.plugin.js-plain-objects", versio
 turansky-seskar = { id = "io.github.turansky.seskar", version.ref = "seskar" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 johnrengelman-shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
-kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinterGradle" }
 
