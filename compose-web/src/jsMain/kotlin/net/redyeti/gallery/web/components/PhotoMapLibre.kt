@@ -194,28 +194,22 @@ private fun createClusterCountLayer(): SymbolLayerSpecification {
 }
 
 private fun createUnclusteredLayer(): CircleLayerSpecification {
-//  return jso {
-//    id = "unclustered-photos"
-//    type = LayerType.Circle
-//    source = "photos"
-//    filter = arrayOf("!", arrayOf("has", "point_count"))
-//    paint = jso {
-//      circleColor = "#11b4da"
-//      circleRadius = 4.0
-//      circleStrokeWidth = 1.0
-//      circleStrokeColor = "#ffffff"
-//    }
-//  }
   return CircleLayerSpecification(
     id = "unclustered-photos",
     type = LayerType.Circle,
     source = "photos",
     filter = arrayOf("!", arrayOf("has", "point_count")),
-    paint = CirclePaintConfig(
-      circleColor = "#11b4da",
-      circleRadius = 4,
-      circleStrokeWidth = 1,
+    paint = jso {
+      circleColor = "#11b4da"
+      circleRadius = 4
+      circleStrokeWidth = 1
       circleStrokeColor = "#FFFFFF"
-    )
+    }
+//    paint = CirclePaintConfig(
+//      circleColor = "#11b4da",
+//      circleRadius = 4,
+//      circleStrokeWidth = 1,
+//      circleStrokeColor = "#FFFFFF"
+//    )
   )
 }
