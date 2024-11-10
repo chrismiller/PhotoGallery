@@ -112,7 +112,7 @@ class AlbumScanner(val config: AppConfig) {
     }
 
     val pattern = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss z")
-    var prevTimeOffset = "+00:00"
+    var prevTimeOffset = "UTC"
 
     val photos = mutableListOf<Photo>()
     val collector = RowCollector()
@@ -130,14 +130,16 @@ class AlbumScanner(val config: AppConfig) {
           if (timeTakenStr.isNullOrEmpty()) {
             timeTakenStr = row["FileCreateDate"]!!
           }
-          var timeOffset = row["OffsetTimeOriginal"]
-          if (timeOffset.isNullOrEmpty()) {
+          val offsetIndex = timeTakenStr.indexOfAny(listOf("-", "+"))
+          val timeOffset: String
+          if (offsetIndex >= 0) {
+            timeTakenStr = timeTakenStr.substring(offsetIndex)
+            timeOffset = timeTakenStr.substring(offsetIndex)
+          } else {
+            logger.w("No timezone found for $originalsDir\\$filename - using $prevTimeOffset")
             timeOffset = prevTimeOffset
-            logger.w("No timezone found for $originalsDir\\$filename - using $timeOffset")
           }
-
-          prevTimeOffset = timeOffset
-          val fullTimeStr = if (timeTakenStr.contains("[-+]".toRegex())) timeTakenStr else "$timeTakenStr$timeOffset"
+          val fullTimeStr = if (timeTakenStr.contains("[-+]".toRegex())) timeTakenStr else "$timeTakenStr $timeOffset"
           val timeTaken = try {
             ZonedDateTime.parse(fullTimeStr, pattern)
           } catch (e: Exception) {
