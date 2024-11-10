@@ -25,7 +25,7 @@ class AlbumScanner(val config: AppConfig) {
 
     private val EXIFTOOL_METADATA_SCAN = listOf(
       // The # suffix returns the value without any automatic formatting/display conversion
-      "-S", "-csv", "-FileName", "-FileSize#", "-DateTimeOriginal", "-OffsetTimeOriginal",
+      "-S", "-csv", "-FileName", "-FileSize#", "-DateTimeOriginal", "-OffsetTimeOriginal", "-FileCreateDate",
       "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
       "-Model", "-ApertureValue", "-ExposureTime", "-FocalLength", "-ISO#", "-Lens", "-Description",
       "*.jpg"
@@ -112,7 +112,7 @@ class AlbumScanner(val config: AppConfig) {
     }
 
     val pattern = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss z")
-    var prevTimeOffset = "UTC"
+    var prevTimeOffset = "+00:00"
 
     val photos = mutableListOf<Photo>()
     val collector = RowCollector()
@@ -126,14 +126,18 @@ class AlbumScanner(val config: AppConfig) {
           val row = parser.parseLine(csvRow.reader(), headers)
           val filename = row["FileName"]!!
           val fileSize = row["FileSize#"].asInt()
-          val timeTakenStr = row["DateTimeOriginal"]!!
+          var timeTakenStr = row["DateTimeOriginal"]
+          if (timeTakenStr.isNullOrEmpty()) {
+            timeTakenStr = row["FileCreateDate"]!!
+          }
           var timeOffset = row["OffsetTimeOriginal"]
           if (timeOffset.isNullOrEmpty()) {
             timeOffset = prevTimeOffset
             logger.w("No timezone found for $originalsDir\\$filename - using $timeOffset")
           }
+
           prevTimeOffset = timeOffset
-          val fullTimeStr = "$timeTakenStr $timeOffset"
+          val fullTimeStr = if (timeTakenStr.contains("[\\-\\+]")) timeTakenStr else "$timeTakenStr$timeOffset"
           val timeTaken = try {
             ZonedDateTime.parse(fullTimeStr, pattern)
           } catch (e: Exception) {
