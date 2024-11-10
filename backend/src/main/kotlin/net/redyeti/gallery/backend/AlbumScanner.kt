@@ -137,7 +137,7 @@ class AlbumScanner(val config: AppConfig) {
           }
 
           prevTimeOffset = timeOffset
-          val fullTimeStr = if (timeTakenStr.contains("[\\-\\+]")) timeTakenStr else "$timeTakenStr$timeOffset"
+          val fullTimeStr = if (timeTakenStr.contains("[-+]".toRegex())) timeTakenStr else "$timeTakenStr$timeOffset"
           val timeTaken = try {
             ZonedDateTime.parse(fullTimeStr, pattern)
           } catch (e: Exception) {
