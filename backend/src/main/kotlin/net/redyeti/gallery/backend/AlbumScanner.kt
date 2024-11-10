@@ -133,10 +133,11 @@ class AlbumScanner(val config: AppConfig) {
             logger.w("No timezone found for $originalsDir\\$filename - using $timeOffset")
           }
           prevTimeOffset = timeOffset
+          val fullTimeStr = "$timeTakenStr $timeOffset"
           val timeTaken = try {
-            ZonedDateTime.parse("$timeTakenStr $timeOffset", pattern)
+            ZonedDateTime.parse(fullTimeStr, pattern)
           } catch (e: Exception) {
-            throw IllegalArgumentException("Could not parse time for $originalsDir/$filename (${e.message})")
+            throw IllegalArgumentException("Could not parse time '$fullTimeStr' for $originalsDir/$filename (${e.message})")
           }
           val description = row["Description"].orEmpty()
           val camera = row["Model"].orEmpty()
