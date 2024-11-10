@@ -6,6 +6,7 @@ package net.redyeti.maplibre.jsobject
 import net.redyeti.maplibre.*
 import net.redyeti.maplibre.jsobject.stylespec.SourceSpecification
 import net.redyeti.maplibre.jsobject.stylespec.CanvasSourceSpecification
+import net.redyeti.maplibre.jsobject.geojson.MapGeoJSONFeature
 import org.w3c.dom.*
 import org.w3c.fetch.RequestCache
 
@@ -1435,11 +1436,12 @@ external class Map(options: MapOptions) {
    * ```
    * @see [Get features under the mouse pointer](https://maplibre.org/maplibre-gl-js/docs/examples/queryrenderedfeatures/)
    */
-  // fun queryRenderedFeatures(geometryOrOptions: Point = definedExternally, options: QueryRenderedFeaturesOptions = definedExternally): Array<MapGeoJSONFeature>
+  fun queryRenderedFeatures(geometryOrOptions: Point = definedExternally, options: QueryRenderedFeaturesOptions = definedExternally): Array<MapGeoJSONFeature>
 
-  // fun queryRenderedFeatures(geometryOrOptions: Array<Point> = definedExternally, options: QueryRenderedFeaturesOptions = definedExternally): Array<MapGeoJSONFeature>
+  fun queryRenderedFeatures(geometryOrOptions: Array<Point> = definedExternally, options: QueryRenderedFeaturesOptions = definedExternally): Array<MapGeoJSONFeature>
 
-  // fun queryRenderedFeatures(geometryOrOptions: QueryRenderedFeaturesOptions = definedExternally, options: QueryRenderedFeaturesOptions = definedExternally): Array<MapGeoJSONFeature>
+  fun queryRenderedFeatures(geometryOrOptions: QueryRenderedFeaturesOptions = definedExternally, options: QueryRenderedFeaturesOptions = definedExternally): Array<MapGeoJSONFeature>
+
   /**
    * Returns an array of MapGeoJSONFeature objects
    * representing features within the specified vector tile or GeoJSON source that satisfy the query parameters.
@@ -1470,7 +1472,8 @@ external class Map(options: MapOptions) {
    * ```
    *
    */
-  // fun querySourceFeatures(sourceId: String, parameters: QuerySourceFeatureOptions? = definedExternally): Array<MapGeoJSONFeature>
+  fun querySourceFeatures(sourceId: String, parameters: QuerySourceFeatureOptions? = definedExternally): Array<MapGeoJSONFeature>
+
   /**
    * Updates the map's MapLibre style object with a new value.
    *

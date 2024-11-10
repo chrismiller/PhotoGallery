@@ -314,7 +314,7 @@ external interface SymbolLayoutConfig: LayoutConfig {
   @JsName("icon-text-fit-padding")
   val iconTextFitPadding: PropertyValueSpecification<Array<Double>>? // [Double, Double, Double, Double]
   @JsName("icon-image")
-  val iconImage: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>?
+  var iconImage: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>?
   @JsName("icon-rotate")
   val iconRotate: DataDrivenPropertyValueSpecification<Double>?
   @JsName("icon-padding")

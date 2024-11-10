@@ -6,7 +6,7 @@ plugins {
   alias(libs.plugins.kotlin.multiplatform)
   // https://github.com/JetBrains/kotlin/tree/master/plugins/js-plain-objects
   alias(libs.plugins.js.plain.objects)
-  alias(libs.plugins.turansky.seskar)
+  //alias(libs.plugins.turansky.seskar)
 }
 
 kotlin {

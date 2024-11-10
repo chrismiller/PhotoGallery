@@ -6,6 +6,7 @@
 package net.redyeti.maplibre.jsobject.geojson
 
 import kotlinx.js.JsPlainObject
+import net.redyeti.maplibre.jsobject.LngLat
 
 // Note: as of the RFC 7946 version of GeoJSON, Coordinate Reference Systems
 // are no longer supported. (See https://tools.ietf.org/html/rfc7946#appendix-B)}

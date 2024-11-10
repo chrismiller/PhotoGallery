@@ -101,6 +101,7 @@ external class Marker {
    * @see [Create a draggable Marker](https://maplibre.org/maplibre-gl-js/docs/examples/drag-a-marker/)
    */
   fun setLngLat(lnglat: LngLat): Marker
+  fun setLngLat(lnglat: Array<Double>): Marker
 
   /**
    * Returns the `Marker`'s HTML element.

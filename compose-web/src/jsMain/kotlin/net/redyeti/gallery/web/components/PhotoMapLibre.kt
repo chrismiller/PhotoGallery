@@ -4,16 +4,20 @@ import androidx.compose.runtime.*
 import js.objects.jso
 import kotlinx.browser.document
 import kotlinx.dom.appendText
-import net.redyeti.gallery.remote.Photo
-import net.redyeti.gallery.remote.PopulatedAlbum
+import kotlinx.js.JsPlainObject
+import net.redyeti.gallery.remote.*
 import net.redyeti.maplibre.LibreMap
 import net.redyeti.maplibre.MapOptions
 import net.redyeti.maplibre.jsobject.LngLat
 import net.redyeti.maplibre.jsobject.LngLatBounds
+import net.redyeti.maplibre.jsobject.Marker
 import net.redyeti.maplibre.jsobject.geojson.*
 import net.redyeti.maplibre.jsobject.stylespec.*
+import net.redyeti.maplibre.updateMarkers
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
+import org.w3c.dom.Element
+import org.w3c.dom.HTMLDivElement
 import kotlin.math.max
 import kotlin.math.min
 
@@ -64,31 +68,15 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
 
   LibreMap(mapOptions) {
     on("load") {
-      val div = document.createElement("div").apply {
-        id = "XXXXX"
+      if (document.getElementById("XXXXX") == null) {
+        createMapDiv(album)
       }
-      document.body?.appendChild(div)
-
-//      div.appendText("*******")
-//      div.appendText(JSON.stringify(TextLayer(id="123", fontName="aaa")))
-//      div.appendText("*******")
-
-      val source = createSource(album)
-      val layer1 = createClusterLayer()
-      val layer2 = createClusterCountLayer()
-      val layer3 = createUnclusteredLayer()
-      //div.appendText(JSON.stringify(source))
-      div.appendText(JSON.stringify(layer3))
-      div.appendText("*******")
-//      div.appendText(JSON.stringify(layer2))
-//      div.appendText("*******")
-//      div.appendText(JSON.stringify(layer1))
-//      div.appendText("*******")
-
-      addSource("photos", source)
-      addLayer(layer1)
-      //addLayer(layer2)
-      addLayer(layer3)
+    }
+    on("data") { e ->
+      js("if (e.sourceId !== 'photos' || !e.isSourceLoaded) return;")
+      on("move") { updateMarkers("photos", ::createMarker) }
+      on("moveend") { updateMarkers("photos", ::createMarker) }
+      updateMarkers("photos", ::createMarker)
     }
 
 //    album.photos.forEach { photo ->
@@ -122,6 +110,58 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
   }
 }
 
+fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
+  val div = document.createElement("div").apply {
+    id = "XXXXX"
+  }
+  document.body?.appendChild(div)
+  val source = createSource(album)
+  val layer1 = createClusterLayer()
+  val layer2 = createClusterCountLayer()
+  val layer3 = createUnclusteredLayer()
+  div.appendText(JSON.stringify(source))
+  div.appendText("*******")
+  div.appendText(JSON.stringify(layer3))
+  div.appendText("*******")
+  div.appendText(JSON.stringify(layer2))
+  div.appendText("*******")
+  div.appendText(JSON.stringify(layer1))
+  div.appendText("*******")
+
+  addSource("photos", source)
+  addLayer(layer1)
+  //addLayer(layer2)
+  addLayer(layer3)
+}
+
+fun createMarker(feature: MapGeoJSONFeature): Marker {
+  val coords = (feature.geometry.unsafeCast<Point>()).coordinates
+  val markerThumb = document.createElement("div") as HTMLDivElement
+  val photo = feature.properties["photo"].unsafeCast<Photo>()
+  val albumKey = feature.properties["albumKey"].unsafeCast<String>()
+//  renderComposable(markerThumb) {
+//    val width = min(markerPhotoSize, photo.width * markerPhotoSize / photo.height)
+//    val height = min(markerPhotoSize, photo.height * markerPhotoSize / photo.width)
+//    Img(
+//      attrs = {
+//        classes(AppStyle.thumb)
+//        style {
+//          width(width.px)
+//          height(height.px)
+//        }
+//      },
+//      src = photo.thumbnailUrl,
+//      alt = photo.description
+//    )
+//  }
+//  val router = Router.current
+//  markerThumb.addEventListener("click", { event ->
+//    router.navigate("/map/$albumKey/${photo.id}")
+//  })
+  return Marker(jso { element = markerThumb })
+    .setLngLat(LngLat(coords[0], coords[1]))
+}
+
 private fun createSource(album: PopulatedAlbum): SourceSpecification {
   val geoData: FeatureCollection<GeoJsonObject, GeoJsonProperties> = jso {
     type = GeoJsonTypes.FeatureCollection
@@ -133,8 +173,8 @@ private fun createSource(album: PopulatedAlbum): SourceSpecification {
             type = GeoJsonTypes.Point
             coordinates = arrayOf(location.longitude, location.latitude, location.altitude)
             properties = jso {
-              set("id", it.id)
-              set("filename", it.filename)
+              set("photo", it.toJsPhoto())
+              set("albumKey", album.album.key)
             }
           }
         }
@@ -151,8 +191,34 @@ private fun createSource(album: PopulatedAlbum): SourceSpecification {
   return source
 }
 
-private fun createClusterLayer(): CircleLayerSpecification {
+@JsPlainObject
+external interface JsPhoto {
+  var id: Int
+  var directory: String
+  var filename: String
+  var description: String
+  var width: Int
+  var height: Int
+  var epochSeconds: Long
+  var timeOffset: String
+  var location: LngLat?
+}
+
+private fun Photo.toJsPhoto(): JsPhoto {
+  val opt = this
   return jso {
+    opt.id.let { id = it }
+    opt.filename.let { filename = it }
+    opt.description.let { description = it }
+    opt.width.let { width = it }
+    opt.height.let { height = it }
+    opt.location?.let { location = LngLat(it.longitude, it.latitude) } // not needed?
+  }
+}
+
+private fun createClusterLayer(): SourceLayerSpecification {
+  // This works
+  return jso<CircleLayerSpecification> {
     id = "clusters"
     type = LayerType.Circle
     source = "photos"
@@ -164,21 +230,20 @@ private fun createClusterLayer(): CircleLayerSpecification {
   }
 }
 
-private fun createClusterCountLayer(): SymbolLayerSpecification {
-  return jso {
+private fun createClusterCountLayer(): SourceLayerSpecification {
+  return jso<SymbolLayerSpecification> {
     id = "cluster-count"
     type = LayerType.Symbol
     source = "photos"
     filter = arrayOf("has", "point_count")
     layout = jso {
-      textField = "X" //"{point_count_abbreviated}"
-      //textFont = arrayOf("Arial Unicode MS Bold")
+      textField = "{point_count_abbreviated}"
+      // Font issue preventing the rendering?
+      //textFont = arrayOf("Open Sans Regular", "Noto Sans Regular")
       textSize = 12.0
     }
-    paint = jso {
-      textColor = "#000000"
-    }
   }
+
 //  val layout = SymbolLayoutConfig(
 //    textField = "{point_count_abbreviated}",
 //    textFont = arrayOf("Arial Unicode MS Bold"),
@@ -193,23 +258,18 @@ private fun createClusterCountLayer(): SymbolLayerSpecification {
 //  )
 }
 
-private fun createUnclusteredLayer(): CircleLayerSpecification {
+private fun createUnclusteredLayer(): SourceLayerSpecification {
   return CircleLayerSpecification(
     id = "unclustered-photos",
     type = LayerType.Circle,
     source = "photos",
     filter = arrayOf("!", arrayOf("has", "point_count")),
-    paint = jso {
+    //filter = arrayOf("!=", "cluster", true),
+    paint = jso<CirclePaintConfig> {
       circleColor = "#11b4da"
       circleRadius = 4
       circleStrokeWidth = 1
       circleStrokeColor = "#FFFFFF"
     }
-//    paint = CirclePaintConfig(
-//      circleColor = "#11b4da",
-//      circleRadius = 4,
-//      circleStrokeWidth = 1,
-//      circleStrokeColor = "#FFFFFF"
-//    )
   )
 }
