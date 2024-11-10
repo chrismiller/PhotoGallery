@@ -133,8 +133,8 @@ class AlbumScanner(val config: AppConfig) {
           val offsetIndex = timeTakenStr.indexOfAny(listOf("-", "+"))
           val timeOffset: String
           if (offsetIndex >= 0) {
-            timeTakenStr = timeTakenStr.substring(offsetIndex)
             timeOffset = timeTakenStr.substring(offsetIndex)
+            timeTakenStr = timeTakenStr.substring(0, offsetIndex)
           } else {
             logger.w("No timezone found for $originalsDir\\$filename - using $prevTimeOffset")
             timeOffset = prevTimeOffset
