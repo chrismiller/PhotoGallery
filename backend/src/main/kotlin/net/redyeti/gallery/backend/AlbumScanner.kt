@@ -128,12 +128,15 @@ class AlbumScanner(val config: AppConfig) {
           val fileSize = row["FileSize#"].asInt()
           var timeTakenStr = row["DateTimeOriginal"]
           if (timeTakenStr.isNullOrEmpty()) {
+            // TODO: is this the best field to fall back on? It's not always the time the photo was taken (but at least
+            //  it should always exist?)
             timeTakenStr = row["FileCreateDate"]!!
           }
           val offsetIndex = timeTakenStr.indexOfAny(listOf("-", "+"))
           val timeOffset: String
           if (offsetIndex >= 0) {
             timeOffset = timeTakenStr.substring(offsetIndex)
+            prevTimeOffset = timeOffset
             timeTakenStr = timeTakenStr.substring(0, offsetIndex)
           } else {
             logger.w("No timezone found for $originalsDir\\$filename - using $prevTimeOffset")
