@@ -27,7 +27,7 @@ kotlin {
   sourceSets {
     jsMain.dependencies {
       // https://github.com/JetBrains/kotlin-wrappers/releases
-      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.826"))
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.832"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
       implementation(libs.kotlinx.coroutines.core)
