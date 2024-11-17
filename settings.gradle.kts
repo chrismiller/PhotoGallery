@@ -20,7 +20,7 @@ dependencyResolutionManagement {
   versionCatalogs {
     create("kotlinWrappers") {
       // https://github.com/JetBrains/kotlin-wrappers/releases
-      val wrappersVersion = "0.0.1-pre.826"
+      val wrappersVersion = "0.0.1-pre.832"
       from("org.jetbrains.kotlin-wrappers:kotlin-wrappers-catalog:$wrappersVersion")
     }
   }

@@ -25,7 +25,7 @@ kotlin {
 
   sourceSets {
     jsMain.dependencies {
-      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.818"))
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.832"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
       implementation(compose.runtime)
