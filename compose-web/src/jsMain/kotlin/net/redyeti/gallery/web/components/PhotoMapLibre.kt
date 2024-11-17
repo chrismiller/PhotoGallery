@@ -130,7 +130,7 @@ fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
 
   addSource("photos", source)
   addLayer(layer1)
-  //addLayer(layer2)
+  addLayer(layer2)
   addLayer(layer3)
 }
 
@@ -238,8 +238,8 @@ private fun createClusterCountLayer(): SourceLayerSpecification {
     filter = arrayOf("has", "point_count")
     layout = jso {
       textField = "{point_count_abbreviated}"
-      // Font issue preventing the rendering?
-      //textFont = arrayOf("Open Sans Regular", "Noto Sans Regular")
+      // Note that if the font name doesn't exist (in the style json), the layers silently fail to render. Hard to debug!
+      textFont = arrayOf("Noto Sans Regular")
       textSize = 12.0
     }
   }
