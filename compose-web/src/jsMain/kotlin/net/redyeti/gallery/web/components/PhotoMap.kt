@@ -38,7 +38,7 @@ private class State(album: PopulatedAlbum, mapWidth: Double, mapHeight: Double) 
   })
 }
 
-const val markerPhotoSize = 50
+const val markerPhotoSize = 100
 
 @Composable
 fun PhotoMap(album: PopulatedAlbum) {

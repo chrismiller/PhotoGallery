@@ -1293,7 +1293,7 @@ external class Map(options: MapOptions) {
    */
   //fun on(type: MapEventType, listener: Listener): Map
 
-  fun on(type: String, listener: (a: Any) -> Any): Map
+  fun on(type: String, listener: (a: dynamic) -> Any): Map
   /**
    * Adds a listener that will be called only once to a specified event type, optionally limited to features in a specified style layer.
    *

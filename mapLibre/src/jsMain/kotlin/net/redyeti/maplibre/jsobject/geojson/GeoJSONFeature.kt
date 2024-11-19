@@ -15,9 +15,9 @@ external class MapGeoJSONFeature: GeoJSONFeature {
  */
 open external class GeoJSONFeature(z: Double, x: Double, y: Double, id: Any /* number | string | undefined */) {
   val type: String
-  val id: Any
+  val id: Any?
   val geometry: Geometry
-  val properties: Map<String, Any> // { [name: string]: any };
+  val properties: dynamic // { [name: string]: any };
   // _vectorTileFeature: VectorTileFeature
 
   fun toJSON()

@@ -41,32 +41,37 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
 
 class MarkerCache {
   companion object {
-    val markers = mutableMapOf<String, Marker>()
-    val markersOnScreen = mutableMapOf<String, Marker>()
+    val markers = mutableMapOf<Int, Marker>()
+    var markersOnScreen = mutableMapOf<Int, Marker>()
   }
 }
 
 fun Map.updateMarkers(source: String, createMarker: (MapGeoJSONFeature) -> Marker) {
-  if (true) return
-  val newMarkers = mutableMapOf<String, Marker>()
+  val newMarkers = mutableMapOf<Int, Marker>()
   val features = querySourceFeatures(source)
 
   // Create an HTML marker for each feature that's on the screen (if it's not in the cache already)
   for (feature in features) {
-    val props = feature.properties
-    if (!props.containsKey("cluster")) continue
-    val id = props["cluster_id"].toString()
-    val marker = markers.getOrPut(id) {
+    if (feature.id != null) {
+      // This is a cluster, ignore. We're only interested in the unclustered images.
+      continue
+    }
+    val photoId = feature.properties.id.unsafeCast<Int>()
+    val marker = markers.getOrPut(photoId) {
       createMarker(feature)
     }
-    markers[id] = marker
-    if (!markersOnScreen.containsKey(id)) {
+    newMarkers[photoId] = marker
+    if (!markersOnScreen.containsKey(photoId)) {
       marker.addTo(this)
     }
-    markersOnScreen.minus(newMarkers.keys).forEach {
-      it.value.remove()
+  }
+  markersOnScreen.forEach { entry ->
+    // Remove markers that are no longer visible from the map
+    if (!newMarkers.containsKey(entry.key)) {
+      entry.value.remove()
     }
   }
+  markersOnScreen = newMarkers
 }
 
 

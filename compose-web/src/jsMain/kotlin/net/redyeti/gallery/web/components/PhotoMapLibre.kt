@@ -3,9 +3,9 @@ package net.redyeti.gallery.web.components
 import androidx.compose.runtime.*
 import js.objects.jso
 import kotlinx.browser.document
-import kotlinx.dom.appendText
-import kotlinx.js.JsPlainObject
+import kotlinx.dom.addClass
 import net.redyeti.gallery.remote.*
+import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.maplibre.LibreMap
 import net.redyeti.maplibre.MapOptions
 import net.redyeti.maplibre.jsobject.LngLat
@@ -16,8 +16,8 @@ import net.redyeti.maplibre.jsobject.stylespec.*
 import net.redyeti.maplibre.updateMarkers
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
-import org.w3c.dom.Element
 import org.w3c.dom.HTMLDivElement
+import org.w3c.dom.Image
 import kotlin.math.max
 import kotlin.math.min
 
@@ -28,6 +28,7 @@ private fun getBounds(photos: List<Photo>, padding: Double = 0.10): LngLatBounds
   var minLong = 180.0
   var maxLong = -180.0
   val locations = photos.mapNotNull { it.location }
+  // TODO: handle the case where no photos are geotagged
   locations.forEach { coord ->
     minLat = min(minLat, coord.latitude)
     maxLat = max(maxLat, coord.latitude)
@@ -36,10 +37,10 @@ private fun getBounds(photos: List<Photo>, padding: Double = 0.10): LngLatBounds
   }
   val padLong = (maxLong - minLong) * padding
   val padLat = (maxLat - minLat) * padding
-  minLong = minLong - padLong
-  maxLong = maxLong + padLong
-  minLat = minLat - padLat
-  maxLat = maxLat + padLat
+  minLong -= padLong
+  maxLong += padLong
+  minLat -= padLat
+  maxLat += padLat
   return LngLatBounds(LngLat(minLong, minLat), LngLat(maxLong, maxLat))
 }
 
@@ -68,15 +69,16 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
 
   LibreMap(mapOptions) {
     on("load") {
-      if (document.getElementById("XXXXX") == null) {
-        createMapDiv(album)
-      }
+      // Are there situations where this shouldn't be called here?
+      createMapDiv(album)
     }
     on("data") { e ->
-      js("if (e.sourceId !== 'photos' || !e.isSourceLoaded) return;")
-      on("move") { updateMarkers("photos", ::createMarker) }
-      on("moveend") { updateMarkers("photos", ::createMarker) }
-      updateMarkers("photos", ::createMarker)
+      // Based on the example https://maplibre.org/maplibre-gl-js/docs/examples/cluster-html/
+      if (e.sourceId == "photos" && e.isSourceLoaded) {
+        on("move") { updateMarkers("photos", ::createMarker) }
+        on("moveend") { updateMarkers("photos", ::createMarker) }
+        updateMarkers("photos", ::createMarker)
+      }
     }
 
 //    album.photos.forEach { photo ->
@@ -111,10 +113,6 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
 }
 
 fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
-  val div = document.createElement("div").apply {
-    id = "XXXXX"
-  }
-  document.body?.appendChild(div)
   val source = createSource(album)
   val layer1 = createClusterLayer()
   val layer2 = createClusterCountLayer()
@@ -137,23 +135,22 @@ fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
 fun createMarker(feature: MapGeoJSONFeature): Marker {
   val coords = (feature.geometry.unsafeCast<Point>()).coordinates
   val markerThumb = document.createElement("div") as HTMLDivElement
-  val photo = feature.properties["photo"].unsafeCast<Photo>()
-  val albumKey = feature.properties["albumKey"].unsafeCast<String>()
-//  renderComposable(markerThumb) {
-//    val width = min(markerPhotoSize, photo.width * markerPhotoSize / photo.height)
-//    val height = min(markerPhotoSize, photo.height * markerPhotoSize / photo.width)
-//    Img(
-//      attrs = {
-//        classes(AppStyle.thumb)
-//        style {
-//          width(width.px)
-//          height(height.px)
-//        }
-//      },
-//      src = photo.thumbnailUrl,
-//      alt = photo.description
-//    )
-//  }
+  val photoId = feature.properties.id.unsafeCast<Int>()
+  val thumbnailUrl = feature.properties.thumbnailUrl.unsafeCast<String>()
+  val description = feature.properties.description.unsafeCast<String>()
+  val width = feature.properties.width.unsafeCast<Int>()
+  val height = feature.properties.height.unsafeCast<Int>()
+  val albumKey = feature.properties.albumKey.unsafeCast<String>()
+  val markerWidth = min(markerPhotoSize, width * markerPhotoSize / height)
+  val markerHeight = min(markerPhotoSize, height * markerPhotoSize / width)
+  val img = Image()
+  img.addClass(AppStyle.thumb)
+  img.src = thumbnailUrl
+  img.alt = description
+  img.style.width = "${markerWidth}px"
+  img.style.height = "${markerHeight}px"
+  img.addEventListener("click", { println("Clicked: /map/$albumKey/$photoId") })
+  markerThumb.appendChild(img)
 //  val router = Router.current
 //  markerThumb.addEventListener("click", { event ->
 //    router.navigate("/map/$albumKey/${photo.id}")
@@ -173,7 +170,11 @@ private fun createSource(album: PopulatedAlbum): SourceSpecification {
             type = GeoJsonTypes.Point
             coordinates = arrayOf(location.longitude, location.latitude, location.altitude)
             properties = jso {
-              set("photo", it.toJsPhoto())
+              set("id", it.id)
+              set("thumbnailUrl", it.thumbnailUrl)
+              set("description", it.description)
+              set("width", it.width)
+              set("height", it.height)
               set("albumKey", album.album.key)
             }
           }
@@ -184,36 +185,11 @@ private fun createSource(album: PopulatedAlbum): SourceSpecification {
   val source = GeoJSONSourceSpecification(
     type = SourceType.GeoJSON,
     cluster = true,
-    clusterMaxZoom = 14.0,
-    clusterRadius = 50.0,
+    clusterMaxZoom = 12.0,  // Disable clustering once we zoom in beyond this
+    clusterRadius = 30.0,   // How big an area to cluster
     data = geoData,
   )
   return source
-}
-
-@JsPlainObject
-external interface JsPhoto {
-  var id: Int
-  var directory: String
-  var filename: String
-  var description: String
-  var width: Int
-  var height: Int
-  var epochSeconds: Long
-  var timeOffset: String
-  var location: LngLat?
-}
-
-private fun Photo.toJsPhoto(): JsPhoto {
-  val opt = this
-  return jso {
-    opt.id.let { id = it }
-    opt.filename.let { filename = it }
-    opt.description.let { description = it }
-    opt.width.let { width = it }
-    opt.height.let { height = it }
-    opt.location?.let { location = LngLat(it.longitude, it.latitude) } // not needed?
-  }
 }
 
 private fun createClusterLayer(): SourceLayerSpecification {
@@ -224,7 +200,15 @@ private fun createClusterLayer(): SourceLayerSpecification {
     source = "photos"
     filter = arrayOf("has", "point_count")
     paint = jso {
-      circleColor = arrayOf("step", arrayOf("get", "point_count"), "#51bbd6", 100, "#f1f075", 750, "#f28cb1")
+      circleColor = arrayOf(
+        "interpolate-hcl", arrayOf("linear"),
+        arrayOf("get", "point_count"),
+        2, "#00F",
+        20, "#08F",
+        50, "#0FF",
+        150, "#0F8",
+        500, "#0F0"
+      )
       circleRadius = arrayOf("step", arrayOf("get", "point_count"), 20, 100, 30, 750, 40)
     }
   }
@@ -243,33 +227,14 @@ private fun createClusterCountLayer(): SourceLayerSpecification {
       textSize = 12.0
     }
   }
-
-//  val layout = SymbolLayoutConfig(
-//    textField = "{point_count_abbreviated}",
-//    textFont = arrayOf("Arial Unicode MS Bold"),
-//    textSize = 12
-//  )
-//  return SymbolLayerSpecification(
-//    id = "cluster-count",
-//    type = LayerType.Symbol,
-//    source = "photos",
-//    filter = arrayOf("has", "point_count"),
-//    layout = layout
-//  )
 }
 
 private fun createUnclusteredLayer(): SourceLayerSpecification {
+  // Use this as a placeholder, so we know where to add markers for photo thumbnails
   return CircleLayerSpecification(
     id = "unclustered-photos",
     type = LayerType.Circle,
     source = "photos",
-    filter = arrayOf("!", arrayOf("has", "point_count")),
-    //filter = arrayOf("!=", "cluster", true),
-    paint = jso<CirclePaintConfig> {
-      circleColor = "#11b4da"
-      circleRadius = 4
-      circleStrokeWidth = 1
-      circleStrokeColor = "#FFFFFF"
-    }
+    filter = arrayOf("!=", "cluster", true)
   )
 }
