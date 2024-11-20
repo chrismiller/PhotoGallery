@@ -1,8 +1,7 @@
 [versions]
 # https://kotlinlang.org/docs/releases.html#release-details
 # https://github.com/JetBrains/kotlin/releases
-# kotlin = "2.0.21"
-kotlin = "2.1.0-RC"
+kotlin = "2.1.0-RC2"
 # https://github.com/Kotlin/kotlinx.coroutines/releases
 kotlinxCoroutines = "1.9.0"
 # https://github.com/Kotlin/kotlinx-datetime/releases
@@ -21,8 +20,8 @@ routingCompose = "0.4.0"
 googleMaps = "0.3.3-alpha"
 
 # https://github.com/google/ksp/releases
-ksp = "2.1.0-RC-1.0.27"
-#ksp = "2.0.21-1.0.27"
+ksp = "2.1.0-RC2-1.0.28"
+
 # https://github.com/ktorio/ktor/releases
 ktor = "3.0.1"
 # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
@@ -32,7 +31,7 @@ shadow = "8.1.1"
 seskar = "3.50.1"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
-# kotlinterGradle = "4.4.1"
+kotlinterGradle = "4.5.0"
 
 # https://github.com/InsertKoinIO/koin/releases
 koin = "4.0.0"
