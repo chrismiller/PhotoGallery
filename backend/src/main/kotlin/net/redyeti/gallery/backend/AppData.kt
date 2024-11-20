@@ -14,4 +14,14 @@ class AppData(albums: List<PopulatedAlbum>) {
   fun getAlbum(key: String): PopulatedAlbum? = albumsByKey[key]
 
   fun getPhoto(albumKey: String, photoId: Int): Photo? = photosByAlbumAndId[albumKey]?.get(photoId)
+
+  fun allAlbumsMerged(): PopulatedAlbum {
+    val allPhotos = mutableListOf<Photo>()
+    albums.forEach { album ->
+      getAlbum(album.key)?.let {
+        allPhotos += it.photos
+      }
+    }
+    return PopulatedAlbum(Album("All", "All Photos", "", albums[0].coverImage, false, true), allPhotos)
+  }
 }

@@ -37,10 +37,11 @@ private fun getBounds(photos: List<Photo>, padding: Double = 0.10): LngLatBounds
   }
   val padLong = (maxLong - minLong) * padding
   val padLat = (maxLat - minLat) * padding
-  minLong -= padLong
-  maxLong += padLong
-  minLat -= padLat
-  maxLat += padLat
+  minLong = max(minLong - padLong, -180.0)
+  maxLong = min(maxLong + padLong, 180.0)
+  minLat = max(minLat - padLat, -90.0)
+  maxLat = min(maxLat + padLat, 90.0)
+  println("Bounds: $minLat, $minLong, $maxLat, $maxLong")
   return LngLatBounds(LngLat(minLong, minLat), LngLat(maxLong, maxLat))
 }
 

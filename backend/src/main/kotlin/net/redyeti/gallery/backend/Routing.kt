@@ -41,7 +41,10 @@ private fun Route.api() {
 
   get("/album/{key}") {
     val key = call.parameters.getOrFail<String>("key")
-    val result = appData.getAlbum(key) ?: throw RequestValidationException(key, listOf("Invalid album ID"))
+    val result = when(key) {
+      "All" -> appData.allAlbumsMerged()
+      else -> appData.getAlbum(key) ?: throw RequestValidationException(key, listOf("Invalid album ID"))
+    }
     call.respond(result)
   }
 
