@@ -57,6 +57,10 @@ data class CameraDetails(
 
 @Serializable
 data class PopulatedAlbum(val album: Album, val photos: List<Photo>) {
+  /**
+   * Wraps the ID photo around so it doesn't exceed the number of IDs in the album. This allows for easy
+   * 'next' / 'previous' navigation.
+   */
   fun wrappedID(id: Int) = (id + photos.size) % photos.size
 
   fun imageUrl(photoID: Int): String {

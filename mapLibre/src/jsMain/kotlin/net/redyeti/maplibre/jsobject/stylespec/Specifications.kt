@@ -208,9 +208,9 @@ typealias FilterSpecification = Any
 external interface LayerSpecification {
   var id: String
   var type: LayerType
-  val metadata: Any?
-  val minzoom: Double?
-  val maxzoom: Double?
+  var metadata: Any?
+  var minzoom: Double?
+  var maxzoom: Double?
 }
 
 @JsPlainObject
@@ -436,37 +436,37 @@ external interface CirclePaintConfig {
   @JsName("circle-color")
   var circleColor: DataDrivenPropertyValueSpecification<ColorSpecification>?
   @JsName("circle-blur")
-  val circleBlur: DataDrivenPropertyValueSpecification<Double>?
+  var circleBlur: DataDrivenPropertyValueSpecification<Double>?
   @JsName("circle-opacity")
-  val circleOpacity: DataDrivenPropertyValueSpecification<Double>?
+  var circleOpacity: DataDrivenPropertyValueSpecification<Double>?
   @JsName("circle-translate")
-  val circleTranslate: PropertyValueSpecification<Array<Double>>?
+  var circleTranslate: PropertyValueSpecification<Array<Double>>?
   @JsName("circle-translate-anchor")
-  val circleTranslateAnchor: PropertyValueSpecification<ViewType>?
+  var circleTranslateAnchor: PropertyValueSpecification<ViewType>?
   @JsName("circle-pitch-scale")
-  val circlePitchScale: PropertyValueSpecification<ViewType>?
+  var circlePitchScale: PropertyValueSpecification<ViewType>?
   @JsName("circle-pitch-alignment")
-  val circlePitchAlignment: PropertyValueSpecification<ViewType>?
+  var circlePitchAlignment: PropertyValueSpecification<ViewType>?
   @JsName("circle-stroke-width")
   var circleStrokeWidth: DataDrivenPropertyValueSpecification<Double>?
   @JsName("circle-stroke-color")
   var circleStrokeColor: DataDrivenPropertyValueSpecification<ColorSpecification>?
   @JsName("circle-stroke-opacity")
-  val circleStrokeOpacity: DataDrivenPropertyValueSpecification<Double>?
+  var circleStrokeOpacity: DataDrivenPropertyValueSpecification<Double>?
 }
 
 @JsPlainObject
 external interface HeatmapPaintConfig {
   @JsName("heatmap-radius")
-  val heatmapRadius: DataDrivenPropertyValueSpecification<Double>?
+  var heatmapRadius: DataDrivenPropertyValueSpecification<Double>?
   @JsName("heatmap-weight")
-  val heatmapWeight: DataDrivenPropertyValueSpecification<Double>?
+  var heatmapWeight: DataDrivenPropertyValueSpecification<Double>?
   @JsName("heatmap-intensity")
-  val heatmapIntensity: PropertyValueSpecification<Double>?
+  var heatmapIntensity: PropertyValueSpecification<Double>?
   @JsName("heatmap-color")
-  val heatmapColor: ExpressionSpecification?
+  var heatmapColor: ExpressionSpecification?
   @JsName("heatmap-opacity")
-  val heatmapOpacity: PropertyValueSpecification<Double>?
+  var heatmapOpacity: PropertyValueSpecification<Double>?
 }
 
 @JsPlainObject
@@ -560,37 +560,37 @@ external interface SymbolLayerSpecification : SourceLayerSpecification {
 @JsPlainObject
 external interface CircleLayerSpecification : SourceLayerSpecification {
   var filter: FilterSpecification?
-  val layout: CircleLayoutConfig?
+  var layout: CircleLayoutConfig?
   var paint: CirclePaintConfig?
 }
 
 @JsPlainObject
 external interface HeatmapLayerSpecification : SourceLayerSpecification {
-  val filter: FilterSpecification?
-  val layout: LayoutConfig?
-  val paint: HeatmapPaintConfig?
+  var filter: FilterSpecification?
+  var layout: LayoutConfig?
+  var paint: HeatmapPaintConfig?
 }
 
 @JsPlainObject
 external interface FillExtrusionLayerSpecification : SourceLayerSpecification {
-  val filter: FilterSpecification?
-  val layout: LayoutConfig?
-  val paint: FillExtrusionPaintConfig?
+  var filter: FilterSpecification?
+  var layout: LayoutConfig?
+  var paint: FillExtrusionPaintConfig?
 }
 
 @JsPlainObject
 external interface RasterLayerSpecification : SourceLayerSpecification {
-  val filter: FilterSpecification?
-  val layout: LayoutConfig?
-  val paint: RasterPaintConfig?
+  var filter: FilterSpecification?
+  var layout: LayoutConfig?
+  var paint: RasterPaintConfig?
 }
 
 
 @JsPlainObject
 external interface HillshadeLayerSpecification : SourceLayerSpecification {
-  val filter: FilterSpecification?
-  val layout: LayoutConfig?
-  val paint: HillshadePaintConfig?
+  var filter: FilterSpecification?
+  var layout: LayoutConfig?
+  var paint: HillshadePaintConfig?
 }
 
 @JsPlainObject

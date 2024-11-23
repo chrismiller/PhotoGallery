@@ -273,5 +273,5 @@ external class Marker {
    * @param opacity - Sets the `opacity` property of the marker.
    * @param opacityWhenCovered - Sets the `opacityWhenCovered` property of the marker.
    */
-  fun setOpacity(opacity : String, opacityWhenCovered : String): Marker
+  fun setOpacity(opacity : String = definedExternally, opacityWhenCovered : String = definedExternally): Marker
 }

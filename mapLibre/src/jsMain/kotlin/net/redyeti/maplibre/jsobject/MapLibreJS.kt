@@ -705,7 +705,7 @@ open external class Camera : Evented {
  * ```
  * @see [Display a map](https://maplibre.org/maplibre-gl-js/docs/examples/simple-map/)
  */
-external class Map(options: MapOptions) {
+external class Map(options: MapOptions) : Camera {
   // var style: Style
   // var painter: Painter
   // var handlers: HandlerManager
@@ -871,11 +871,11 @@ external class Map(options: MapOptions) {
    * ```
    */
   fun hasControl(control: IControl): Boolean
-  fun calculateCameraOptionsFromTo(
+  override fun calculateCameraOptionsFromTo(
     from: LngLat,
     altitudeFrom: Double,
     to: LngLat,
-    altitudeTo: Double = definedExternally
+    altitudeTo: Double
   ): CameraOptions
 
   /**
@@ -1276,6 +1276,8 @@ external class Map(options: MapOptions) {
    * @see [Create a draggable marker](https://maplibre.org/maplibre-gl-js/docs/examples/drag-a-point/)
    */
   //fun<T: MapLayerEventType> on(type: T, layer: String, listener: (ev: Any /* MapLayerEventType[T] & Object */) -> Unit): Map
+  fun on(type: String, layer: String, listener: (a: dynamic) -> Any): Map
+
   /**
    * Overload of the `on` method that allows to listen to events without specifying a layer.
    * @event
@@ -1356,7 +1358,6 @@ external class Map(options: MapOptions) {
    */
   // fun off(type: /* keyof MapEventType */, listener: Listener): Map
 
-  fun off(type: String, listener: (a: Any?) -> Any?): Map
   /**
    * Returns an array of MapGeoJSONFeature objects
    * representing visible features that satisfy the query parameters.
@@ -2395,8 +2396,6 @@ external class Map(options: MapOptions) {
    */
 //  fun _requestRenderFrame(callback: () -> Unit): TaskID
 //  fun _cancelRenderFrame(id: TaskID): Unit
-  fun _requestRenderFrame(callback: () -> Unit): Double
-  fun _cancelRenderFrame(id: Double): Unit
 
   /**
    * @internal
@@ -3318,7 +3317,7 @@ external interface QuerySourceFeatureOptions {
    * A [filter](https://maplibre.org/maplibre-style-spec/layers/#filter)
    * to limit query results.
    */
-  // var filter: FilterSpecification?
+  var filter: Any? // FilterSpecification?
 
   /**
    * Whether to check if the [parameters.filter] conforms to the MapLibre Style Specification. Disabling validation is a performance optimization that should only be used if you have previously validated the values you will be passing to this function.

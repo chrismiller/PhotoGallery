@@ -9,12 +9,13 @@ import net.redyeti.maplibre.jsobject.Marker
 import net.redyeti.maplibre.jsobject.NavigationControl
 import net.redyeti.maplibre.jsobject.geojson.MapGeoJSONFeature
 
+import kotlin.math.*
+
 @Composable
 fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = null) {
   var map: Map? by remember { mutableStateOf(null) }
 
   LaunchedEffect(Unit) {
-    // <link rel='stylesheet' href='/maplibre-gl.css' />
     val css = document.createElement("link")
     css.setAttribute("rel", "stylesheet")
     css.setAttribute("href", "/maplibre-gl.css")
@@ -46,25 +47,31 @@ class MarkerCache {
   }
 }
 
-fun Map.updateMarkers(source: String, createMarker: (MapGeoJSONFeature) -> Marker) {
+fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double = 14.0, createMarker: (MapGeoJSONFeature) -> Marker) {
+  if (getZoom() < fadeStart) {
+    // Remove any thumbnails, we're zoomed out too far
+    markersOnScreen.forEach { it.value.remove() }
+    markersOnScreen.clear()
+    return
+  }
+
   val newMarkers = mutableMapOf<Int, Marker>()
-  val features = querySourceFeatures(source)
+  // Apply some transparency to the marker if we're between the fade zoom levels
+  val opacity = min((getZoom() - fadeStart) / (fadeStop - fadeStart), 1.0).toString()
 
   // Create an HTML marker for each feature that's on the screen (if it's not in the cache already)
-  for (feature in features) {
-    if (feature.id != null) {
-      // This is a cluster, ignore. We're only interested in the unclustered images.
-      continue
-    }
+  for (feature in querySourceFeatures(source)) {
     val photoId = feature.properties.id.unsafeCast<Int>()
     val marker = markers.getOrPut(photoId) {
       createMarker(feature)
     }
+    marker.setOpacity(opacity)
     newMarkers[photoId] = marker
     if (!markersOnScreen.containsKey(photoId)) {
       marker.addTo(this)
     }
   }
+
   markersOnScreen.forEach { entry ->
     // Remove markers that are no longer visible from the map
     if (!newMarkers.containsKey(entry.key)) {
@@ -76,8 +83,7 @@ fun Map.updateMarkers(source: String, createMarker: (MapGeoJSONFeature) -> Marke
 
 
 private inline fun Map.newComposition(
-  parent: CompositionContext,
-  noinline content: @Composable () -> Unit
+  parent: CompositionContext, noinline content: @Composable () -> Unit
 ): Composition {
   return Composition(
     MapApplier(), parent

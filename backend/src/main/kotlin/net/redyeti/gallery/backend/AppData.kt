@@ -16,10 +16,13 @@ class AppData(albums: List<PopulatedAlbum>) {
   fun getPhoto(albumKey: String, photoId: Int): Photo? = photosByAlbumAndId[albumKey]?.get(photoId)
 
   fun allAlbumsMerged(): PopulatedAlbum {
+    // Create a new album that contains all photos, assigning new IDs as we go because the existing
+    // ones overlap across albums. We mark the album as hidden, because it works well on map view
+    // but brings the album view to its knees
     val allPhotos = mutableListOf<Photo>()
-    albums.forEach { album ->
+    albums.forEachIndexed { i, album ->
       getAlbum(album.key)?.let {
-        allPhotos += it.photos
+        allPhotos += it.photos.map { it.copy(id = i) }
       }
     }
     return PopulatedAlbum(Album("All", "All Photos", "", albums[0].coverImage, false, true), allPhotos)

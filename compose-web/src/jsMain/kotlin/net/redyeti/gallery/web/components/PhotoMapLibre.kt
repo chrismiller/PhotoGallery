@@ -1,6 +1,7 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.*
+import app.softwork.routingcompose.Router
 import js.objects.jso
 import kotlinx.browser.document
 import kotlinx.dom.addClass
@@ -13,6 +14,7 @@ import net.redyeti.maplibre.jsobject.LngLatBounds
 import net.redyeti.maplibre.jsobject.Marker
 import net.redyeti.maplibre.jsobject.geojson.*
 import net.redyeti.maplibre.jsobject.stylespec.*
+import net.redyeti.maplibre.jsobject.stylespec.CirclePaintConfig
 import net.redyeti.maplibre.updateMarkers
 import org.jetbrains.compose.web.css.*
 import org.jetbrains.compose.web.dom.Div
@@ -28,7 +30,6 @@ private fun getBounds(photos: List<Photo>, padding: Double = 0.10): LngLatBounds
   var minLong = 180.0
   var maxLong = -180.0
   val locations = photos.mapNotNull { it.location }
-  // TODO: handle the case where no photos are geotagged
   locations.forEach { coord ->
     minLat = min(minLat, coord.latitude)
     maxLat = max(maxLat, coord.latitude)
@@ -41,7 +42,7 @@ private fun getBounds(photos: List<Photo>, padding: Double = 0.10): LngLatBounds
   maxLong = min(maxLong + padLong, 180.0)
   minLat = max(minLat - padLat, -90.0)
   maxLat = min(maxLat + padLat, 90.0)
-  println("Bounds: $minLat, $minLong, $maxLat, $maxLong")
+
   return LngLatBounds(LngLat(minLong, minLat), LngLat(maxLong, maxLat))
 }
 
@@ -73,56 +74,37 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
       // Are there situations where this shouldn't be called here?
       createMapDiv(album)
     }
+    val router = Router.current
+    val createMarker = { feature: MapGeoJSONFeature ->
+      createMarker(feature) { albumKey, photoId ->
+        router.navigate("/map/${albumKey}/${photoId}")
+      }
+    }
     on("data") { e ->
       // Based on the example https://maplibre.org/maplibre-gl-js/docs/examples/cluster-html/
       if (e.sourceId == "photos" && e.isSourceLoaded) {
-        on("move") { updateMarkers("photos", ::createMarker) }
-        on("moveend") { updateMarkers("photos", ::createMarker) }
-        updateMarkers("photos", ::createMarker)
+        on("move") { updateMarkers("photos", 13.0, 14.0, createMarker) }
+        on("moveend") { updateMarkers("photos", 13.0, 14.0, createMarker) }
+        updateMarkers("photos", 13.0, 14.0, createMarker)
       }
     }
 
-//    album.photos.forEach { photo ->
-//      val l = photo.location
-//      if (l != null) {
-//        val markerThumb = document.createElement("div") as HTMLElement
-//        renderComposable(markerThumb) {
-//          val width = min(markerPhotoSize, photo.width * markerPhotoSize / photo.height)
-//          val height = min(markerPhotoSize, photo.height * markerPhotoSize / photo.width)
-//          Img(
-//            attrs = {
-//              classes(AppStyle.thumb)
-//              style {
-//                width(width.px)
-//                height(height.px)
-//              }
-//            },
-//            src = photo.thumbnailUrl,
-//            alt = photo.description
-//          )
-//        }
-//        val router = Router.current
-//        markerThumb.addEventListener("click", { event ->
-//          router.navigate("/map/${album.album.key}/${photo.id}")
-//        })
-//        Marker(jso { element = markerThumb })
-//          .setLngLat(LngLat(l.longitude, l.latitude))
-//          .addTo(this)
-//      }
-//    }
+    // Change the cursor to a pointer when the mouse is over the places layer.
+    on("mouseenter", "photos") {
+      getCanvas().style.cursor = "pointer";
+    }
+    // Change it back to a pointer when it leaves.
+    on("mouseleave", "photos") {
+      getCanvas().style.cursor = "";
+    }
   }
 }
 
 fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
   val source = createSource(album)
-  val layer1 = createClusterLayer()
-  val layer2 = createClusterCountLayer()
-  val layer3 = createUnclusteredLayer()
+  val layer1 = createHeatmapLayer()
+  val layer2 = createThumbnailLayer()
   //  div.appendText(JSON.stringify(source))
-  //  div.appendText("*******")
-  //  div.appendText(JSON.stringify(layer3))
-  //  div.appendText("*******")
-  //  div.appendText(JSON.stringify(layer2))
   //  div.appendText("*******")
   //  div.appendText(JSON.stringify(layer1))
   //  div.appendText("*******")
@@ -130,10 +112,9 @@ fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
   addSource("photos", source)
   addLayer(layer1)
   addLayer(layer2)
-  addLayer(layer3)
 }
 
-fun createMarker(feature: MapGeoJSONFeature): Marker {
+fun createMarker(feature: MapGeoJSONFeature, onClick: (albumKey: String, photoId: Int) -> Unit): Marker {
   val coords = (feature.geometry.unsafeCast<Point>()).coordinates
   val markerThumb = document.createElement("div") as HTMLDivElement
   val photoId = feature.properties.id.unsafeCast<Int>()
@@ -150,12 +131,9 @@ fun createMarker(feature: MapGeoJSONFeature): Marker {
   img.alt = description
   img.style.width = "${markerWidth}px"
   img.style.height = "${markerHeight}px"
-  img.addEventListener("click", { println("Clicked: /map/$albumKey/$photoId") })
+  img.addEventListener("click", { onClick(albumKey, photoId) })
   markerThumb.appendChild(img)
-//  val router = Router.current
-//  markerThumb.addEventListener("click", { event ->
-//    router.navigate("/map/$albumKey/${photo.id}")
-//  })
+  markerThumb.style.cursor = "pointer"
   return Marker(jso { element = markerThumb })
     .setLngLat(LngLat(coords[0], coords[1]))
 }
@@ -183,14 +161,10 @@ private fun createSource(album: PopulatedAlbum): SourceSpecification {
       }
     }.toTypedArray()
   }
-  val source = GeoJSONSourceSpecification(
+  return GeoJSONSourceSpecification(
     type = SourceType.GeoJSON,
-    cluster = true,
-    clusterMaxZoom = 12.0,  // Disable clustering once we zoom in beyond this
-    clusterRadius = 30.0,   // How big an area to cluster
     data = geoData,
   )
-  return source
 }
 
 private fun createClusterLayer(): SourceLayerSpecification {
@@ -227,15 +201,57 @@ private fun createClusterCountLayer(): SourceLayerSpecification {
       textFont = arrayOf("Noto Sans Regular")
       textSize = 12.0
     }
+    paint = jso {
+      textColor = "#FFF"
+    }
   }
 }
 
-private fun createUnclusteredLayer(): SourceLayerSpecification {
-  // Use this as a placeholder, so we know where to add markers for photo thumbnails
+private fun createHeatmapLayer(): SourceLayerSpecification {
+  return jso<HeatmapLayerSpecification> {
+    id = "heatmap"
+    type = LayerType.HeatMap
+    source = "photos"
+    maxzoom = 14.0
+    paint = jso {
+      // We don't really have anything to weight this by? :-/
+      heatmapWeight = 1.0
+      // Increase the heatmap color weight by zoom level. heatmap-intensity is a multiplier on top of heatmap-weight
+      heatmapIntensity = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 0, 1, 14, 3)
+      // Colour ramp for heatmap.  Domain is 0 (low) to 1 (high). Begin colour ramp at 0-stop with a
+      // 0-transparency colour to create a blur-like effect.
+      heatmapColor = arrayOf("interpolate", arrayOf("linear"), arrayOf("heatmap-density"),
+        0,
+        "rgba(50, 50, 255, 0)",
+        0.2,
+        "rgba(0, 204, 255, 0.2)",
+        0.4,
+        "rgba(128, 255, 128, 0.6)",
+        0.6,
+        "rgb(255, 255, 102)",
+        0.8,
+        "rgb(255, 128, 0)",
+        1,
+        "rgb(204, 0, 0)"
+      )
+      // Adjust the heatmap radius by zoom level
+      heatmapRadius = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 0, 2, 14, 20)
+      // Fade the heatmap out once we start zooming in past level 10
+      heatmapOpacity = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 12, 1, 14, 0)
+    }
+  }
+}
+
+private fun createThumbnailLayer(): SourceLayerSpecification {
+  // Use this as an invisible placeholder, so we know where to add markers for photo thumbnails.
   return CircleLayerSpecification(
-    id = "unclustered-photos",
+    id = "thumbnails",
     type = LayerType.Circle,
     source = "photos",
-    filter = arrayOf("!=", "cluster", true)
+    minzoom = 14.0,
+    paint = jso<CirclePaintConfig> {
+      circleColor = "rgba(0,0,0,0)"
+      circleRadius = 1
+    }
   )
 }
