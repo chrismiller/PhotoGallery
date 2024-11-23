@@ -42,12 +42,20 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
 
 class MarkerCache {
   companion object {
+    // TODO: should be limit the number of markers we remember?
     val markers = mutableMapOf<Int, Marker>()
     var markersOnScreen = mutableMapOf<Int, Marker>()
   }
 }
 
+fun Map.resetCache() {
+  markers.forEach { it.value.remove() }
+  markers.clear()
+  markersOnScreen.clear()
+}
+
 fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double = 14.0, createMarker: (MapGeoJSONFeature) -> Marker) {
+  // This logic takes a similar approach to the code in https://maplibre.org/maplibre-gl-js/docs/examples/cluster-html/
   if (getZoom() < fadeStart) {
     // Remove any thumbnails, we're zoomed out too far
     markersOnScreen.forEach { it.value.remove() }
@@ -55,11 +63,12 @@ fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double
     return
   }
 
-  val newMarkers = mutableMapOf<Int, Marker>()
   // Apply some transparency to the marker if we're between the fade zoom levels
   val opacity = min((getZoom() - fadeStart) / (fadeStop - fadeStart), 1.0).toString()
 
-  // Create an HTML marker for each feature that's on the screen (if it's not in the cache already)
+  // Create an HTML marker for each feature that's on the screen (if it's not in the cache already).
+  // Note that querySourceFeatures() can be quite expensive when there are lots of features visible.
+  val newMarkers = mutableMapOf<Int, Marker>()
   for (feature in querySourceFeatures(source)) {
     val photoId = feature.properties.id.unsafeCast<Int>()
     val marker = markers.getOrPut(photoId) {

@@ -9,6 +9,7 @@ import net.redyeti.gallery.remote.*
 import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.maplibre.LibreMap
 import net.redyeti.maplibre.MapOptions
+import net.redyeti.maplibre.resetCache
 import net.redyeti.maplibre.jsobject.LngLat
 import net.redyeti.maplibre.jsobject.LngLatBounds
 import net.redyeti.maplibre.jsobject.Marker
@@ -72,6 +73,9 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
 
   LibreMap(mapOptions) {
     on("load") {
+      // Clear the cache, because photo IDs are different compared to the previous album's data,
+      // plus we're not likely to want the entries again soon.
+      resetCache()
       // Are there situations where this shouldn't be called here?
       createMapDiv(album)
     }
@@ -88,15 +92,6 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
         on("moveend") { updateMarkers("photos", 13.0, 14.0, createMarker) }
         updateMarkers("photos", 13.0, 14.0, createMarker)
       }
-    }
-
-    // Change the cursor to a pointer when the mouse is over the places layer.
-    on("mouseenter", "photos") {
-      getCanvas().style.cursor = "pointer";
-    }
-    // Change it back to a pointer when it leaves.
-    on("mouseleave", "photos") {
-      getCanvas().style.cursor = "";
     }
   }
 }
