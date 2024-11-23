@@ -25,7 +25,7 @@ class AlbumScanner(val config: AppConfig) {
 
     private val EXIFTOOL_METADATA_SCAN = listOf(
       // The # suffix returns the value without any automatic formatting/display conversion
-      "-S", "-csv", "-FileName", "-FileSize#", "-DateTimeOriginal", "-OffsetTimeOriginal",
+      "-S", "-csv", "-FileName", "-FileSize#", "-DateTimeOriginal", "-OffsetTimeOriginal", "-FileCreateDate",
       "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
       "-Model", "-ApertureValue", "-ExposureTime", "-FocalLength", "-ISO#", "-Lens", "-Description",
       "*.jpg"
@@ -126,17 +126,27 @@ class AlbumScanner(val config: AppConfig) {
           val row = parser.parseLine(csvRow.reader(), headers)
           val filename = row["FileName"]!!
           val fileSize = row["FileSize#"].asInt()
-          val timeTakenStr = row["DateTimeOriginal"]!!
-          var timeOffset = row["OffsetTimeOriginal"]
-          if (timeOffset.isNullOrEmpty()) {
-            timeOffset = prevTimeOffset
-            logger.w("No timezone found for $originalsDir\\$filename - using $timeOffset")
+          var timeTakenStr = row["DateTimeOriginal"]
+          if (timeTakenStr.isNullOrEmpty()) {
+            // TODO: is this the best field to fall back on? It's not always the time the photo was taken (but at least
+            //  it should always exist?)
+            timeTakenStr = row["FileCreateDate"]!!
           }
-          prevTimeOffset = timeOffset
+          val offsetIndex = timeTakenStr.indexOfAny(listOf("-", "+"))
+          val timeOffset: String
+          if (offsetIndex >= 0) {
+            timeOffset = timeTakenStr.substring(offsetIndex)
+            prevTimeOffset = timeOffset
+            timeTakenStr = timeTakenStr.substring(0, offsetIndex)
+          } else {
+            logger.w("No timezone found for $originalsDir\\$filename - using $prevTimeOffset")
+            timeOffset = prevTimeOffset
+          }
+          val fullTimeStr = if (timeTakenStr.contains("[-+]".toRegex())) timeTakenStr else "$timeTakenStr $timeOffset"
           val timeTaken = try {
-            ZonedDateTime.parse("$timeTakenStr $timeOffset", pattern)
+            ZonedDateTime.parse(fullTimeStr, pattern)
           } catch (e: Exception) {
-            throw IllegalArgumentException("Could not parse time for $originalsDir/$filename (${e.message})")
+            throw IllegalArgumentException("Could not parse time '$fullTimeStr' for $originalsDir/$filename (${e.message})")
           }
           val description = row["Description"].orEmpty()
           val camera = row["Model"].orEmpty()
