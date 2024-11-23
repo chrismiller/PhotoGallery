@@ -20,9 +20,10 @@ class AppData(albums: List<PopulatedAlbum>) {
     // ones overlap across albums. We mark the album as hidden, because it works well on map view
     // but brings the album view to its knees
     val allPhotos = mutableListOf<Photo>()
-    albums.forEachIndexed { i, album ->
+    var id = 0
+    albums.forEach { album ->
       getAlbum(album.key)?.let {
-        allPhotos += it.photos.map { it.copy(id = i) }
+        allPhotos += it.photos.map { it.copy(id = id++) }
       }
     }
     return PopulatedAlbum(Album("All", "All Photos", "", albums[0].coverImage, false, true), allPhotos)
