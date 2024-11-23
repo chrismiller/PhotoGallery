@@ -33,7 +33,6 @@ kotlin {
       implementation(libs.routing.compose)
       implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
       implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
-      implementation(libs.google.maps)
       implementation(libs.kotlinx.datetime)
     }
 

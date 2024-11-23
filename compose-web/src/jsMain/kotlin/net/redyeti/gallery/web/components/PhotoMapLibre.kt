@@ -23,6 +23,7 @@ import org.w3c.dom.Image
 import kotlin.math.max
 import kotlin.math.min
 
+private const val markerPhotoSize = 100
 
 private fun getBounds(photos: List<Photo>, padding: Double = 0.10): LngLatBounds {
   var minLat = 90.0
