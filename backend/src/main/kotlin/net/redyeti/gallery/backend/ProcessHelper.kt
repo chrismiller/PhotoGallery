@@ -35,11 +35,11 @@ fun execute(
   stderrThread.join()
   val returnCode = process.waitFor()
 
+  failure?.also { throw it }
+
   if (returnCode != 0) {
     throw RuntimeException("Error while running ${arguments.first()}: $returnCode")
   }
-
-  failure?.also { throw it }
 
   return 0
 }
