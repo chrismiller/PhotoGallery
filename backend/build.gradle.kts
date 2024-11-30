@@ -34,6 +34,7 @@ dependencies {
   implementation(libs.ktor.serialization.kotlinx.json)
 
   implementation(libs.solar.positioning)
+  implementation(libs.gpx.parsing)
   implementation(libs.jansi)
 
   implementation(libs.log4j.slf4j2.impl)

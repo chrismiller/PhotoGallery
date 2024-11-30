@@ -77,7 +77,7 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
       // plus we're not likely to want the entries again soon.
       resetCache()
       // Are there situations where this shouldn't be called here?
-      createMapDiv(album)
+      populateMap(album)
     }
     val router = Router.current
     val createMarker = { feature: MapGeoJSONFeature ->
@@ -96,18 +96,16 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
   }
 }
 
-fun net.redyeti.maplibre.jsobject.Map.createMapDiv(album: PopulatedAlbum) {
-  val source = createSource(album)
-  val layer1 = createHeatmapLayer()
-  val layer2 = createThumbnailLayer()
-  //  div.appendText(JSON.stringify(source))
-  //  div.appendText("*******")
-  //  div.appendText(JSON.stringify(layer1))
-  //  div.appendText("*******")
+fun net.redyeti.maplibre.jsobject.Map.populateMap(album: PopulatedAlbum) {
+  if (album.album.hasGpsTracks) {
+    val gpsSource = createGpsTracks(album)
+    addSource("gpstracks", gpsSource)
+    addLayer(createGpsTrackLayer())
+  }
 
-  addSource("photos", source)
-  addLayer(layer1)
-  addLayer(layer2)
+  addSource("photos", createPhotoSource(album))
+  addLayer(createHeatmapLayer())
+  addLayer(createThumbnailLayer())
 }
 
 fun createMarker(feature: MapGeoJSONFeature, onClick: (albumKey: String, photoId: Int) -> Unit): Marker {
@@ -134,7 +132,7 @@ fun createMarker(feature: MapGeoJSONFeature, onClick: (albumKey: String, photoId
     .setLngLat(LngLat(coords[0], coords[1]))
 }
 
-private fun createSource(album: PopulatedAlbum): SourceSpecification {
+private fun createPhotoSource(album: PopulatedAlbum): SourceSpecification {
   val geoData: FeatureCollection<GeoJsonObject, GeoJsonProperties> = jso {
     type = GeoJsonTypes.FeatureCollection
     features = album.photos.mapNotNull<Photo, Feature<GeoJsonObject, GeoJsonProperties>> {
@@ -163,44 +161,11 @@ private fun createSource(album: PopulatedAlbum): SourceSpecification {
   )
 }
 
-private fun createClusterLayer(): SourceLayerSpecification {
-  // This works
-  return jso<CircleLayerSpecification> {
-    id = "clusters"
-    type = LayerType.Circle
-    source = "photos"
-    filter = arrayOf("has", "point_count")
-    paint = jso {
-      circleColor = arrayOf(
-        "interpolate-hcl", arrayOf("linear"),
-        arrayOf("get", "point_count"),
-        2, "#00F",
-        20, "#08F",
-        50, "#0FF",
-        150, "#0F8",
-        500, "#0F0"
-      )
-      circleRadius = arrayOf("step", arrayOf("get", "point_count"), 20, 100, 30, 750, 40)
-    }
-  }
-}
-
-private fun createClusterCountLayer(): SourceLayerSpecification {
-  return jso<SymbolLayerSpecification> {
-    id = "cluster-count"
-    type = LayerType.Symbol
-    source = "photos"
-    filter = arrayOf("has", "point_count")
-    layout = jso {
-      textField = "{point_count_abbreviated}"
-      // Note that if the font name doesn't exist (in the style json), the layers silently fail to render. Hard to debug!
-      textFont = arrayOf("Noto Sans Regular")
-      textSize = 12.0
-    }
-    paint = jso {
-      textColor = "#FFF"
-    }
-  }
+private fun createGpsTracks(album: PopulatedAlbum): SourceSpecification {
+  return GeoJSONSourceSpecification(
+    type = SourceType.GeoJSON,
+    data = album.album.gpsUrl,
+  )
 }
 
 private fun createHeatmapLayer(): SourceLayerSpecification {
@@ -248,6 +213,24 @@ private fun createThumbnailLayer(): SourceLayerSpecification {
     paint = jso<CirclePaintConfig> {
       circleColor = "rgba(0,0,0,0)"
       circleRadius = 1
+    }
+  )
+}
+
+private fun createGpsTrackLayer(): SourceLayerSpecification {
+  // Use this as an invisible placeholder, so we know where to add markers for photo thumbnails.
+  return LineLayerSpecification(
+    id = "gpstracks",
+    type = LayerType.Line,
+    source = "gpstracks",
+    minzoom = 5.0,
+    layout = jso<LineLayoutConfig> {
+      lineJoin = LineJoinType.Round
+      lineCap = LineCapType.Round
+    },
+    paint = jso<LinePaintConfig> {
+      lineColor = "rgba(0,0,180,0.5)"
+      lineWidth = 3.0
     }
   )
 }

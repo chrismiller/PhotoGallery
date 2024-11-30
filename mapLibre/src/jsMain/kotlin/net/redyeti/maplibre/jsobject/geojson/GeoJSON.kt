@@ -17,19 +17,26 @@ import net.redyeti.maplibre.jsobject.LngLat
  * https://tools.ietf.org/html/rfc7946#section-1.4
  */
 sealed external interface GeoJsonGeometryTypes {
+  // Union types: https://github.com/turansky/seskar#unions
   companion object {
     @seskar.js.JsValue("Point")
     val Point: GeoJsonGeometryTypes
+
     @seskar.js.JsValue("MultiPoint")
     val MultiPoint: GeoJsonGeometryTypes
+
     @seskar.js.JsValue("LineString")
     val LineString: GeoJsonGeometryTypes
+
     @seskar.js.JsValue("MultiLineString")
     val MultiLineString: GeoJsonGeometryTypes
+
     @seskar.js.JsValue("Polygon")
     val Polygon: GeoJsonGeometryTypes
+
     @seskar.js.JsValue("MultiPolygon")
     val MultiPolygon: GeoJsonGeometryTypes
+
     @seskar.js.JsValue("GeometryCollection")
     val GeometryCollection: GeoJsonGeometryTypes
   }
@@ -43,20 +50,28 @@ sealed external interface GeoJsonTypes {
   companion object {
     @seskar.js.JsValue("Point")
     val Point: GeoJsonTypes
+
     @seskar.js.JsValue("MultiPoint")
     val MultiPoint: GeoJsonTypes
+
     @seskar.js.JsValue("LineString")
     val LineString: GeoJsonTypes
+
     @seskar.js.JsValue("MultiLineString")
     val MultiLineString: GeoJsonTypes
+
     @seskar.js.JsValue("Polygon")
     val Polygon: GeoJsonTypes
+
     @seskar.js.JsValue("MultiPolygon")
     val MultiPolygon: GeoJsonTypes
+
     @seskar.js.JsValue("GeometryCollection")
     val GeometryCollection: GeoJsonTypes
+
     @seskar.js.JsValue("Feature")
     val Feature: GeoJsonTypes
+
     @seskar.js.JsValue("FeatureCollection")
     val FeatureCollection: GeoJsonTypes
   }
@@ -66,19 +81,9 @@ sealed external interface GeoJsonTypes {
  * Bounding box
  * https://tools.ietf.org/html/rfc7946#section-5
  */
-typealias BBox = Array<Double> /* [
-    number,
-    number,
-    number,
-    number
-] | [
-    number,
-    number,
-    number,
-    number,
-    number,
-    number
-] */
+typealias BBox = Array<Double> /* [ number, number, number, number ]
+                                | [ number, number, number, number, number, number ]
+                                 */
 
 /**
  * A Position is an array of coordinates.
@@ -106,6 +111,7 @@ external interface GeoJsonObject {
    * Specifies the type of GeoJSON object.
    */
   var type: GeoJsonTypes
+
   /**
    * Bounding box of the coordinate range of the object's Geometries, Features, or Feature Collections.
    * The value of the bbox member is an array of length 2*n where n is the number of dimensions
@@ -195,17 +201,21 @@ external interface GeometryCollection<G : Geometry /* default is Geometry */> : 
  * A feature object which contains a geometry and associated properties.
  * https://tools.ietf.org/html/rfc7946#section-3.2
  */
-external interface Feature<G : Geometry? /* default is Geometry */, P /* default is GeoJsonProperties */> : GeoJsonObject {
+external interface Feature<G : Geometry? /* default is Geometry */, P /* default is GeoJsonProperties */> :
+  GeoJsonObject {
   override var type: GeoJsonTypes /* "Feature" */
+
   /**
    * The feature's geometry
    */
   var geometry: G
+
   /**
    * A value that uniquely identifies this feature in a
    * https://tools.ietf.org/html/rfc7946#section-3.2.
    */
   var id: String /* string | number | undefined */
+
   /**
    * Properties associated with this feature.
    */
@@ -216,10 +226,12 @@ external interface Feature<G : Geometry? /* default is Geometry */, P /* default
  * A collection of feature objects.
  *  https://tools.ietf.org/html/rfc7946#section-3.3
  */
-external interface FeatureCollection<G : Geometry /* default is Geometry */, P /* default is GeoJsonProperties */> : GeoJsonObject {
+external interface FeatureCollection<G : Geometry /* default is Geometry */, P /* default is GeoJsonProperties */> :
+  GeoJsonObject {
   override var type: GeoJsonTypes /* "FeatureCollection" */
   var features: Array<Feature<G, P>>
 }
+
 external interface GeoJsonProperties {
   @seskar.js.JsNative
   operator fun get(key: String): Any?

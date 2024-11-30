@@ -42,6 +42,8 @@ kermit = "2.0.5"
 jansi = "2.4.1"
 # https://github.com/klausbrunner/solarpositioning/tags
 solarPositioning = "2.0.3"
+# https://github.com/jenetics/jpx/releases
+gpxParsing = "3.2.0"
 # https://junit.org/junit5/docs/current/release-notes/index.html#release-notes
 junit = "5.11.3"
 # https://github.com/mockito/mockito/releases
@@ -85,6 +87,7 @@ log4j-core = { module = "org.apache.logging.log4j:log4j-core", version.ref = "lo
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }
 jansi = { module = "org.fusesource.jansi:jansi", version.ref = "jansi" }
 solar-positioning = { module = "net.e175.klaus:solarpositioning", version.ref = "solarPositioning" }
+gpx-parsing = { module = "io.jenetics:jpx", version.ref = "gpxParsing"}
 
 [plugins]
 compose = { id = "org.jetbrains.compose", version.ref = "compose" }

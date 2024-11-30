@@ -57,9 +57,8 @@ class AppConfig(
   val staticGpsTrackDir get() = galleryDir.resolve("gpstracks")
   val metadataDir get() = galleryDir.resolve("metadata")
   val albumsFile get() = galleryDir.resolve("albums.csv")
-  fun largeDir(albumName: String) = staticImageDir.resolve(albumName).resolve("large")
+  fun largeDir(albumDirectory: String) = staticImageDir.resolve(albumDirectory).resolve("large")
   fun thumbnailDir(albumDirectory: String) = staticImageDir.resolve(albumDirectory).resolve("thumb")
   fun originalsDir(albumDirectory: String) = galleryDir.resolve("originals").resolve(albumDirectory)
-
-  fun gpsTrackDir(albumName: String) = staticGpsTrackDir.resolve("${albumName}.kmz")
+  fun gpsTrackDir(albumDirectory: String) = staticGpsTrackDir.resolve(albumDirectory)
 }

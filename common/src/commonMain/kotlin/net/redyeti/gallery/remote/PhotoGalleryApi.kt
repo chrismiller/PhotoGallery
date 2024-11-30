@@ -14,10 +14,10 @@ data class Album(
   val title: String,
   val subtitle: String,
   val coverImage: Photo,
-  val hasGpsTrack: Boolean,
+  val hasGpsTracks: Boolean,
   val hidden: Boolean,
 ) {
-  fun kmlUrl() = "/gps/${key}.kmz"
+  val gpsUrl get() = "/api/gps/$key"
 }
 
 @Serializable

@@ -8,10 +8,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import java.io.File
+import java.nio.file.Path
 
 fun Application.configureRouting(appConfig: AppConfig) = routing {
   route("/api") {
-    api()
+    api(appConfig.staticGpsTrackDir)
   }
 
   fun staticPath(name: String, path: File) {
@@ -20,7 +21,6 @@ fun Application.configureRouting(appConfig: AppConfig) = routing {
   }
 
   staticPath("/image", appConfig.staticImageDir.toFile())
-  staticPath("/gps", appConfig.staticGpsTrackDir.toFile())
   appConfig.otherStatic.forEach { (name, path) ->
     staticPath(name, path.toFile())
   }
@@ -32,7 +32,9 @@ fun Application.configureRouting(appConfig: AppConfig) = routing {
   }
 }
 
-private fun Route.api() {
+private fun Route.api(staticGpsTrackDir: Path) {
+  val gpsTrackBase = staticGpsTrackDir
+
   get("/status") { call.respond(HttpStatusCode.OK) }
 
   get("/albums") {
@@ -46,6 +48,13 @@ private fun Route.api() {
       else -> appData.getAlbum(key) ?: throw RequestValidationException(key, listOf("Invalid album ID"))
     }
     call.respond(result)
+  }
+
+  get("/gps/{key}") {
+    val key = call.parameters.getOrFail<String>("key")
+    val album = appData.getAlbum(key) ?: throw RequestValidationException(key, listOf("Invalid album ID"))
+    if (!album.album.hasGpsTracks) throw RequestValidationException(key, listOf("Album does not have any GPS tracks"))
+    call.respond(loadGpsTracks(gpsTrackBase.resolve(key)))
   }
 
   get("/photo/{albumKey}/{photoId}") {

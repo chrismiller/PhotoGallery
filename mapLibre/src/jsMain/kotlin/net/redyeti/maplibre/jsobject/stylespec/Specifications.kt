@@ -265,24 +265,46 @@ external interface FillLayoutConfig: LayoutConfig {
   val fillSortKey: DataDrivenPropertyValueSpecification<Double>
 }
 
+sealed external interface LineCapType {
+  companion object {
+    @JsValue("butt")
+    val Butt: LineCapType
+    @JsValue("round")
+    val Round: LineCapType
+    @JsValue("square")
+    val Square: LineCapType
+  }
+}
+
+sealed external interface LineJoinType {
+  companion object {
+    @JsValue("bevel")
+    val Bevel: LineJoinType
+    @JsValue("round")
+    val Round: LineJoinType
+    @JsValue("miter")
+    val Miter: LineJoinType
+  }
+}
+
 @JsPlainObject
 external interface LineLayoutConfig: LayoutConfig {
-//  @JsName("line-cap")
-//  val lineCap: PropertyValueSpecification<"butt" | "round" | "square">?
-//  @JsName("line-join")
-//  val lineJoin: DataDrivenPropertyValueSpecification<"bevel" | "round" | "miter">?
+  @JsName("line-cap")
+  var lineCap: PropertyValueSpecification<LineCapType>?
+  @JsName("line-join")
+  var lineJoin: DataDrivenPropertyValueSpecification<LineJoinType>?
   @JsName("line-miter-limit")
-  val lineMiterLimit: PropertyValueSpecification<Double>?
+  var lineMiterLimit: PropertyValueSpecification<Double>?
   @JsName("line-round-limit")
-  val lineRoundLimit: PropertyValueSpecification<Double>?
+  var lineRoundLimit: PropertyValueSpecification<Double>?
   @JsName("line-sort-key")
-  val lineSortKey: DataDrivenPropertyValueSpecification<Double>?
+  var lineSortKey: DataDrivenPropertyValueSpecification<Double>?
 }
 
 @JsPlainObject
 external interface CircleLayoutConfig: LayoutConfig {
   @JsName("circle-sort-key")
-  val circleSortKey: DataDrivenPropertyValueSpecification<Double>?
+  var circleSortKey: DataDrivenPropertyValueSpecification<Double>?
 }
 
 @JsPlainObject
@@ -490,6 +512,32 @@ external interface FillExtrusionPaintConfig {
 }
 
 @JsPlainObject
+external interface LinePaintConfig {
+  @JsName("line-opacity")
+  var lineOpacity: PropertyValueSpecification<Double>?
+  @JsName("line-color")
+  var lineColor: DataDrivenPropertyValueSpecification<ColorSpecification>?
+  @JsName("line-translate")
+  var lineTranslate: PropertyValueSpecification<Array<Double>>?
+  @JsName("line-translate-anchor")
+  var lineTranslateAnchor: PropertyValueSpecification<ViewType>?
+  @JsName("line-width")
+  var lineWidth: DataDrivenPropertyValueSpecification<Double>?
+  @JsName("line-gap-width")
+  var lineGapWidth: DataDrivenPropertyValueSpecification<Double>?
+  @JsName("line-offset")
+  var lineOffset: DataDrivenPropertyValueSpecification<Double>?
+  @JsName("line-blur")
+  var lineBlur: PropertyValueSpecification<Double>?
+  @JsName("line-dasharray")
+  var lineDashArray: PropertyValueSpecification<Double>?
+  @JsName("line-pattern")
+  var linePattern: DataDrivenPropertyValueSpecification<ResolvedImageSpecification>?
+  @JsName("line-gradient")
+  var lineGradient: DataDrivenPropertyValueSpecification<ColorSpecification>?
+}
+
+@JsPlainObject
 external interface RasterPaintConfig {
   @JsName("raster-opacity")
   val rasterOpacity: PropertyValueSpecification<Double>?
@@ -544,10 +592,9 @@ external interface FillLayerSpecification : SourceLayerSpecification {
 
 @JsPlainObject
 external interface LineLayerSpecification : SourceLayerSpecification {
-  val filter: FilterSpecification?
-  val layout: LineLayoutConfig?
-//  paint: {
-//  }
+  var filter: FilterSpecification?
+  var layout: LineLayoutConfig?
+  var paint: LinePaintConfig?
 }
 
 @JsPlainObject

@@ -22,7 +22,7 @@ external interface MapOptions {
    * Note: showing the logo of MapLibre is not required for using MapLibre.
    * @defaultValue compact: true, customAttribution: "MapLibre ...".
    */
-//  var attributionControl: (Any /* false | AttributionControlOptions */)?
+  var attributionControl: Any? /* false | AttributionControlOptions */
 
   /**
    * The initial bearing (rotation) of the map, measured in degrees counter-clockwise from north. If `bearing` is not specified in the constructor options, MapLibre GL JS will look for it in the map's style object. If it is not specified in the style, either, it will default to `0`.

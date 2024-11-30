@@ -40,8 +40,4 @@ class PhotoGalleryRepository : KoinComponent, PhotoGalleryInterface {
 
   // Used by web client
   override suspend fun fetchAlbum(key: String): PopulatedAlbum = photoGalleryApi.fetchAlbum(key)
-
-  companion object {
-    private const val POLL_INTERVAL = 1_000L
-  }
 }

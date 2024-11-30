@@ -63,12 +63,13 @@ class AlbumScanner(val config: AppConfig) {
         val hidden = directory.startsWith('|')
         directory = directory.substringAfter('|')
 
-        // Take note of the restrictions on KML files here: https://developers.google.com/maps/documentation/javascript/kmllayer#restrictions
-        val hasGpsTrack = config.gpsTrackDir(directory).exists()
+        val gpsTrackDir = config.gpsTrackDir(directory)
+        val hasGpsTracks = gpsTrackDir.exists() && gpsTrackDir.listDirectoryEntries()
+          .any { print(it); it.isRegularFile() && it.extension == "gpx" }
         try {
           val photos = loadAlbum(directory)
           val coverPhoto = photos.first { photo -> photo.filename == coverImage }
-          val album = Album(directory, title, subtitle, coverPhoto, hasGpsTrack, hidden)
+          val album = Album(directory, title, subtitle, coverPhoto, hasGpsTracks, hidden)
           albums += PopulatedAlbum(album, photos)
           logger.i("Loaded ${album.title}")
         } catch (e: Exception) {
