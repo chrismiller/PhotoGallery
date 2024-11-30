@@ -95,6 +95,15 @@ data class GpsCoordinates(val latitude: Double, val longitude: Double, val altit
   }
 }
 
+@Serializable
+data class GeometryData(val type: String, val coordinates: List<DoubleArray>)
+
+@Serializable
+data class FeatureData(val type: String, val geometry: GeometryData) //, val properties: Map<String, String>)
+
+@Serializable
+data class FeatureCollectionData(val type: String, val features: List<FeatureData>)
+
 class PhotoGalleryApi(private val client: HttpClient, var baseUrl: String = "/api") :
   KoinComponent {
   suspend fun fetchAlbums(): List<Album> {

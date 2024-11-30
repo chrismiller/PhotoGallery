@@ -2,7 +2,7 @@ package net.redyeti.util
 
 import java.io.Reader
 
-class CsvParser(val delimiter: Char = ',', val quoteChar: Char = '"', val escapeChar: Char = '\\') {
+class CsvParser<H>(val delimiter: Char = ',', val quoteChar: Char = '"', val escapeChar: Char = '\\') {
   private var lineNumber = 0
   private var columnNumber = 0
 
@@ -15,11 +15,11 @@ class CsvParser(val delimiter: Char = ',', val quoteChar: Char = '"', val escape
     QuotedField
   }
 
-  fun parseLine(chars: Reader, headers: List<String>): Map<String, String> {
+  fun parseLine(chars: Reader, headers: List<H?>): Map<H, String> {
     val fields = parseLine(chars)
-    val result = mutableMapOf<String, String>()
+    val result = mutableMapOf<H, String>()
     fields.forEachIndexed { i, value ->
-      result[headers[i]] = value
+      headers[i]?.apply { result[this] = value }
     }
     return result
   }

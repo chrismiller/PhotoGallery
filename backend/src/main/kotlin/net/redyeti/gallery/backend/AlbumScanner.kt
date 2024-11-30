@@ -13,8 +13,6 @@ import net.e175.klaus.solarpositioning.SPA
 import net.e175.klaus.solarpositioning.SunriseResult
 import net.redyeti.gallery.remote.*
 import net.redyeti.util.CsvParser
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import kotlin.io.path.*
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -23,14 +21,7 @@ class AlbumScanner(val config: AppConfig) {
   companion object {
     val logger = Logger.withTag(this::class.simpleName!!)
 
-    private val EXIFTOOL_METADATA_SCAN = listOf(
-      // The # suffix returns the value without any automatic formatting/display conversion
-      "-S", "-csv", "-FileName", "-FileSize#", "-DateTimeOriginal", "-OffsetTimeOriginal", "-FileCreateDate",
-      "-ImageWidth", "-ImageHeight", "-GPSLatitude#", "-GPSLongitude#", "-GPSAltitude#",
-      "-Model", "-ApertureValue", "-ExposureTime", "-FocalLength", "-ISO#", "-Lens", "-Description",
-      "*.jpg"
-    )
-
+    private val EXIFTOOL_METADATA_SCAN: List<String> = mutableListOf("-S", "-G", "-csv") + Metadata.allAsStrings().map { "-$it" } + "*.jpg"
     private val EXIFTOOL_STRIP_EXIF = listOf(
       "-P", "-all=", "-tagsFromFile", "@",
       "-ColorSpace", "-InteropIndex", "-ICC_Profile",
@@ -43,7 +34,7 @@ class AlbumScanner(val config: AppConfig) {
   fun loadAlbums(): List<PopulatedAlbum> {
     val albums = mutableListOf<PopulatedAlbum>()
     val headers = mutableListOf<String>()
-    val parser = CsvParser()
+    val parser = CsvParser<String>()
     config.albumsFile.forEachLine {
       if (it.isBlank() || it.startsWith("//")) {
         // Ignore blank lines and comments
@@ -92,8 +83,8 @@ class AlbumScanner(val config: AppConfig) {
 
     // Run exiftool to get all the photo metadata
     val params = listOf(config.exiftool.toString()) + EXIFTOOL_METADATA_SCAN
-    val parser = CsvParser()
-    val headers = mutableListOf<String>()
+    val parser = CsvParser<Metadata>()
+    var headers = listOf<Metadata?>()
 
     class RowCollector {
       private var fullRow = ""
@@ -112,9 +103,7 @@ class AlbumScanner(val config: AppConfig) {
       }
     }
 
-    val pattern = DateTimeFormatter.ofPattern("yyyy:MM:dd HH:mm:ss z")
-    var prevTimeOffset = "UTC"
-
+    val timeParser = TimeParser(originalsDir)
     val photos = mutableListOf<Photo>()
     val collector = RowCollector()
     val processor: (String) -> Unit = { s ->
@@ -122,45 +111,24 @@ class AlbumScanner(val config: AppConfig) {
         val csvRow = collector.take()
         println(csvRow)
         if (headers.isEmpty()) {
-          headers += parser.parseLine(csvRow.reader())
+          headers = parser.parseLine(csvRow.reader()).map { Metadata.map[it] }
         } else {
           val row = parser.parseLine(csvRow.reader(), headers)
-          val filename = row["FileName"]!!
-          val fileSize = row["FileSize#"].asInt()
-          var timeTakenStr = row["DateTimeOriginal"]
-          if (timeTakenStr.isNullOrEmpty()) {
-            // TODO: is this the best field to fall back on? It's not always the time the photo was taken (but at least
-            //  it should always exist?)
-            timeTakenStr = row["FileCreateDate"]!!
-          }
-          val offsetIndex = timeTakenStr.indexOfAny(listOf("-", "+"))
-          val timeOffset: String
-          if (offsetIndex >= 0) {
-            timeOffset = timeTakenStr.substring(offsetIndex)
-            prevTimeOffset = timeOffset
-            timeTakenStr = timeTakenStr.substring(0, offsetIndex)
-          } else {
-            logger.w("No timezone found for $originalsDir\\$filename - using $prevTimeOffset")
-            timeOffset = prevTimeOffset
-          }
-          val fullTimeStr = if (timeTakenStr.contains("[-+]".toRegex())) timeTakenStr else "$timeTakenStr $timeOffset"
-          val timeTaken = try {
-            ZonedDateTime.parse(fullTimeStr, pattern)
-          } catch (e: Exception) {
-            throw IllegalArgumentException("Could not parse time '$fullTimeStr' for $originalsDir/$filename (${e.message})")
-          }
-          val description = row["Description"].orEmpty()
-          val camera = row["Model"].orEmpty()
-          val lens = row["Lens"].orEmpty()
-          val aperture = row["ApertureValue"].orEmpty()
-          val focalLength = row["FocalLength"].orEmpty()
-          val shutterSpeed = row["ExposureTime"].orEmpty()
-          val iso = row["ISO#"].asInt()
-          val fullWidth = row["ImageWidth"].asInt()
-          val fullHeight = row["ImageHeight"].asInt()
-          val latitude = row["GPSLatitude#"].asDouble()
-          val longitude = row["GPSLongitude#"].asDouble()
-          val altitude = row["GPSAltitude#"].asDouble()
+          val filename = row[Metadata.File.FileName]!!
+          val fileSize = row[Metadata.File.FileSize].asInt()
+          val timeTaken = timeParser.timeTaken(row)
+          val description = row[Metadata.XMP.Description].orEmpty()
+          val camera = row[Metadata.Exif.Model].orEmpty()
+          val lens = row[Metadata.XMP.Lens].orEmpty()
+          val aperture = row[Metadata.Exif.ApertureValue].orEmpty()
+          val focalLength = row[Metadata.Exif.FocalLength].orEmpty()
+          val shutterSpeed = row[Metadata.Exif.ExposureTime].orEmpty()
+          val iso = row[Metadata.Exif.ISO].asInt()
+          val fullWidth = row[Metadata.File.ImageWidth].asInt()
+          val fullHeight = row[Metadata.File.ImageHeight].asInt()
+          val latitude = row[Metadata.Composite.GPSLatitude].asDouble()
+          val longitude = row[Metadata.Composite.GPSLongitude].asDouble()
+          val altitude = row[Metadata.Composite.GPSAltitude].asDouble()
           val location = if (latitude != 0.0 || longitude != 0.0 || altitude != 0.0) {
             GpsCoordinates(latitude, longitude, altitude)
           } else {
@@ -202,7 +170,7 @@ class AlbumScanner(val config: AppConfig) {
           val cameraDetails = CameraDetails(camera, lens, aperture, shutterSpeed, focalLength, iso)
           val photo = Photo(
             -1, albumKey, filename, description, w, h, fullWidth, fullHeight, fileSize,
-            timeTaken.toEpochSecond(), timeOffset, location, sunDetails, cameraDetails
+            timeTaken.toEpochSecond(), timeTaken.offset.id, location, sunDetails, cameraDetails
           )
           photos += photo
         }
