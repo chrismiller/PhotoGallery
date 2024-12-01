@@ -9,7 +9,8 @@ private val archNameRegex = "ALG-?\\d+".toRegex()
 private fun insertArchLinks(photo: Photo, archMap: Map<String, Photo>): String {
   var thisName = photo.filename.substringBefore('.')
   val description = archNameRegex.replace(photo.description) { m ->
-    val name = m.value.replace("-", "")
+    // Convert e.g. ALG-27 into ALG027 so it matches the photo filenames
+    val name = "ALG" + m.value.drop(4).padStart(3, '0')
     if (name != thisName) {
       archMap[name]?.let { photo ->
         return@replace "{photo:${photo.id}}${m.value}{/}"
