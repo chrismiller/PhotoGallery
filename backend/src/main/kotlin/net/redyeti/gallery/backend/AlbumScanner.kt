@@ -11,6 +11,7 @@ import kotlinx.serialization.json.encodeToStream
 import net.e175.klaus.solarpositioning.DeltaT
 import net.e175.klaus.solarpositioning.SPA
 import net.e175.klaus.solarpositioning.SunriseResult
+import net.redyeti.gallery.backend.algeria.algeriaTransform
 import net.redyeti.gallery.remote.*
 import net.redyeti.util.CsvParser
 import kotlin.io.path.*
@@ -58,7 +59,7 @@ class AlbumScanner(val config: AppConfig) {
         val hasGpsTracks = gpsTrackDir.exists() && gpsTrackDir.listDirectoryEntries()
           .any { print(it); it.isRegularFile() && it.extension == "gpx" }
         try {
-          val photos = loadAlbum(directory)
+          val photos = transformPhotos(directory, loadAlbum(directory))
           val coverPhoto = photos.first { photo -> photo.filename == coverImage }
           val album = Album(directory, title, subtitle, coverPhoto, hasGpsTracks, hidden)
           albums += PopulatedAlbum(album, photos)
@@ -71,6 +72,16 @@ class AlbumScanner(val config: AppConfig) {
     // Reverse the order so the newest albums are shown first
     albums.reverse()
     return albums
+  }
+
+  private fun transformPhotos(albumKey: String, photos: List<Photo>): List<Photo> {
+    val photos = when (albumKey) {
+      // Apply special mappings for the stone arches locations and cross-references
+      "AlgeriaArches" -> algeriaTransform(photos)
+      else -> photos
+    }
+    // Add links for any URLs in the descriptions
+    return insertUrlLinks(photos)
   }
 
   fun loadAlbum(albumKey: String): List<Photo> {

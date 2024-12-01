@@ -119,7 +119,7 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
         NavButton("Previous (left arrow key)", LightboxStyle.arrowPrev, prev)
         NavButton("Next (right arrow key)", LightboxStyle.arrowNext, next)
         PopupImage(url, close)
-        PhotoCaption(photo, Count(id, popAlbum.photos.size))
+        PhotoCaption(photo, Count(id, popAlbum.photos.size), updateId)
       }
       InfoPanel(photo) { infoPanelVisible = false }
     }

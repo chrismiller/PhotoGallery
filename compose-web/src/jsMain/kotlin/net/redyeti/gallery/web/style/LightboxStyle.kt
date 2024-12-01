@@ -44,8 +44,8 @@ object LightboxStyle : StyleSheet() {
       LightboxVars.imageBackgroundColour(Color.transparent)
       LightboxVars.imageCaptionTextColour(Color("#E0E0E0"))
       LightboxVars.imageCaptionSubtextColour(Color("#BBBBBB"))
-      LightboxVars.imageCaptionLinkColour(Color("#E0E0E0"))
-      LightboxVars.imageCaptionLinkHoverColour(Color("#FFFFFF"))
+      LightboxVars.imageCaptionLinkColour(Color("#4DA3FF"))
+      LightboxVars.imageCaptionLinkHoverColour(Color("#007BFF"))
     }
   }
 
@@ -239,6 +239,7 @@ object LightboxStyle : StyleSheet() {
             color(LightboxVars.imageCaptionLinkColour.value())
             self + hover style {
               color(LightboxVars.imageCaptionLinkHoverColour.value())
+              cursor("pointer")
             }
           }
         }

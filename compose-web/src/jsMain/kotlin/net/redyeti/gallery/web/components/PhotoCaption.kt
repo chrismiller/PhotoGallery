@@ -8,10 +8,12 @@ import org.jetbrains.compose.web.dom.Div
 import org.jetbrains.compose.web.dom.Text
 
 @Composable
-fun PhotoCaption(photo: Photo, count: Count?) {
+fun PhotoCaption(photo: Photo, count: Count?, updateId: (Int) -> Unit) {
   Div(attrs = { classes(LightboxStyle.lightboxCaption) }) {
     Div(attrs = { classes(LightboxStyle.textArea) }) {
-      StyledText(photo.description, LightboxStyle.captionText)
+      StyledText(photo.description, LightboxStyle.captionText) { id ->
+        updateId(id)
+      }
       StyledText("Copyright © Chris Miller", LightboxStyle.copyrightText)
       if (count != null) {
         StyledText("${count.current + 1} of ${count.total}", LightboxStyle.captionCounter)
@@ -21,37 +23,40 @@ fun PhotoCaption(photo: Photo, count: Count?) {
   }
 }
 
-fun nextUrl(text: String, start: Int): Pair<Int, Int>? {
-  val i = text.indexOf("http", start)
-  if (i < 0
-    || (!text.startsWith("://", i + 4)
-        && !text.startsWith("s://", i + 4))
-  ) {
-    return null
+@Composable
+fun StyledText(text: String, style: String, updateId: (Int) -> Unit = {}) {
+  Div(attrs = { classes(style) }) {
+    TextWithLinks(text, updateId)
   }
-  var end = text.indexOf(' ', i + 6)
-  if (end < 0) end = text.length
-  while (end > i + 6 && text[end - 1] == '.') { end-- }
-  return Pair(i, end)
 }
 
+// This matches any {type:data}content{/} templated text in the description.
+// The extra escaping is required, otherwise the regex doesn't work correctly with Javascript
+private val replaceRegex = "\\{(\\w+):(.+?)\\}(.+?)\\{\\/\\}".toRegex()
+
+private fun mapUrl(lat: String, lon: String) = "https://maps.google.com/maps?z=16&q=$lat,$lon&ll=$lat,$lon"
+
 @Composable
-fun StyledText(text: String, style: String) {
-  Div(attrs = { classes(style) }) {
-    var start = 0
-    val end = text.length
-    while (start < end) {
-      val url = nextUrl(text, start)
-      start = if (url == null) {
-        Text(text.substring(start, end))
-        end
-      } else {
-        Text(text.substring(start, url.first))
-        val href = text.substring(url.first, url.second)
-        A(href = href) { Text(href) }
-        url.second
+fun TextWithLinks(text: String, updateId: (Int) -> Unit) {
+  var start = 0
+  replaceRegex.findAll(text).forEach { match ->
+    Text(text.substring(start, match.range.first))
+    start = match.range.last + 1
+    val type = match.groups[1]!!.value
+    val data = match.groups[2]!!.value
+    val content = match.groups[3]!!.value
+    when (type) {
+      "photo" -> A(attrs = { onClick { updateId(data.toInt()) } }) { Text(content) }
+      "map" -> {
+        val (lat, lon) = data.split(",")
+        A(href = mapUrl(lat, lon)) { Text(content) }
       }
+      "url" -> A(href = data) { Text(content) }
+      else -> Text(content)
     }
+  }
+  if (start < text.length) {
+    Text(text.substring(start))
   }
 }
 
