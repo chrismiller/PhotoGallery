@@ -6,13 +6,13 @@ import kotlin.test.assertEquals
 class TestCsvParser {
   @Test
   fun testSimple() {
-    val parser = CsvParser()
+    val parser = CsvParser<String>()
     assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def".reader()))
   }
 
   @Test
   fun testNewlines() {
-    val parser = CsvParser()
+    val parser = CsvParser<String>()
     assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\r\n".reader()))
     assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\n\r".reader()))
     assertEquals(listOf("abc", "123", "def"), parser.parseLine("abc,123,def\n".reader()))
@@ -32,13 +32,13 @@ class TestCsvParser {
 
   @Test
   fun testMultilineField() {
-    val parser = CsvParser()
+    val parser = CsvParser<String>()
     assertEquals(listOf("a", "b\nc", "d"), parser.parseLine("a,\"b\nc\",d".reader()))
   }
 
   @Test
   fun testEscaping() {
-    val parser = CsvParser()
+    val parser = CsvParser<String>()
 
     val reader = "\\abc,1\\23,def\nx\\\\yz".reader()
     assertEquals(listOf("abc", "123", "def"), parser.parseLine(reader))
@@ -47,7 +47,7 @@ class TestCsvParser {
 
   @Test
   fun testQuotes() {
-    val parser = CsvParser()
+    val parser = CsvParser<String>()
 
     var reader = "abc,\"123\",def".reader()
     assertEquals(listOf("abc", "123", "def"), parser.parseLine(reader))
