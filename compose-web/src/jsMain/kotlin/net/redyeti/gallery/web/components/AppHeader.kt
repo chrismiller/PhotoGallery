@@ -11,7 +11,7 @@ import org.jetbrains.compose.web.dom.*
 fun AppHeader(title: String, subtitle: String) {
   Div(attrs = { classes(AppStyle.headerText) }) {
     H1 { Text(title) }
-    H2 { Text(subtitle) }
+    H2 { StyledText(subtitle) }
   }
   Div(attrs = { classes(AppStyle.headerLogo) }) {
     NavLink(to = "/") {

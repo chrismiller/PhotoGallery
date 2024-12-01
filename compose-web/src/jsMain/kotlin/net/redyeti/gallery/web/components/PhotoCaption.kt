@@ -14,18 +14,21 @@ fun PhotoCaption(photo: Photo, count: Count?, updateId: (Int) -> Unit) {
       StyledText(photo.description, LightboxStyle.captionText) { id ->
         updateId(id)
       }
-      StyledText("Copyright © Chris Miller", LightboxStyle.copyrightText)
-      if (count != null) {
-        StyledText("${count.current + 1} of ${count.total}", LightboxStyle.captionCounter)
-      }
+      val copyright = if (photo.directory == "AlgeriaArches") {
+        "Copyright © {url:https://naturalarches.org/tassili/}naturalarches.org{/}"
+      } else "Copyright © Chris Miller"
+      StyledText(copyright, LightboxStyle.copyrightText)
     }
-    CaptionIcons(photo)
+    if (count != null) {
+      StyledText("${count.current + 1} of ${count.total}", LightboxStyle.captionCounter)
+    }
   }
+  CaptionIcons(photo)
 }
 
 @Composable
-fun StyledText(text: String, style: String, updateId: (Int) -> Unit = {}) {
-  Div(attrs = { classes(style) }) {
+fun StyledText(text: String, style: String? = null, updateId: (Int) -> Unit = {}) {
+  Div(attrs = { if (style != null) classes(style) }) {
     TextWithLinks(text, updateId)
   }
 }
