@@ -8,6 +8,7 @@ import net.redyeti.maplibre.jsobject.Map
 import net.redyeti.maplibre.jsobject.Marker
 import net.redyeti.maplibre.jsobject.NavigationControl
 import net.redyeti.maplibre.jsobject.geojson.MapGeoJSONFeature
+import org.w3c.dom.HTMLElement
 
 import kotlin.math.*
 
@@ -65,6 +66,8 @@ fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double
 
   // Apply some transparency to the marker if we're between the fade zoom levels
   val opacity = min((getZoom() - fadeStart) / (fadeStop - fadeStart), 1.0).toString()
+  // Scale the thumbnails from 10% to 100% as we zoom in
+  val scaleFactor = (min((getZoom() - fadeStart) / (20.0 - fadeStart), 1.0) * 0.9 + 0.1).toString()
 
   // Create an HTML marker for each feature that's on the screen (if it's not in the cache already).
   // Note that querySourceFeatures() can be quite expensive when there are lots of features visible.
@@ -75,6 +78,8 @@ fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double
       createMarker(feature)
     }
     marker.setOpacity(opacity)
+    val img = marker.getElement().firstElementChild
+    (img as HTMLElement?)?.style?.setProperty("scale", scaleFactor)
     newMarkers[photoId] = marker
     if (!markersOnScreen.containsKey(photoId)) {
       marker.addTo(this)
