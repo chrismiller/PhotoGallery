@@ -55,7 +55,7 @@ fun Map.resetCache() {
   markersOnScreen.clear()
 }
 
-fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double = 14.0, createMarker: (MapGeoJSONFeature) -> Marker) {
+fun Map.updateMarkers(source: String, createMarker: (MapGeoJSONFeature) -> Marker, fadeStart: Double = 12.0, fadeStop: Double = 13.0) {
   // This logic takes a similar approach to the code in https://maplibre.org/maplibre-gl-js/docs/examples/cluster-html/
   if (getZoom() < fadeStart) {
     // Remove any thumbnails, we're zoomed out too far
@@ -67,7 +67,7 @@ fun Map.updateMarkers(source: String, fadeStart: Double = 13.0, fadeStop: Double
   // Apply some transparency to the marker if we're between the fade zoom levels
   val opacity = min((getZoom() - fadeStart) / (fadeStop - fadeStart), 1.0).toString()
   // Scale the thumbnails from 10% to 100% as we zoom in
-  val scaleFactor = (min((getZoom() - fadeStart) / (20.0 - fadeStart), 1.0) * 0.9 + 0.1).toString()
+  val scaleFactor = (min((getZoom() - fadeStart) / (17.0 - fadeStart), 1.0) * 0.9 + 0.1).toString()
 
   // Create an HTML marker for each feature that's on the screen (if it's not in the cache already).
   // Note that querySourceFeatures() can be quite expensive when there are lots of features visible.

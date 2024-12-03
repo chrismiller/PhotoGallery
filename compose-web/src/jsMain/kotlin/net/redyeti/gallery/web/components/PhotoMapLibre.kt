@@ -88,9 +88,9 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
     on("data") { e ->
       // Based on the example https://maplibre.org/maplibre-gl-js/docs/examples/cluster-html/
       if (e.sourceId == "photos" && e.isSourceLoaded) {
-        on("move") { updateMarkers("photos", 13.0, 14.0, createMarker) }
-        on("moveend") { updateMarkers("photos", 13.0, 14.0, createMarker) }
-        updateMarkers("photos", 13.0, 14.0, createMarker)
+        on("move") { updateMarkers("photos", createMarker) }
+        on("moveend") { updateMarkers("photos", createMarker) }
+        updateMarkers("photos", createMarker)
       }
     }
   }
@@ -168,17 +168,18 @@ private fun createGpsTracks(album: PopulatedAlbum): SourceSpecification {
   )
 }
 
+private const val MAX_HEATMAP_ZOOM = 13.0
 private fun createHeatmapLayer(): SourceLayerSpecification {
   return jso<HeatmapLayerSpecification> {
     id = "heatmap"
     type = LayerType.HeatMap
     source = "photos"
-    maxzoom = 14.0
+    maxzoom = MAX_HEATMAP_ZOOM
     paint = jso {
       // We don't really have anything to weight this by? :-/
       heatmapWeight = 1.0
       // Increase the heatmap color weight by zoom level. heatmap-intensity is a multiplier on top of heatmap-weight
-      heatmapIntensity = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 0, 1, 14, 3)
+      heatmapIntensity = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 0, 1, MAX_HEATMAP_ZOOM, 3)
       // Colour ramp for heatmap.  Domain is 0 (low) to 1 (high). Begin colour ramp at 0-stop with a
       // 0-transparency colour to create a blur-like effect.
       heatmapColor = arrayOf("interpolate", arrayOf("linear"), arrayOf("heatmap-density"),
@@ -196,9 +197,9 @@ private fun createHeatmapLayer(): SourceLayerSpecification {
         "rgb(204, 0, 0)"
       )
       // Adjust the heatmap radius by zoom level
-      heatmapRadius = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 0, 2, 14, 20)
-      // Fade the heatmap out once we start zooming in past level 10
-      heatmapOpacity = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 12, 1, 14, 0)
+      heatmapRadius = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), 0, 2, MAX_HEATMAP_ZOOM, 20)
+      // Fade the heatmap out once we get near its maximum zoom
+      heatmapOpacity = arrayOf("interpolate", arrayOf("linear"), arrayOf("zoom"), MAX_HEATMAP_ZOOM - 2, 1, MAX_HEATMAP_ZOOM, 0)
     }
   }
 }
@@ -209,7 +210,7 @@ private fun createThumbnailLayer(): SourceLayerSpecification {
     id = "thumbnails",
     type = LayerType.Circle,
     source = "photos",
-    minzoom = 14.0,
+    minzoom = MAX_HEATMAP_ZOOM,       // pick up where the heatmap fades out
     paint = jso<CirclePaintConfig> {
       circleColor = "rgba(0,0,0,0)"
       circleRadius = 1
