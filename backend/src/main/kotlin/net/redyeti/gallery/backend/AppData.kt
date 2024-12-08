@@ -26,6 +26,6 @@ class AppData(albums: List<PopulatedAlbum>) {
         allPhotos += it.photos.map { it.copy(id = id++) }
       }
     }
-    return PopulatedAlbum(Album("All", "All Photos", "", albums[0].coverImage, false, true), allPhotos)
+    return PopulatedAlbum(Album("All", "All Photos", "Photos from all albums", albums[0].coverImage, false, true), allPhotos)
   }
 }
