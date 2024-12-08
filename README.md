@@ -1,11 +1,14 @@
 # Photo Gallery
 
-![kotlin-version](https://img.shields.io/badge/kotlin-2.1.0-orange)
+This is personal project I built, it's the code that runs my https://redyeti.net photo album website. While the code
+and configuration is somewhat generic and likely reusable, it's not a goal of mine to make this a completely
+customisable gallery application for general-purpose use. That means I might make functionality or breaking changes at
+any point in time, and I'm probably not likely to tackle any bug or feature requests unless they affect me directly,
+so please bear that in mind if you choose to deploy your own website based on this code. I'd be happy to consider any
+pull requests that do improve things or make this project a more generic solution though.
 
-**Kotlin Multiplatform** project with Compose HTML for the web UI, and Ktor backend.
-
-* Web (Compose HTML)
-* JVM (Ktor backend service for finding, resizing and serving images)
+![kotlin-version](https://img.shields.io/badge/kotlin-2.1.0-orange) The gallery is built with **Kotlin Multiplatform**,
+using Compose HTML for the web frontend and a Ktor server for the backend.
 
 ### Configuration
 
