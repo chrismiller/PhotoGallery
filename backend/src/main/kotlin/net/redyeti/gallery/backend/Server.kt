@@ -4,6 +4,8 @@ import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 
+const val GALLERY_CONFIG = "GALLERY_CONFIG"
+const val DEFAULT_PATH = "D:/Photos/PhotoGallery/config.properties"
 
 lateinit var appConfig: AppConfig
 lateinit var appData: AppData
@@ -11,7 +13,8 @@ lateinit var appData: AppData
 fun main() {
   System.setProperty("jdk.tls.client.protocols", "TLSv1.2")
 
-  appConfig = ConfigLoader().load()
+  val configFile = System.getenv(GALLERY_CONFIG) ?: DEFAULT_PATH
+  appConfig = ConfigLoader().load(configFile)
 
   appData = initGallery(appConfig)
 

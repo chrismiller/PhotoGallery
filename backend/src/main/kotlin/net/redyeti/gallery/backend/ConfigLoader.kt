@@ -12,9 +12,7 @@ class ConfigLoader {
     private const val DEFAULT_PORT = "8081"
   }
 
-  fun load(): AppConfig {
-    val configFile = System.getenv("REDYETI_CONFIG") ?: "D:/Photos/PhotoGallery/config.properties"
-
+  fun load(configFile: String): AppConfig {
     val props = Properties()
     FileInputStream(configFile).use {
       props.load(it)
@@ -34,7 +32,7 @@ class ConfigLoader {
     return AppConfig(
       Path(props.getProperty("EXIFTOOL", "exiftool.exe")),
       Path(props.getProperty("IMAGEMAGICK", "imagemagick.exe")),
-      Path(props.getProperty("GALLERY_DIR", Path.of(configFile).parent.toString())),
+      Path(props.getProperty("GALLERY_BASE", Path.of(configFile).parent.toString())),
       props.getProperty("HTTP_PORT", DEFAULT_PORT).toInt(),
       props.getProperty("MIN_LARGE_DIMENSION", MIN_LARGE_DIMENSION).toInt(),
       props.getProperty("MIN_THUMBNAIL_DIMENSION", MIN_THUMBNAIL_DIMENSION).toInt(),
