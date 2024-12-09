@@ -18,12 +18,12 @@ fun PhotoCaption(photo: Photo, count: Count?, updateId: (Int) -> Unit) {
         "Copyright © {url:https://naturalarches.org/tassili/}naturalarches.org{/}"
       } else "Copyright © Chris Miller"
       StyledText(copyright, LightboxStyle.copyrightText)
+      if (count != null) {
+        StyledText("${count.current + 1} of ${count.total}", LightboxStyle.captionCounter)
+      }
     }
-    if (count != null) {
-      StyledText("${count.current + 1} of ${count.total}", LightboxStyle.captionCounter)
-    }
+    CaptionIcons(photo)
   }
-  CaptionIcons(photo)
 }
 
 @Composable
