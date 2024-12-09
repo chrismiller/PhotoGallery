@@ -35,8 +35,8 @@ kotlin {
       implementation(compose.html.core)
       // https://github.com/maplibre/maplibre-gl-js/releases
       // Download css to compose-web/src/jsMain/resources
-      //   from https://unpkg.com/maplibre-gl@5.0.0-pre.8/dist/maplibre-gl.css
-      implementation(npm("maplibre-gl", "5.0.0-pre.8"))
+      //   from https://unpkg.com/maplibre-gl@5.0.0-pre.9/dist/maplibre-gl.css
+      implementation(npm("maplibre-gl", "5.0.0-pre.9"))
       //implementation(npm("maplibre-gl", "4.7.1"))
       // https://www.npmjs.com/package/pmtiles
       // implementation(npm("pmtiles", "4.0.1"))
