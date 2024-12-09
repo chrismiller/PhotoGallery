@@ -3,45 +3,55 @@ package net.redyeti.maplibre.jsobject.stylespec
 import kotlinx.js.JsPlainObject
 import seskar.js.JsValue
 
+/**
+ * https://maplibre.org/maplibre-style-spec/root/
+ */
 @JsPlainObject
 external interface StyleSpecification {
-  val version: Int
-  val name: String
-  val metadata: Any
-  val center: Array<Double>
-  val zoom: Double
-  val bearing: Double
-  val pitch: Double
+  val version: Int?
+  val name: String?
+  val metadata: Map<String, dynamic>?
+  val center: Array<Double>?
+  val centerAltitude: Double?
+  val zoom: Double?
+  val bearing: Double?
+  val pitch: Double?
+  val roll: Double?
   val light: LightSpecification?
   val sky: SkySpecification?
-
-  //val projection: ProjectionSpecification?
-  //val terrain: TerrainSpecification?
-  val sources: Map<String, SourceSpecification>
-
-  //val sprite: SpriteSpecification?
+  var projection: ProjectionSpecification?
+  val terrain: TerrainSpecification?
+  val sources: Map<String, SourceSpecification>?
+  val sprite: SpriteSpecification?
   val glyphs: String?
-  //val transition: TransitionSpecification?
-  //val layers: Array<LayerSpecification>
+  val transition: TransitionSpecification?
+  val layers: Array<LayerSpecification>?
 }
 
 @JsPlainObject
 external interface LightSpecification {
-  val anchor: PropertyValueSpecification<ViewType>
-  //position: PropertyValueSpecification<[ Double, Double, Double ]>
-  //color: PropertyValueSpecification<ColorSpecification>
-  //intensity: PropertyValueSpecification<Double>
+  val anchor: PropertyValueSpecification<ViewType>?
+  val position: PropertyValueSpecification<Array<Double>>?  // [ Double, Double, Double ]
+  val color: PropertyValueSpecification<ColorSpecification>?
+  val intensity: PropertyValueSpecification<Double>?
 }
 
 @JsPlainObject
 external interface SkySpecification {
-//  sky-color: PropertyValueSpecification<ColorSpecification>
-//  horizon-color: PropertyValueSpecification<ColorSpecification>
-//  fog-color: PropertyValueSpecification<ColorSpecification>
-//  fog-ground-blend: PropertyValueSpecification<Double>
-//  horizon-fog-blend: PropertyValueSpecification<Double>
-//  sky-horizon-blend: PropertyValueSpecification<Double>
-//  atmosphere-blend: PropertyValueSpecification<Double>
+  @JsName("sky-color")
+  val skyColor: PropertyValueSpecification<ColorSpecification>
+  @JsName("horizon-color")
+  val horizonColor: PropertyValueSpecification<ColorSpecification>
+  @JsName("fog-color")
+  val fogColor: PropertyValueSpecification<ColorSpecification>
+  @JsName("fog-ground-blend")
+  val fogGroundBlend: PropertyValueSpecification<Double>
+  @JsName("horizon-fog-blend")
+  val horizonFogBlend: PropertyValueSpecification<Double>
+  @JsName("sky-horizon-blend")
+  val skyHorizonBlend: PropertyValueSpecification<Double>
+  @JsName("atmosphere-blend")
+  val atmosphereBlend: PropertyValueSpecification<Double>
 }
 
 @JsPlainObject
@@ -50,9 +60,35 @@ external interface TerrainSpecification {
   val exaggeration: Double
 }
 
+/**
+ * https://maplibre.org/maplibre-style-spec/sprite/
+ */
+@JsPlainObject
+external interface SpriteSpecification {
+}
+
+/**
+ * https://maplibre.org/maplibre-style-spec/transition/
+ */
+@JsPlainObject
+external interface TransitionSpecification {
+  val duration: Double?
+  val delay: Double?
+}
+
+sealed external interface ProjectionType {
+  companion object {
+    @JsValue("mercator")
+    val Mercator: ProjectionType
+    @JsValue("globe")
+    val Globe: ProjectionType
+  }
+}
+
+
 @JsPlainObject
 external interface ProjectionSpecification {
-  //type: mercator | globe
+  val type: ProjectionType?
 }
 
 sealed external interface SourceType {
@@ -130,7 +166,7 @@ external interface RasterDEMSourceSpecification : SourceSpecification {
 
 @JsPlainObject
 external interface GeoJSONSourceSpecification : SourceSpecification {
-  val data: Any // GeoJSON.GeoJSON | String
+  var data: Any // GeoJSON.GeoJSON | String
   val maxzoom: Double?
   val attribution: String?
   val buffer: Double?
@@ -208,7 +244,7 @@ typealias FilterSpecification = Any
 external interface LayerSpecification {
   var id: String
   var type: LayerType
-  var metadata: Any?
+  var metadata: Map<String, dynamic>?
   var minzoom: Double?
   var maxzoom: Double?
 }
@@ -218,6 +254,7 @@ external interface SourceLayerSpecification: LayerSpecification {
   var source: String
   @JsName("source-layer")
   val sourceLayer: String?
+  var filter: FilterSpecification?
 }
 
 sealed external interface ViewType {
@@ -585,49 +622,42 @@ external interface BackgroundPaintConfig {
 
 @JsPlainObject
 external interface FillLayerSpecification : SourceLayerSpecification {
-  val filter: FilterSpecification?
   val layout: FillLayoutConfig?
   val paint: FillPaintConfig?
 }
 
 @JsPlainObject
 external interface LineLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: LineLayoutConfig?
   var paint: LinePaintConfig?
 }
 
 @JsPlainObject
 external interface SymbolLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: SymbolLayoutConfig?
   var paint: SymbolPaintConfig?
 }
 
 @JsPlainObject
 external interface CircleLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: CircleLayoutConfig?
   var paint: CirclePaintConfig?
 }
 
 @JsPlainObject
 external interface HeatmapLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: LayoutConfig?
   var paint: HeatmapPaintConfig?
 }
 
 @JsPlainObject
 external interface FillExtrusionLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: LayoutConfig?
   var paint: FillExtrusionPaintConfig?
 }
 
 @JsPlainObject
 external interface RasterLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: LayoutConfig?
   var paint: RasterPaintConfig?
 }
@@ -635,7 +665,6 @@ external interface RasterLayerSpecification : SourceLayerSpecification {
 
 @JsPlainObject
 external interface HillshadeLayerSpecification : SourceLayerSpecification {
-  var filter: FilterSpecification?
   var layout: LayoutConfig?
   var paint: HillshadePaintConfig?
 }
@@ -664,4 +693,3 @@ typealias ExpressionSpecification = Any
 //{ type: 'exponential', stops: Array<[{zoom: Double, value: Double}, T]>, property: String, default?: T }
 //| { type: 'interval',    stops: Array<[{zoom: Double, value: Double}, T]>, property: String, default?: T }
 //| { type: 'categorical', stops: Array<[{zoom: Double, value: String | Double | boolean}, T]>, property: String, default?: T };
-

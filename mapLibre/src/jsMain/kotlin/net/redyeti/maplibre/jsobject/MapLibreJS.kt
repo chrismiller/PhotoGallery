@@ -4,8 +4,11 @@
 package net.redyeti.maplibre.jsobject
 
 import net.redyeti.maplibre.*
-import net.redyeti.maplibre.jsobject.stylespec.SourceSpecification
 import net.redyeti.maplibre.jsobject.stylespec.CanvasSourceSpecification
+import net.redyeti.maplibre.jsobject.stylespec.LayerSpecification
+import net.redyeti.maplibre.jsobject.stylespec.SourceSpecification
+import net.redyeti.maplibre.jsobject.stylespec.StyleSpecification
+import net.redyeti.maplibre.jsobject.stylespec.TerrainSpecification
 import net.redyeti.maplibre.jsobject.geojson.MapGeoJSONFeature
 import org.w3c.dom.*
 import org.w3c.fetch.RequestCache
@@ -57,7 +60,6 @@ open external class Evented {
   //fun once(type: String): Promise<Any>
   fun once(type: String, listener: (a: Any) -> Any = definedExternally): Evented
   fun fire(event: Event, properties: Any? = definedExternally): Evented
-
   fun fire(event: String, properties: Any? = definedExternally): Evented
 
   /**
@@ -293,6 +295,34 @@ open external class Camera : Evented {
    * ```
    */
   fun zoomOut(options: AnimationOptions = definedExternally, eventData: Any? = definedExternally): Camera
+
+  /**
+   * Returns the map's current vertical field of view, in degrees.
+   *
+   * @returns The map's current vertical field of view.
+   * @defaultValue 36.87
+   * @example
+   * ```ts
+   * const verticalFieldOfView = map.getVerticalFieldOfView();
+   * ```
+   */
+  fun getVerticalFieldOfView(): Double
+
+  /**
+   * Sets the map's vertical field of view, in degrees.
+   *
+   * Triggers the following events: `movestart`, `move`, and `moveend`.
+   *
+   * @param fov - The vertical field of view to set, in degrees (0-180).
+   * @param eventData - Additional properties to be added to event objects of events triggered by this method.
+   * @defaultValue 36.87
+   * @example
+   * Change vertical field of view to 30 degrees
+   * ```ts
+   * map.setVerticalFieldOfView(30);
+   * ```
+   */
+  fun setVerticalFieldOfView(fov: Double, eventData: Any? = definedExternally): Camera
 
   /**
    * Returns the map's current bearing. The bearing is the compass direction that is "up"; for example, a bearing
@@ -1523,9 +1553,11 @@ external class Map(options: MapOptions) : Camera {
    * });
    * ```
    */
-  // fun setStyle(style: StyleSpecification?, options: Map$1SetStyleOptions = definedExternally): Map
-
-  // fun setStyle(style: String?, options: Map$1SetStyleOptions = definedExternally): Map
+  fun setStyle(style: StyleSpecification?, options: StyleSwapOptions = definedExternally): Map
+  fun setStyle(style: StyleSpecification?, options: StyleOptions = definedExternally): Map
+  fun setStyle(style: String?, options: StyleSwapOptions = definedExternally): Map
+  fun setStyle(style: String?, options: StyleOptions = definedExternally): Map
+  fun setStyle(style: String?): Map
   /**
    *  Updates the requestManager's transform request with a new function
    *
@@ -1544,7 +1576,7 @@ external class Map(options: MapOptions) : Camera {
   // fun _updateStyle(style: StyleSpecification?, options: Map$1_updateStyleOptions = definedExternally): Map
 
   // fun _updateStyle(style: String?, options: Map$1_updateStyleOptions = definedExternally): Map
-  fun _lazyInitEmptyStyle(): Unit
+  // fun _lazyInitEmptyStyle(): Unit
   // fun _diffStyle(style: StyleSpecification, options: Map$1_diffStyleOptions = definedExternally): Unit
 
   // fun _diffStyle(style: String, options: Map$1_diffStyleOptions = definedExternally): Unit
@@ -1560,7 +1592,7 @@ external class Map(options: MapOptions) : Camera {
    * ```
    *
    */
-  // fun getStyle(): StyleSpecification
+  fun getStyle(): StyleSpecification
   /**
    * Returns a Boolean indicating whether the map's style is fully loaded.
    *
@@ -1638,7 +1670,8 @@ external class Map(options: MapOptions) : Camera {
    * map.setTerrain({ source: 'terrain' });
    * ```
    */
-  // fun setTerrain(options: TerrainSpecification?): Map
+  fun setTerrain(options: TerrainSpecification?): Map
+
   /**
    * Get the terrain-options if terrain is loaded
    * @returns the TerrainSpecification passed to setTerrain
@@ -1647,7 +1680,8 @@ external class Map(options: MapOptions) : Camera {
    * map.getTerrain(); // { source: 'terrain' };
    * ```
    */
-  // fun getTerrain(): TerrainSpecification?
+  fun getTerrain(): TerrainSpecification?
+
   /**
    * Returns a Boolean indicating whether all tiles in the viewport from all sources on
    * the style are loaded.
@@ -1987,7 +2021,7 @@ external class Map(options: MapOptions) : Camera {
    * @see [Filter symbols by toggling a list](https://maplibre.org/maplibre-gl-js/docs/examples/filter-markers/)
    * @see [Filter symbols by text input](https://maplibre.org/maplibre-gl-js/docs/examples/filter-markers-by-input/)
    */
-  // fun getLayer(id: String): StyleLayer?
+  fun getLayer(id: String): LayerSpecification? // StyleLayer?
   /**
    * Return the ids of all layers currently in the style, including custom layers, in order.
    *
@@ -3526,16 +3560,6 @@ external interface StyleImageInterface {
    * This gives the image a chance to clean up resources and event listeners.
    */
   var onRemove: (() -> Unit)?
-}
-
-/**
- * Supporting type to add validation to another style related type
- */
-external interface StyleSetterOptions {
-  /**
-   * Whether to check if the filter conforms to the MapLibre Style Specification. Disabling validation is a performance optimization that should only be used if you have previously validated the values you will be passing to this function.
-   */
-  var validate: Boolean?
 }
 
 external interface IdUrl {
