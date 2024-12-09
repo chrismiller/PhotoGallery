@@ -1,8 +1,10 @@
 @file:JsModule("maplibre-gl")
 @file:JsNonModule
 
-package net.redyeti.maplibre.jsobject
+package net.redyeti.maplibre.jsobject.ui.control
 
+import net.redyeti.maplibre.jsobject.IControl
+import net.redyeti.maplibre.jsobject.Map
 import org.w3c.dom.HTMLElement
 
 external interface NavigationControlOptions {

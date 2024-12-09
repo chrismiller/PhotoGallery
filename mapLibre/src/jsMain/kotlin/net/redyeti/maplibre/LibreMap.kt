@@ -6,11 +6,11 @@ import net.redyeti.maplibre.MarkerCache.Companion.markers
 import net.redyeti.maplibre.MarkerCache.Companion.markersOnScreen
 import net.redyeti.maplibre.jsobject.Map
 import net.redyeti.maplibre.jsobject.Marker
-import net.redyeti.maplibre.jsobject.NavigationControl
 import net.redyeti.maplibre.jsobject.geojson.MapGeoJSONFeature
+import net.redyeti.maplibre.jsobject.ui.control.NavigationControl
+import net.redyeti.maplibre.jsobject.ui.control.ScaleControl
 import org.w3c.dom.HTMLElement
-
-import kotlin.math.*
+import kotlin.math.min
 
 @Composable
 fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = null) {
@@ -26,6 +26,7 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
     val script = document.createElement("script").apply {
       map = Map(jsOptions).apply {
         addControl(NavigationControl())
+        addControl(ScaleControl())
       }
     }
     document.head?.appendChild(script)
