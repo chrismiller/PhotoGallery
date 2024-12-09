@@ -33,11 +33,13 @@ kotlin {
       implementation(libs.kotlinx.coroutines.core)
       implementation(compose.runtime)
       implementation(compose.html.core)
-      // https://www.npmjs.com/package/pmtiles
-      implementation(npm("pmtiles", "3.2.1"))
       // https://github.com/maplibre/maplibre-gl-js/releases
-      //implementation(npm("maplibre-gl", "5.0.0-pre.6"))
-      implementation(npm("maplibre-gl", "4.7.1"))
+      // Download css to compose-web/src/jsMain/resources
+      //   from https://unpkg.com/maplibre-gl@5.0.0-pre.8/dist/maplibre-gl.css
+      implementation(npm("maplibre-gl", "5.0.0-pre.8"))
+      //implementation(npm("maplibre-gl", "4.7.1"))
+      // https://www.npmjs.com/package/pmtiles
+      // implementation(npm("pmtiles", "4.0.1"))
       // https://github.com/caseycesari/GeoJSON.js/releases
       implementation(npm("geojson", "0.5.0"))
     }
