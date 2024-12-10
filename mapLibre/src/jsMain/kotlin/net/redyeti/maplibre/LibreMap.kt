@@ -7,6 +7,7 @@ import net.redyeti.maplibre.MarkerCache.Companion.markersOnScreen
 import net.redyeti.maplibre.jsobject.Map
 import net.redyeti.maplibre.jsobject.Marker
 import net.redyeti.maplibre.jsobject.geojson.MapGeoJSONFeature
+import net.redyeti.maplibre.jsobject.ui.control.GeolocateControl
 import net.redyeti.maplibre.jsobject.ui.control.NavigationControl
 import net.redyeti.maplibre.jsobject.ui.control.ScaleControl
 import org.w3c.dom.HTMLElement
@@ -27,6 +28,7 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
       map = Map(jsOptions).apply {
         addControl(NavigationControl())
         addControl(ScaleControl())
+        addControl(GeolocateControl())
       }
     }
     document.head?.appendChild(script)
