@@ -168,10 +168,8 @@ private fun PopupImage(imageUrl: String, close: () -> Unit) {
   Div(attrs = {
     classes(LightboxStyle.imageWrapper)
     onClick { e ->
-      // Close the lightbox when clicking on it, but only if an arrow or any other higher level item wasn't the target
-      if (e.target == e.currentTarget) {
-        close()
-      }
+      // Close the lightbox when clicking on it
+      close()
     }
   }) {
     Img(
