@@ -25,7 +25,7 @@ kotlin {
 
   sourceSets {
     jsMain.dependencies {
-      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.832"))
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.852"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
       implementation(compose.runtime)
@@ -36,6 +36,7 @@ kotlin {
       implementation(libs.kotlinx.datetime)
       // Seems to pull in 4.7.1 if this isn't explicitly included here
       implementation(npm("maplibre-gl", "5.0.0-pre.9"))
+      //implementation(npm("maplibre-gl", "4.7.1"))
     }
 
     jsTest.dependencies {
