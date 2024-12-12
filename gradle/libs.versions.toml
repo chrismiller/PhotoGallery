@@ -12,7 +12,7 @@ kotlinxSerialization = "1.7.3"
 # Note that the compose version must match the one expected by the routingCompose version, otherwise we risk
 # getting a javascript error and blank screen. See the routing compose release notes for dependency details.
 # https://github.com/JetBrains/compose-multiplatform/releases
-compose = "1.7.1"
+compose = "1.8.0-alpha01"
 # https://github.com/hfhbd/routing-compose/releases
 routingCompose = "0.4.0"
 
