@@ -20,7 +20,7 @@ routingCompose = "0.4.0"
 ksp = "2.1.0-1.0.29"
 
 # https://github.com/ktorio/ktor/releases
-ktor = "3.0.1"
+ktor = "3.0.3"
 # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
 shadow = "8.1.1"
 # https://github.com/turansky/seskar
