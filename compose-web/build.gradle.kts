@@ -25,7 +25,7 @@ kotlin {
 
   sourceSets {
     jsMain.dependencies {
-      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.852"))
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.859"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
       implementation(compose.runtime)
@@ -35,8 +35,7 @@ kotlin {
       implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
       implementation(libs.kotlinx.datetime)
       // Seems to pull in 4.7.1 if this isn't explicitly included here
-      implementation(npm("maplibre-gl", "5.0.0-pre.10"))
-      //implementation(npm("maplibre-gl", "4.7.1"))
+      implementation(npm("maplibre-gl", "5.0.0"))
     }
 
     jsTest.dependencies {
