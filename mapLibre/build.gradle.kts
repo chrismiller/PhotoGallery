@@ -34,7 +34,7 @@ kotlin {
       implementation(compose.runtime)
       implementation(compose.html.core)
       // https://github.com/maplibre/maplibre-gl-js/releases
-      implementation(npm("maplibre-gl", "5.0.0"))
+      implementation(npm("maplibre-gl", "5.0.1"))
       // https://www.npmjs.com/package/pmtiles
       // implementation(npm("pmtiles", "4.0.1"))
       // https://github.com/caseycesari/GeoJSON.js/releases
