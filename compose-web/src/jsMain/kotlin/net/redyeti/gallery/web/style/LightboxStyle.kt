@@ -390,7 +390,7 @@ object LightboxStyle : StyleSheet() {
     className(infoSection) style {
       className(infoItem) style {
         margin(0.px, 25.px)
-        padding(24.px, 0.px, 20.px)
+        padding(16.px, 0.px)
         property("border-bottom", "1px solid #F1F1F1")
         minHeight(65.px)
         textAlign("left")

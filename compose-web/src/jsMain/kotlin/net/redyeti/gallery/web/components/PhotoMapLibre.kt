@@ -56,7 +56,6 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
       style {
         width(100.percent)
         height(100.percent)
-        backgroundColor(Color.black)
       }
     }
   )
