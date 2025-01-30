@@ -1,41 +1,40 @@
 [versions]
 # https://kotlinlang.org/docs/releases.html#release-details
 # https://github.com/JetBrains/kotlin/releases
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 # https://github.com/Kotlin/kotlinx.coroutines/releases
-kotlinxCoroutines = "1.10.0"
+kotlinxCoroutines = "1.10.1"
 # https://github.com/Kotlin/kotlinx-datetime/releases
 kotlinxDatetime = "0.6.1"
 # https://github.com/Kotlin/kotlinx.serialization/releases
-kotlinxSerialization = "1.8.0-RC"
+kotlinxSerialization = "1.8.0"
 
 # Note that the compose version must match the one expected by the routingCompose version, otherwise we risk
 # getting a javascript error and blank screen. See the routing compose release notes for dependency details.
 # https://github.com/JetBrains/compose-multiplatform/releases
-compose = "1.8.0-alpha01"
+compose = "1.8.0-alpha02"
 # https://github.com/hfhbd/routing-compose/releases
 routingCompose = "0.4.0"
 
 # https://github.com/google/ksp/releases
-ksp = "2.1.0-1.0.29"
+ksp = "2.1.10-1.0.29"
 
 # https://github.com/ktorio/ktor/releases
 ktor = "3.0.3"
 # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
 shadow = "8.1.1"
 # https://github.com/turansky/seskar
-#seskar = "3.51.0"
-seskar = "3.75.0"
+seskar = "3.82.0"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
-kotlinterGradle = "4.5.0"
+kotlinterGradle = "5.0.1"
 
 # https://github.com/InsertKoinIO/koin/releases
-koin = "4.0.0"
+koin = "4.0.2"
 # https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 slf4j = "2.0.16"
 # https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
-log4j2 = "2.24.2"
+log4j2 = "2.24.3"
 # https://github.com/touchlab/Kermit/releases
 kermit = "2.0.5"
 # https://github.com/fusesource/jansi/releases
@@ -45,9 +44,10 @@ solarPositioning = "2.0.3"
 # https://github.com/jenetics/jpx/releases
 gpxParsing = "3.2.0"
 # https://junit.org/junit5/docs/current/release-notes/index.html#release-notes
-junit = "5.11.3"
+junit = "5.11.4"
 # https://github.com/mockito/mockito/releases
 mockito = "5.14.2"
+mockito = "5.15.2"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
