@@ -14,9 +14,12 @@ dependencies {
 
   implementation(libs.kotlinx.serialisation.core) // JVM dependency
   implementation(libs.kotlinx.coroutines.core)
+  implementation(libs.kotlinx.html)
+  implementation(libs.kotlinx.html.jvm)
 
   implementation(libs.ktor.server.core)
   implementation(libs.ktor.server.netty)
+  implementation(libs.ktor.server.html)
   implementation(libs.ktor.server.cors)
   implementation(libs.ktor.server.compression)
   implementation(libs.ktor.server.request.validation)

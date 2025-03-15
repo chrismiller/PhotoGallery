@@ -2,29 +2,31 @@
 # https://kotlinlang.org/docs/releases.html#release-details
 # https://github.com/JetBrains/kotlin/releases
 kotlin = "2.1.10"
+# https://github.com/Kotlin/kotlinx.html/releases
+kotlinxHtml = "0.12.0"
 # https://github.com/Kotlin/kotlinx.coroutines/releases
 kotlinxCoroutines = "1.10.1"
 # https://github.com/Kotlin/kotlinx-datetime/releases
-kotlinxDatetime = "0.6.1"
+kotlinxDatetime = "0.6.2"
 # https://github.com/Kotlin/kotlinx.serialization/releases
 kotlinxSerialization = "1.8.0"
 
 # Note that the compose version must match the one expected by the routingCompose version, otherwise we risk
 # getting a javascript error and blank screen. See the routing compose release notes for dependency details.
 # https://github.com/JetBrains/compose-multiplatform/releases
-compose = "1.8.0-alpha02"
+compose = "1.8.0-alpha04"
 # https://github.com/hfhbd/routing-compose/releases
 routingCompose = "0.4.0"
 
 # https://github.com/google/ksp/releases
-ksp = "2.1.10-1.0.29"
+ksp = "2.1.20-RC3-1.0.31"
 
 # https://github.com/ktorio/ktor/releases
-ktor = "3.0.3"
+ktor = "3.1.1"
 # https://plugins.gradle.org/plugin/com.github.johnrengelman.shadow
 shadow = "8.1.1"
-# https://github.com/turansky/seskar
-seskar = "3.82.0"
+# https://plugins.gradle.org/plugin/io.github.turansky.seskar
+seskar = "4.3.0"
 
 # https://github.com/jeremymailen/kotlinter-gradle/releases
 kotlinterGradle = "5.0.1"
@@ -32,7 +34,7 @@ kotlinterGradle = "5.0.1"
 # https://github.com/InsertKoinIO/koin/releases
 koin = "4.0.2"
 # https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-slf4j = "2.0.16"
+slf4j = "2.0.17"
 # https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core
 log4j2 = "2.24.3"
 # https://github.com/touchlab/Kermit/releases
@@ -40,20 +42,23 @@ kermit = "2.0.5"
 # https://github.com/fusesource/jansi/releases
 jansi = "2.4.1"
 # https://github.com/klausbrunner/solarpositioning/tags
-solarPositioning = "2.0.3"
+solarPositioning = "2.0.4"
 # https://github.com/jenetics/jpx/releases
-gpxParsing = "3.2.0"
+gpxParsing = "3.2.1"
 # https://junit.org/junit5/docs/current/release-notes/index.html#release-notes
-junit = "5.11.4"
+junit = "5.12.1"
 # https://github.com/mockito/mockito/releases
-mockito = "5.14.2"
-mockito = "5.15.2"
+mockito = "5.16.0"
+# https://github.com/sargunv/maplibre-compose/releases
+maplibreCompose = "0.6.0"
 
 [libraries]
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinxCoroutines" }
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
 kotlinx-serialisation-core = { module = "org.jetbrains.kotlinx:kotlinx-serialization-core", version.ref = "kotlinxSerialization" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-html = { module = "org.jetbrains.kotlinx:kotlinx-html", version.ref = "kotlinxHtml" }
+kotlinx-html-jvm = { module = "org.jetbrains.kotlinx:kotlinx-html-jvm", version.ref = "kotlinxHtml" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-json = { module = "io.ktor:ktor-client-json", version.ref = "ktor" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
@@ -63,6 +68,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 routing-compose = { module = "app.softwork:routing-compose", version.ref = "routingCompose" }
 ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor" }
 ktor-server-netty = { module = "io.ktor:ktor-server-netty", version.ref = "ktor" }
+ktor-server-html = { module = "io.ktor:ktor-server-html-builder", version.ref = "ktor" }
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 ktor-server-compression = { module = "io.ktor:ktor-server-compression", version.ref = "ktor" }
 ktor-server-request-validation = { module = "io.ktor:ktor-server-request-validation", version.ref = "ktor" }

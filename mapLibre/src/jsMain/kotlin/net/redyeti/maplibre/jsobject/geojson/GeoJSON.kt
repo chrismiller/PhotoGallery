@@ -233,9 +233,9 @@ external interface FeatureCollection<G : Geometry /* default is Geometry */, P /
 }
 
 external interface GeoJsonProperties {
-  @seskar.js.JsNative
+  @seskar.js.JsNativeGetter
   operator fun get(key: String): Any?
 
-  @seskar.js.JsNative
+  @seskar.js.JsNativeSetter
   operator fun set(key: String, value: Any?)
 }
