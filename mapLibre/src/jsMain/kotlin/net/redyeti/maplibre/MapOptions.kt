@@ -136,7 +136,7 @@ data class MapOptions(
    * is a custom parameter and bar is an arbitrary hash distinct from the map hash.
    * @defaultValue false
    */
-  var hash: Boolean = false, //v(Any /* boolean | string */)?
+  var hash: Any = false, //v(Any /* boolean | string */)?
 
   /**
    * If `false`, no mouse, touch, or keyboard listeners will be attached to the map, so it will not respond to interaction.
@@ -326,11 +326,45 @@ data class MapOptions(
   fun toJsMapOptions(): net.redyeti.maplibre.jsobject.MapOptions {
     var opt = this
     return jso {
-      opt.bounds?.let { bounds = it }
-      opt.container.let { container = it }
-      opt.attributionControl?.let { attributionControl = it }
-      opt.style.let { style = it }
-      opt.zoom.let { zoom = it }
+      antialias = opt.antialias
+      attributionControl = opt.attributionControl
+      bearing = opt.bearing
+      bearingSnap = opt.bearingSnap
+      bounds = opt.bounds
+      boxZoom = opt.boxZoom
+      cancelPendingTileRequestsWhileZooming = opt.cancelPendingTileRequestsWhileZooming
+      opt.center?.let { opt.center = it }
+      clickTolerance = opt.clickTolerance
+      collectResourceTiming = opt.collectResourceTiming
+      container = opt.container
+      cooperativeGestures = opt.cooperativeGestures
+      crossSourceCollisions = opt.crossSourceCollisions
+      doubleClickZoom = opt.doubleClickZoom
+      dragRotate = opt.dragRotate
+      fadeDuration = opt.fadeDuration
+      failIfMajorPerformanceCaveat = opt.failIfMajorPerformanceCaveat
+      hash = opt.hash
+      interactive = opt.interactive
+      localIdeographFontFamily = opt.localIdeographFontFamily
+      locale = opt.locale
+      maplibreLogo = opt.maplibreLogo
+      maxBounds = opt.maxBounds
+      maxPitch = opt.maxPitch
+      maxTileCacheSize = opt.maxTileCacheSize
+      maxTileCacheZoomLevels = opt.maxTileCacheZoomLevels
+      maxZoom = opt.maxZoom
+      minPitch = opt.minPitch
+      minZoom = opt.minZoom
+      pitch = opt.pitch
+      pitchWithRotate = opt.pitchWithRotate
+      opt.pixelRatio?.let { pixelRatio = it }
+      preserveDrawingBuffer = opt.preserveDrawingBuffer
+      refreshExpiredTiles = opt.refreshExpiredTiles
+      renderWorldCopies = opt.renderWorldCopies
+      style = opt.style
+      trackResize = opt.trackResize
+      validateStyle = opt.validateStyle
+      zoom = opt.zoom
     }
   }
 }

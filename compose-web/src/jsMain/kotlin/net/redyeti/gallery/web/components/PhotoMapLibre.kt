@@ -66,6 +66,7 @@ fun PhotoMapLibre(album: PopulatedAlbum) {
         container = "map-container",
         bounds = getBounds(album.photos),
         style = "/liberty-style.json",
+        hash = true,
       )
     )
   }

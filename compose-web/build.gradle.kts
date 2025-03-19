@@ -28,7 +28,6 @@ kotlin {
       implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.859"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
-      implementation(compose.runtime)
       implementation(compose.html.core)
       implementation(libs.routing.compose)
       implementation(projects.common)     // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview

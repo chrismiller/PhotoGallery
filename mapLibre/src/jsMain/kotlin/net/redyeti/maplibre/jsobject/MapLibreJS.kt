@@ -769,7 +769,7 @@ external class Map(options: MapOptions) : Camera {
   var _antialias: Boolean
   var _refreshExpiredTiles: Boolean
 
-  // var _hash: Hash
+  var _hash: Boolean
   var _delegatedListeners: Any?
   var _fadeDuration: Double
   var _crossSourceCollisions: Boolean

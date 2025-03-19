@@ -153,7 +153,7 @@ external interface MapOptions {
    * is a custom parameter and bar is an arbitrary hash distinct from the map hash.
    * @defaultValue false
    */
-//  var hash: (Any /* boolean | string */)
+  var hash: Any // (Any /* boolean | string */)
 
   /**
    * If `false`, no mouse, touch, or keyboard listeners will be attached to the map, so it will not respond to interaction.
