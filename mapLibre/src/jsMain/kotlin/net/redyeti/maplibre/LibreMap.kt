@@ -14,7 +14,7 @@ import org.w3c.dom.HTMLElement
 import kotlin.math.min
 
 @Composable
-fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = null) {
+fun LibreMap(options: MapOptions, withControls: Boolean = true, mapContent: @Composable (Map.() -> Unit)? = null) {
   var map: Map? by remember { mutableStateOf(null) }
 
   LaunchedEffect(Unit) {
@@ -27,9 +27,11 @@ fun LibreMap(options: MapOptions, mapContent: @Composable (Map.() -> Unit)? = nu
     val jsOptions = options.toJsMapOptions()
     val script = document.createElement("script").apply {
       map = Map(jsOptions).apply {
-        addControl(NavigationControl())
-        addControl(ScaleControl())
-        addControl(GeolocateControl())
+        if (withControls) {
+          addControl(NavigationControl())
+          addControl(ScaleControl())
+          addControl(GeolocateControl())
+        }
       }
     }
     document.head?.appendChild(script)
