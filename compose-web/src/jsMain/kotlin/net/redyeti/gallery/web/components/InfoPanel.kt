@@ -1,14 +1,26 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import net.redyeti.gallery.remote.*
 import net.redyeti.gallery.web.style.LightboxStyle
+import net.redyeti.maplibre.LibreMap
+import net.redyeti.maplibre.MapOptions
+import net.redyeti.maplibre.jsobject.LngLat
+import net.redyeti.maplibre.jsobject.LngLatBounds
+import net.redyeti.maplibre.jsobject.Marker
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
+import org.jetbrains.compose.web.css.height
+import org.jetbrains.compose.web.css.percent
+import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.*
 import kotlin.math.roundToInt
 
@@ -140,34 +152,34 @@ private fun LocationInfoPanel(location: GpsCoordinates?) {
           Span { Text("Altitude: ${location.altitude.toInt()} m") }
         }
       }
-//      Span(attrs = {
-//        classes(LightboxStyle.label)
-//        id("location-map")
-//        style {
-//          width(100.percent)
-//          height(150.px)
-//        }
-//      }) {
-//        val bounds = LngLatBounds(
-//          LngLat(location.longitude - 0.1, location.latitude - 0.1),
-//          LngLat(location.longitude + 0.1, location.latitude + 0.1),
-//        )
-//        val mapOptions: MapOptions by remember(location) {
-//          mutableStateOf(
-//            MapOptions(
-//              container = "location-map",
-//              bounds = bounds,
-//              style = "/liberty-style.json",
-//            )
-//          )
-//        }
-//        LibreMap(mapOptions, false) {
-//          val lnglat = LngLat(location.longitude, location.latitude)
-//          val marker: Marker by remember { mutableStateOf(Marker().setLngLat(lnglat).addTo(this)) }
-//          marker.setLngLat(lnglat)
-//          this.fitBounds(bounds)
-//        }
-//      }
+      Span(attrs = {
+        classes(LightboxStyle.label)
+        id("location-map")
+        style {
+          width(100.percent)
+          height(150.px)
+        }
+      }) {
+        val bounds = LngLatBounds(
+          LngLat(location.longitude - 0.1, location.latitude - 0.1),
+          LngLat(location.longitude + 0.1, location.latitude + 0.1),
+        )
+        val mapOptions: MapOptions by remember(location) {
+          mutableStateOf(
+            MapOptions(
+              container = "location-map",
+              bounds = bounds,
+              style = "/liberty-style.json",
+            )
+          )
+        }
+        LibreMap(mapOptions, false) {
+          val lnglat = LngLat(location.longitude, location.latitude)
+          val marker: Marker by remember { mutableStateOf(Marker().setLngLat(lnglat).addTo(this)) }
+          marker.setLngLat(lnglat)
+          this.fitBounds(bounds)
+        }
+      }
       Span(attrs = { classes(LightboxStyle.subs) }) {
         Span {
           A(href = location.googleMapsUrl, attrs = {
