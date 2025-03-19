@@ -7,6 +7,7 @@ import io.ktor.server.plugins.requestvalidation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
+import net.redyeti.files.directoryBrowser
 import java.io.File
 import java.nio.file.Path
 
@@ -21,8 +22,11 @@ fun Application.configureRouting(appConfig: AppConfig) = routing {
   }
 
   staticPath("/image", appConfig.staticImageDir.toFile())
+
   appConfig.otherStatic.forEach { (name, path) ->
-    staticPath(name, path.toFile())
+    route(name) {
+      directoryBrowser(path.toFile())
+    }
   }
 
   singlePageApplication {
