@@ -34,7 +34,7 @@ kotlin {
       implementation(projects.mapLibre)   // enabled by TYPESAFE_PROJECT_ACCESSORS feature preview
       implementation(libs.kotlinx.datetime)
       // Seems to pull in 4.7.1 if this isn't explicitly included here
-      implementation(npm("maplibre-gl", "5.0.1"))
+      implementation(npm("maplibre-gl", "5.2.0"))
     }
 
     jsTest.dependencies {

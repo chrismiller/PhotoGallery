@@ -20,7 +20,8 @@ fun LibreMap(options: MapOptions, withControls: Boolean = true, mapContent: @Com
   LaunchedEffect(Unit) {
     val css = document.createElement("link")
     css.setAttribute("rel", "stylesheet")
-    css.setAttribute("href", "/maplibre-gl-5.0.1.css")
+    // Download css from https://unpkg.com/maplibre-gl@5.2.0/dist/maplibre-gl.css to compose-web/src/jsMain/resources
+    css.setAttribute("href", "/maplibre-gl-5.2.0.css")
     document.head?.appendChild(css)
 
     val jsOptions = options.toJsMapOptions()
