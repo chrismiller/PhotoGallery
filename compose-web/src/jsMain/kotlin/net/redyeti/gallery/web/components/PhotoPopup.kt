@@ -110,7 +110,7 @@ fun PhotoPopup(popAlbum: PopulatedAlbum, photoID: Int, base: String) {
         }
       }) {
         Back(close)
-        Options(photo, infoClicked = { infoPanelVisible = !infoPanelVisible })
+        Options(popAlbum, photo, infoClicked = { infoPanelVisible = !infoPanelVisible })
       }
       Div(attrs = {
         id("fs")
@@ -140,7 +140,7 @@ private fun Back(close: () -> Unit) {
 }
 
 @Composable
-private fun Options(photo: Photo, infoClicked: () -> Unit) {
+private fun Options(album: PopulatedAlbum, photo: Photo, infoClicked: () -> Unit) {
   Ul(attrs = { classes(LightboxStyle.options) }) {
     val location = photo.location
     if (location != null) {
@@ -149,6 +149,9 @@ private fun Options(photo: Photo, infoClicked: () -> Unit) {
       }
     }
     OptionIcon("Show photo information", LightboxStyle.infoOption) { infoClicked() }
+    OptionIcon("Show album", LightboxStyle.albumOption) {
+      window.location.href = "/album/${album.album.key}"
+    }
   }
 }
 

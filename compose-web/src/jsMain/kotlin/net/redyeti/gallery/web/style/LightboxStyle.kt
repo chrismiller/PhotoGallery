@@ -448,6 +448,7 @@ object LightboxStyle : StyleSheet() {
   val back by style {}
   val options by style {}
   val infoOption by style {}
+  val albumOption by style {}
   val locationOption by style {}
 
   val galleryHeader by style {
@@ -526,6 +527,13 @@ object LightboxStyle : StyleSheet() {
         self + before style {
           property("-webkit-mask-image", "url(/info.svg)")
           property("mask-image", "url(/info.svg)")
+        }
+      }
+
+      type("button") + className(albumOption) style {
+        self + before style {
+          property("-webkit-mask-image", "url(/album.svg)")
+          property("mask-image", "url(/album.svg)")
         }
       }
 
