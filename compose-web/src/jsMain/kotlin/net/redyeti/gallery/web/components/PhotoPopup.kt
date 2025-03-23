@@ -142,6 +142,9 @@ private fun Back(close: () -> Unit) {
 @Composable
 private fun Options(album: PopulatedAlbum, photo: Photo, infoClicked: () -> Unit) {
   Ul(attrs = { classes(LightboxStyle.options) }) {
+    OptionIcon("Show album", LightboxStyle.albumOption) {
+      window.location.href = "/album/${album.album.key}"
+    }
     val location = photo.location
     if (location != null) {
       OptionIcon("Show location on Google Maps", LightboxStyle.locationOption) {
@@ -149,9 +152,6 @@ private fun Options(album: PopulatedAlbum, photo: Photo, infoClicked: () -> Unit
       }
     }
     OptionIcon("Show photo information", LightboxStyle.infoOption) { infoClicked() }
-    OptionIcon("Show album", LightboxStyle.albumOption) {
-      window.location.href = "/album/${album.album.key}"
-    }
   }
 }
 
