@@ -19,7 +19,7 @@ sealed class Metadata(val raw: Boolean = false) {
     object ISO: Exif(true)
     object Model: Exif()
     object ApertureValue: Exif()
-    override val group = "Exif"
+    override val group = "EXIF"
   }
   sealed class MakerNotes(raw: Boolean = false): Metadata(raw) {
     object TimeZone: MakerNotes()

@@ -23,7 +23,7 @@ class AppData(albums: List<PopulatedAlbum>) {
     var id = 0
     albums.forEach { album ->
       getAlbum(album.key)?.let {
-        allPhotos += it.photos.map { it.copy(id = id++) }
+        allPhotos += it.photos.map { photo -> photo.copy(id = id++) }
       }
     }
     return PopulatedAlbum(Album("All", "All Photos", "Photos from all albums", albums[0].coverImage, false, true), allPhotos)
