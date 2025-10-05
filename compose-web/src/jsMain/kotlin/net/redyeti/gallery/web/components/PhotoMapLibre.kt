@@ -108,9 +108,11 @@ fun net.redyeti.maplibre.jsobject.Map.populateMap(album: PopulatedAlbum) {
     addLayer(createGpsTrackLayer())
   }
 
-  addSource("photos", createPhotoSource(album))
-  addLayer(createHeatmapLayer())
-  addLayer(createThumbnailLayer())
+  if (this.getSource("photos") == null) {
+    addSource("photos", createPhotoSource(album))
+    addLayer(createHeatmapLayer())
+    addLayer(createThumbnailLayer())
+  }
 }
 
 fun createMarker(feature: MapGeoJSONFeature, onClick: (albumKey: String, photoId: Int) -> Unit): Marker {
