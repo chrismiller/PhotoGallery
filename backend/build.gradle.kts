@@ -48,7 +48,8 @@ dependencies {
 
   testImplementation(kotlin("test"))
   testImplementation(libs.mockito)
-  testImplementation(libs.junit)
+  testImplementation(libs.junit.api)
+  testImplementation(libs.junit.params)
 }
 
 tasks.processResources {
@@ -56,6 +57,10 @@ tasks.processResources {
     include("**/*")
     into("app")
   }
+}
+
+tasks.test {
+  useJUnitPlatform()
 }
 
 application {
