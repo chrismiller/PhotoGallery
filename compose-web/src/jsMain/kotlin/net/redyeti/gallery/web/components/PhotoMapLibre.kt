@@ -1,23 +1,28 @@
 package net.redyeti.gallery.web.components
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import app.softwork.routingcompose.Router
-import js.objects.jso
+import js.objects.unsafeJso
 import kotlinx.browser.document
 import kotlinx.dom.addClass
-import net.redyeti.gallery.remote.*
+import net.redyeti.gallery.remote.Photo
+import net.redyeti.gallery.remote.PopulatedAlbum
 import net.redyeti.gallery.web.style.AppStyle
 import net.redyeti.maplibre.LibreMap
 import net.redyeti.maplibre.MapOptions
-import net.redyeti.maplibre.resetCache
 import net.redyeti.maplibre.jsobject.LngLat
 import net.redyeti.maplibre.jsobject.LngLatBounds
 import net.redyeti.maplibre.jsobject.Marker
 import net.redyeti.maplibre.jsobject.geojson.*
 import net.redyeti.maplibre.jsobject.stylespec.*
-import net.redyeti.maplibre.jsobject.stylespec.CirclePaintConfig
+import net.redyeti.maplibre.resetCache
 import net.redyeti.maplibre.updateMarkers
-import org.jetbrains.compose.web.css.*
+import org.jetbrains.compose.web.css.height
+import org.jetbrains.compose.web.css.percent
+import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.Div
 import org.w3c.dom.HTMLDivElement
 import org.w3c.dom.Image
@@ -128,28 +133,28 @@ fun createMarker(feature: MapGeoJSONFeature, onClick: (albumKey: String, photoId
   img.addEventListener("click", { onClick(albumKey, photoId) })
   markerThumb.appendChild(img)
   markerThumb.style.cursor = "pointer"
-  return Marker(jso { element = markerThumb })
+  return Marker(unsafeJso { element = markerThumb })
     .setLngLat(LngLat(coords[0], coords[1]))
 }
 
 private fun createPhotoSource(album: PopulatedAlbum): SourceSpecification {
-  val geoData: FeatureCollection<GeoJsonObject, GeoJsonProperties> = jso {
+  val geoData: FeatureCollection<GeoJsonObject, GeoJsonProperties> = unsafeJso {
     type = GeoJsonTypes.FeatureCollection
     features = album.photos.mapNotNull<Photo, Feature<GeoJsonObject, GeoJsonProperties>> {
       it.location?.let { location ->
-        jso {
+        unsafeJso {
           type = GeoJsonTypes.Feature
-          geometry = jso<Point> {
+          geometry = unsafeJso<Point> {
             type = GeoJsonTypes.Point
             coordinates = arrayOf(location.longitude, location.latitude, location.altitude)
-            properties = jso {
-              set("id", it.id)
-              set("thumbnailUrl", it.thumbnailUrl)
-              set("description", it.description)
-              set("width", it.width)
-              set("height", it.height)
-              set("albumKey", album.album.key)
-            }
+          }
+          properties = unsafeJso<GeoJsonProperties> {
+            set("id", it.id)
+            set("thumbnailUrl", it.thumbnailUrl)
+            set("description", it.description)
+            set("width", it.width)
+            set("height", it.height)
+            set("albumKey", album.album.key)
           }
         }
       }
@@ -170,12 +175,12 @@ private fun createGpsTracks(album: PopulatedAlbum): SourceSpecification {
 
 private const val MAX_HEATMAP_ZOOM = 13.0
 private fun createHeatmapLayer(): SourceLayerSpecification {
-  return jso<HeatmapLayerSpecification> {
+  return unsafeJso<HeatmapLayerSpecification> {
     id = "heatmap"
     type = LayerType.HeatMap
     source = "photos"
     maxzoom = MAX_HEATMAP_ZOOM
-    paint = jso {
+    paint = unsafeJso {
       // We don't really have anything to weight this by? :-/
       heatmapWeight = 1.0
       // Increase the heatmap color weight by zoom level. heatmap-intensity is a multiplier on top of heatmap-weight
@@ -211,7 +216,7 @@ private fun createThumbnailLayer(): SourceLayerSpecification {
     type = LayerType.Circle,
     source = "photos",
     minzoom = MAX_HEATMAP_ZOOM,       // pick up where the heatmap fades out
-    paint = jso<CirclePaintConfig> {
+    paint = unsafeJso<CirclePaintConfig> {
       circleColor = "rgba(0,0,0,0)"
       circleRadius = 1
     }
@@ -225,11 +230,11 @@ private fun createGpsTrackLayer(): SourceLayerSpecification {
     type = LayerType.Line,
     source = "gpstracks",
     minzoom = 5.0,
-    layout = jso<LineLayoutConfig> {
+    layout = unsafeJso<LineLayoutConfig> {
       lineJoin = LineJoinType.Round
       lineCap = LineCapType.Round
     },
-    paint = jso<LinePaintConfig> {
+    paint = unsafeJso<LinePaintConfig> {
       lineColor = "rgba(0,0,180,0.5)"
       lineWidth = 3.0
     }

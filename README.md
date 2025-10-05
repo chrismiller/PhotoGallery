@@ -7,7 +7,7 @@ any point in time, and I'm probably not likely to tackle any bug or feature requ
 so please bear that in mind if you choose to deploy your own website based on this code. I'd be happy to consider any
 pull requests that do improve things or make this project a more generic solution though.
 
-![kotlin-version](https://img.shields.io/badge/kotlin-2.1.0-orange) The gallery is built with **Kotlin Multiplatform**,
+![kotlin-version](https://img.shields.io/badge/kotlin-2.2.20-orange) The gallery is built with **Kotlin Multiplatform**,
 using Compose HTML for the web frontend and a Ktor server for the backend.
 
 ### Configuration
@@ -62,6 +62,13 @@ invoking `./gradlew :compose-web:jsBrowserDevelopmentRun`
 Using shadowJar plugin to create an "uber" jar as shown below.
 
 `./gradlew :backend:shadowJar`
+
+### Run a fresh checkout
+
+del kotlin-js-store\yarn.lock
+gradlew build
+gradlew installShadowDist
+gradlew runShadow
 
 ### Languages, libraries and tools used
 

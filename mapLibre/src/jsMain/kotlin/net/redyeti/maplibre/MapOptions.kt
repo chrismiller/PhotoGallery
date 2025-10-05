@@ -1,6 +1,6 @@
 package net.redyeti.maplibre
 
-import js.objects.jso
+import js.objects.unsafeJso
 import net.redyeti.maplibre.jsobject.LngLat
 import net.redyeti.maplibre.jsobject.LngLatBounds
 
@@ -325,7 +325,7 @@ data class MapOptions(
 ) {
   fun toJsMapOptions(): net.redyeti.maplibre.jsobject.MapOptions {
     var opt = this
-    return jso {
+    return unsafeJso {
       antialias = opt.antialias
       attributionControl = opt.attributionControl
       bearing = opt.bearing

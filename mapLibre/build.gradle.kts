@@ -27,14 +27,14 @@ kotlin {
   sourceSets {
     jsMain.dependencies {
       // https://github.com/JetBrains/kotlin-wrappers/releases
-      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:1.0.0-pre.859"))
+      implementation(project.dependencies.platform("org.jetbrains.kotlin-wrappers:kotlin-wrappers-bom:2025.10.1"))
       implementation(kotlinWrappers.js)
       implementation(kotlin("stdlib-js"))
       implementation(libs.kotlinx.coroutines.core)
       implementation(compose.runtime)
       implementation(compose.html.core)
       // https://github.com/maplibre/maplibre-gl-js/releases
-      implementation(npm("maplibre-gl", "5.2.0"))
+      implementation(npm("maplibre-gl", "5.8.0"))
       // https://www.npmjs.com/package/pmtiles
       // implementation(npm("pmtiles", "4.0.1"))
       // https://github.com/caseycesari/GeoJSON.js/releases

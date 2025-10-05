@@ -5,9 +5,6 @@
 
 package net.redyeti.maplibre.jsobject.geojson
 
-import kotlinx.js.JsPlainObject
-import net.redyeti.maplibre.jsobject.LngLat
-
 // Note: as of the RFC 7946 version of GeoJSON, Coordinate Reference Systems
 // are no longer supported. (See https://tools.ietf.org/html/rfc7946#appendix-B)}
 /* export as namespace GeoJSON; */
@@ -233,9 +230,7 @@ external interface FeatureCollection<G : Geometry /* default is Geometry */, P /
 }
 
 external interface GeoJsonProperties {
-  @seskar.js.JsNativeGetter
   operator fun get(key: String): Any?
 
-  @seskar.js.JsNativeSetter
   operator fun set(key: String, value: Any?)
 }
