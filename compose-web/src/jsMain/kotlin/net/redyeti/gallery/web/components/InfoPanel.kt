@@ -1,17 +1,29 @@
 package net.redyeti.gallery.web.components
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import kotlin.time.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 import net.redyeti.gallery.remote.*
 import net.redyeti.gallery.web.style.LightboxStyle
+import net.redyeti.maplibre.LibreMap
+import net.redyeti.maplibre.MapOptions
+import net.redyeti.maplibre.jsobject.LngLat
+import net.redyeti.maplibre.jsobject.LngLatBounds
+import net.redyeti.maplibre.jsobject.Marker
 import org.jetbrains.compose.web.attributes.ATarget
 import org.jetbrains.compose.web.attributes.target
+import org.jetbrains.compose.web.css.height
+import org.jetbrains.compose.web.css.percent
+import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.css.width
 import org.jetbrains.compose.web.dom.*
 import kotlin.math.roundToInt
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 @Composable
 fun InfoPanel(photo: Photo, close: () -> Unit) {

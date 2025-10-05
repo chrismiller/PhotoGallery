@@ -65,6 +65,7 @@ Using shadowJar plugin to create an "uber" jar as shown below.
 
 ### Run a fresh checkout
 
+git clone https://github.com/chrismiller/PhotoGallery.git
 del kotlin-js-store\yarn.lock
 gradlew build
 gradlew installShadowDist
