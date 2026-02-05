@@ -2,7 +2,6 @@ package net.redyeti.gallery.repository
 
 import co.touchlab.kermit.Logger
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import net.redyeti.gallery.remote.Album
 import net.redyeti.gallery.remote.PhotoGalleryApi
@@ -18,8 +17,7 @@ interface PhotoGalleryInterface {
 
 class PhotoGalleryRepository : KoinComponent, PhotoGalleryInterface {
   private val photoGalleryApi: PhotoGalleryApi by inject()
-
-  val coroutineScope: CoroutineScope = MainScope()
+  private val coroutineScope: CoroutineScope by inject()
 
   val logger = Logger.withTag(this::class.simpleName!!)
 
